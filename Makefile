@@ -1,0 +1,64 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
+#    Updated: 2021/12/21 20:19:17 by zcanales         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = minishell
+
+SRCS =	src/main.c\
+		src/terminal.c\
+
+OBJS = $(SRCS:.c=.o)
+OBJ_DIR = obj
+
+MAKE = make
+PINK = \033[0;35m \033[1m
+RED = \033[0;31m \033[1m
+RESET = \033[0m
+
+INCLUDE = include/minishell.h
+LIB_A = Libft/libft.a
+
+CC = gcc
+PWD_RL = /System/Volumes/Data/sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/
+RLFLAGS =  -L /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/lib\
+		  -I /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/include\
+		  -lreadline\
+
+CFLAGS = -Wall -Wextra -Werror
+all: $(NAME) 
+
+$(NAME): $(SRCS) $(LIB_A) 
+	@$(CC) $(CFLAGS) $(RLFLAGS) $^ $(LIB_A) -I$(INCLUDE) -o $(NAME)
+	@#mv $(OBJS) $(OBJ_DIR)
+	@echo "🥜$(PINK)$(NAME) was created 🥜$(RESET)"
+
+$(OBJ_DIR):
+	@mkdir $@
+
+$(LIB_A) : Libft/*.c Libft/*.h
+	@make -C Libft/
+
+%.o: %.c $(OBJ_DIR) $(INCLUDE) $(LIB_A)
+	@$(CC) $(CFLAGS) $(RLFLAGS) -I$(INCLUDE) -c $< -o $@
+
+clean :
+	@rm -rf obj/
+	@make -C Libft/ clean
+	@echo "🐘$(RED)object files were deleted$(RESET)"
+
+fclean : clean
+	@rm -rf $(NAME)
+	@make -C Libft/ fclean
+	@echo "🐘🐘$(RED)$(NAME) was deleted$(RESET)"
+
+re: fclean all
+
+.PHONY : re all fclean clean
