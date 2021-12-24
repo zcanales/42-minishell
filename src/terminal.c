@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/21 19:55:15 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/24 10:38:21 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int create_terminal(void)
     char    *line;
 
 	line = NULL;
+	attributes();
     signal(SIGINT, sig_handler);
 	while (1)
 	{
