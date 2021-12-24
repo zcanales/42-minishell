@@ -23,13 +23,9 @@ void get_env(char **env)
 
     i = 0;
     my_env.env = env;
-    while (env[i])
-    {
-        if (!ft_strncmp(env[i], "PATH", 4))
-            path = env[i];
-        i++;
-    }
-    path = path + 5;
+	path = getenv("PATH");
+	my_env.home = getenv("HOME");
+	my_env.root = getenv("ROOT");
     //malloc de cuantas path? para el split?
     my_env.paths = ft_split(path, ':');
     i = 0;

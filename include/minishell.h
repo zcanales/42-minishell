@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:40 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/24 17:18:32 by eperaita         ###   ########.fr       */
+/*   Updated: 2021/12/24 17:39:23 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_env
 {
     char    **env;
     char    **paths;
+    char    *home;
+    char    *root;
 }   t_env;
 
 /* TERMINAL	*/
