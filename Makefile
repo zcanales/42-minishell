@@ -6,7 +6,7 @@
 #    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
-#    Updated: 2021/12/21 20:19:17 by zcanales         ###   ########.fr        #
+#    Updated: 2021/12/24 10:31:30 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = minishell
 
 SRCS =	src/main.c\
 		src/terminal.c\
+		src/attributes.c\
 
 OBJS = $(SRCS:.c=.o)
 OBJ_DIR = obj
@@ -28,7 +29,7 @@ LIB_A = Libft/libft.a
 
 CC = gcc
 PWD_RL = /System/Volumes/Data/sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/
-RLFLAGS =  -L /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/lib\
+RLFLAGS = -L /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/lib\
 		  -I /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/include\
 		  -lreadline\
 
@@ -37,7 +38,7 @@ all: $(NAME)
 
 $(NAME): $(SRCS) $(LIB_A) 
 	@$(CC) $(CFLAGS) $(RLFLAGS) $^ $(LIB_A) -I$(INCLUDE) -o $(NAME)
-	@#mv $(OBJS) $(OBJ_DIR)
+	#@mv $(OBJS) $(OBJ_DIR)
 	@echo "🥜$(PINK)$(NAME) was created 🥜$(RESET)"
 
 $(OBJ_DIR):
@@ -47,7 +48,12 @@ $(LIB_A) : Libft/*.c Libft/*.h
 	@make -C Libft/
 
 %.o: %.c $(OBJ_DIR) $(INCLUDE) $(LIB_A)
-	@$(CC) $(CFLAGS) $(RLFLAGS) -I$(INCLUDE) -c $< -o $@
+	if [ "$<" = "src/terminal.c" ];then\
+		$(CC) $(RLFLAGS) -I$(INCLUDE) -c $< -o $@;\
+	else\
+		$(CC) $(FLAGS) -I$(INCLUDE) -c $< -o $@;\
+	fi
+#	@$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
 
 clean :
 	@rm -rf obj/

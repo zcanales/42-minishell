@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:40 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/21 19:52:17 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/24 10:30:29 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,5 @@
 /* TERMINAL	*/
 int		create_terminal(void);
 //void	rl_clear_history(void);
+void    attributes();
 #endif
