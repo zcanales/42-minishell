@@ -6,13 +6,15 @@
 #    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
-#    Updated: 2021/12/24 12:49:11 by zcanales         ###   ########.fr        #
+#    Updated: 2021/12/27 14:15:42 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRCS =	src/main.c\
+		src/init.c\
+		src/exe.c\
 		src/terminal.c\
 		src/attributes.c\
 
@@ -38,7 +40,7 @@ all: $(NAME)
 
 $(NAME): $(SRCS) $(LIB_A) 
 	@$(CC) $(CFLAGS) $(RLFLAGS) $^ $(LIB_A) -I$(INCLUDE) -o $(NAME)
-	#@mv $(OBJS) $(OBJ_DIR)
+	@#@mv $(OBJS) $(OBJ_DIR)
 	@echo "🥜$(PINK)$(NAME) was created 🥜$(RESET)"
 
 $(OBJ_DIR):

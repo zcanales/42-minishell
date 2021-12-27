@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/24 10:38:21 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/27 14:15:38 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,36 @@
 # include <signal.h>
 #include "../include/minishell.h"
 
-char    *get_line(char *line)
+void	free_and_init(t_shell *shell)
 {
-    if (line) //Readline hace malloc asique hay que liberar memoria
+	int i;
+
+	i = -1;
+	while (shell->my_pro->commands[++i])
+		free(shell->my_pro->commands[i]);
+	free(shell->my_pro->commands);
+	free(shell->line);
+	shell->line = NULL;
+	ft_memset(shell->my_pro, 0, sizeof(t_pro));
+
+}
+
+char    *get_line(t_shell *shell)
+{
+    if (shell->line) //Readline hace malloc asique hay que liberar memoria
     {
-		free(line);
-       line = NULL;
+		//free_line
+		////free_commands
+		//inicializar variables
+		free_and_init(shell);
+      // shell->line = NULL;
     }
-    line = readline("\033[0;35m\033[1mPink 🥜 > \033[0m");
-    if (line && line[0] != '\0') //No queremos guardar comandos vacios com Ctrl + C
-        add_history(line);
-	if (line && !ft_strncmp(line, "history -c", ft_strlen("history -c")))
+    shell->line = readline("\033[0;35m\033[1mPink 🥜 > \033[0m");
+    if (shell->line && shell->line[0] != '\0') //No queremos guardar comandos vacios com Ctrl + C
+        add_history(shell->line);
+	if (shell->line && !ft_strncmp(shell->line, "history -c", ft_strlen("history -c")))
 		 rl_clear_history();	
-    return (line);
+    return (shell->line);
 }
 
 void    sig_handler(int signum)
@@ -45,21 +62,22 @@ void    sig_handler(int signum)
 
 }
 
-int create_terminal(void)
+int create_terminal(t_shell *shell)
 {
-    char    *line;
 
-	line = NULL;
-	attributes();
+	shell->line = NULL;
+	attributes(shell);
     signal(SIGINT, sig_handler);
 	while (1)
 	{
-		line = get_line(line);
-		if (!line)
+		shell->line = get_line(shell);
+		if (!shell->line)
 		{
 			printf("exit\n");
 			break;
 		}
+		else
+			input(shell);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/24 10:24:00 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/24 10:50:54 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/27 14:15:39 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,27 @@
 #include "../include/minishell.h"
 void	attributes()
 {
-    struct termios vieja;
-    struct termios actual;
+    struct termios old;
+    struct termios changed;
 
-	 if (tcgetattr(0, &vieja)==-1) 
+	 if (tcgetattr(0, &old)==-1) 
 	 {
-    perror ("ioctl/TCGETA vieja:");
+    perror ("ioctl/TCGETA old:");
     return ;
 	 }
 
-	 if (tcgetattr(0, &actual)==-1)
+	 if (tcgetattr(0, &changed)==-1)
 	 {
-  	  perror ("ioctl/TCGETA actual:");
+  	  perror ("ioctl/TCGETA changed:");
    	 return ;
 	 }
 
-	  actual.c_lflag=actual.c_lflag & ~ICANON & ECHO; // ~ICANON | ECHO;
-	   actual.c_cc[VQUIT] = 0;
-   	 if (tcsetattr(0,TCSANOW, &actual)==-1) 
-    perror ("ioctl/TCSETA actual:");
+	  changed.c_lflag=changed.c_lflag & ~ICANON & ECHO; // ~ICANON | ECHO;
+	   changed.c_cc[VQUIT] = 0;
+   	 if (tcsetattr(0,TCSANOW, &changed)==-1) 
+    perror ("ioctl/TCSETA changed:");
 
-//	  tcsetattr(0,TCSANOW, &vieja);
+//	  tcsetattr(0,TCSANOW, &old);
 
 
 

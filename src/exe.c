@@ -12,49 +12,44 @@
 // ( < > ) Si hay redirecciones a file necesitamos la funcion RE_IN_OUT
 
 
-//GET ENV//
-
-void get_env(char **env)
-{
-    t_env   my_env;
-    char    *path;
-    char    *temp;
-    int     i;
-
-    i = 0;
-    my_env.env = env;
-	path = getenv("PATH");
-	my_env.home = getenv("HOME");
-	my_env.root = getenv("ROOT");
-    //malloc de cuantas path? para el split?
-    my_env.paths = ft_split(path, ':');
-    i = 0;
-    while (my_env.paths[i])
-    {
-        temp = ft_strjoin(my_env.paths[i], "/");
-        free(my_env.paths[i]);
-        my_env.paths[i] = temp;
-        i++;
-    }
-}
+#include "../include/minishell.h"
 
 //INPUT STRING//
 
-void input()
+int input(t_shell *shell)
 {
-    t_pro proc;
-    char *input;
     int i;
 
-    i = 0;
-    //leer del pipeline (read?)
-    proc.commands = ft_split(input, "|"); //split del input con pipes. OJO! SI hubiera una unica pipe! // gestionar tambien && y ; ???
-    while (proc.commands[i++]) //contar cuantos procesos
-        proc.nprocess++;
+	//Comprobrar:
+	//	-Que no nos hayan metido 2 || seguidos
+	//	-Contar cuantos procesos
+	i = -1;
+	while (shell->line[++i])
+	{
+		if (shell->line[i] == '|')
+		{
+			shell->my_pro->nprocess++;
+			if (shell->line[i + 1] == '|')
+			{
+				printf("Error argumentos\n");
+				return (1);
+			}
+		}
+	}
+	printf("nbr_proccess = %d\n", shell->my_pro->nprocess);
+  	shell->my_pro->commands = ft_split(shell->line, '|');
+	printf("proccess = %s\n", shell->my_pro->commands[0]);
+	//split del input con pipes. OJO! SI hubiera una unica pipe! // gestionar tambien && y ; ???
+	if (shell->my_pro->commands[0] == NULL)
+	{
+		printf("Error argumentos\n");
+		return (1);
+	}
+	return (0);
     //hay redirecciones??? toda esta info tiene que llegar a las siguentes
 }
 
-
+/*
 //ALLOC PROCESSES//
 
 void alloc_process(t_pro *proc)
@@ -66,7 +61,7 @@ void alloc_process(t_pro *proc)
     npipes = (proc->nprocess + 1);
     proc->pipe = (int **)malloc(npipes * sizeof(int *)); //alojo array de pipes
     if (!proc->pipe)
-            ft_error(com);
+		ft_error(com);
     while (i < npipes)
     {
         proc->pipe[i] = (int *)malloc(2 * sizeof(int)); //alojo cada pipe
@@ -110,7 +105,7 @@ void exe_command(char *order, t_pro *proc, t_env *env)
         i++;
     }
 }
-
+*/
 
 /*RE_IN_OUT : Sin adaptar. 
 void re_in_out()

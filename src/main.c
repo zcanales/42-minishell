@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:16 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/21 20:19:16 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/27 14:15:36 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,23 @@
 # include <stdlib.h>
 # include <signal.h>
 
-int main()
+/*
+ * 1. PASO = INIT -> 
+ * 		-crear la estructura
+ * 		-inicializarla a 0 
+ * 		-crear el environment (GET_ENVIRONMENT)
+ * 2. PASO = CREATE_TERMINAL ->
+ * 		-crear la terminal
+ * 		2. 1 ->Dentro de CREAT_TERMINAL -> analizar el comando que nos han pasado
+ * 		*/
+
+int main(int argc, char **argv, char **env)
 {
-//	init();
-	create_terminal();
+	t_shell	*shell;
+	(void)argc;
+	(void)argv;
+	if (init(&shell, env))
+		return (1);
+	create_terminal(shell);
 	return (0);
 }
