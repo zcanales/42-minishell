@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/27 14:15:38 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/27 17:30:48 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,8 @@ void	free_and_init(t_shell *shell)
 
 char    *get_line(t_shell *shell)
 {
-    if (shell->line) //Readline hace malloc asique hay que liberar memoria
-    {
-		//free_line
-		////free_commands
-		//inicializar variables
+    if (shell->line) //Readline hace malloc asique hay que liberar memoria y inizializar
 		free_and_init(shell);
-      // shell->line = NULL;
-    }
     shell->line = readline("\033[0;35m\033[1mPink 🥜 > \033[0m");
     if (shell->line && shell->line[0] != '\0') //No queremos guardar comandos vacios com Ctrl + C
         add_history(shell->line);

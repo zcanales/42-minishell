@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/27 14:15:37 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/27 17:30:48 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ void get_environment(t_env  *my_env, char **env)
 
     my_env->env = env;
     path = getenv("PATH");
-    my_env->home = getenv("HOME");
-    printf("HOME = %s\n", my_env->home);
-    my_env->root = getenv("ROOT");
-    //malloc de cuantas path? para el split?
     my_env->paths = ft_split(path, ':');
     i = 0;
     while (my_env->paths[i])

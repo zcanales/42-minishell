@@ -21,8 +21,14 @@ int input(t_shell *shell)
     int i;
 
 	//Comprobrar:
+	//	-En la primera posición no haya un |
 	//	-Que no nos hayan metido 2 || seguidos
 	//	-Contar cuantos procesos
+	if (shell->line[0] == '|')
+	{
+		printf("Error argumentos\n");
+		exit (1);
+	}
 	i = -1;
 	while (shell->line[++i])
 	{
@@ -32,10 +38,11 @@ int input(t_shell *shell)
 			if (shell->line[i + 1] == '|')
 			{
 				printf("Error argumentos\n");
-				return (1);
+				exit (1);
 			}
 		}
 	}
+	shell->my_pro->nprocess++;
 	printf("nbr_proccess = %d\n", shell->my_pro->nprocess);
   	shell->my_pro->commands = ft_split(shell->line, '|');
 	printf("proccess = %s\n", shell->my_pro->commands[0]);
@@ -43,41 +50,44 @@ int input(t_shell *shell)
 	if (shell->my_pro->commands[0] == NULL)
 	{
 		printf("Error argumentos\n");
-		return (1);
+		exit (1);
 	}
+	alloc_process(shell);
 	return (0);
     //hay redirecciones??? toda esta info tiene que llegar a las siguentes
 }
 
-/*
+
 //ALLOC PROCESSES//
 
-void alloc_process(t_pro *proc)
+void alloc_process(t_shell *shell)
 {
     int i;
     int npipes;
 
-    i = 0;
-    npipes = (proc->nprocess + 1);
-    proc->pipe = (int **)malloc(npipes * sizeof(int *)); //alojo array de pipes
-    if (!proc->pipe)
-		ft_error(com);
-    while (i < npipes)
+    i = -1;
+    npipes = (shell->my_pro->nprocess + 1);
+    shell->my_pro->fd = (int **)malloc(npipes * sizeof(int *)); //alojo array de pipes
+    if (!shell->my_pro->fd)
+		exit(1);
+    while (++i < npipes)
     {
-        proc->pipe[i] = (int *)malloc(2 * sizeof(int)); //alojo cada pipe
-        if (!proc->pipe[i])
-            ft_error(com);
-        if (pipe(com->fd[i]) < 0)                       //creo la pipe
-            ft_error(com);
-        i++;
+        shell->my_pro->fd[i] = (int *)malloc(2 * sizeof(int)); //alojo cada pipe
+        if (!shell->my_pro->fd[i])
+            exit(1);
+        if (pipe(shell->my_pro->fd[i]) < 0)      //creo la pipe
+		{
+			printf("Error pipe\n");
+			exit(1);			
+		}
     }
     i = 0;
-    proc->pid = (int *)malloc(com->nchild * sizeof (int)); //alojo array de hijos
-    if (com->pid < 0)
-        ft_error (com);
+    shell->my_pro->pid = (int *)malloc(shell->my_pro->nprocess * sizeof (int)); //alojo array de hijos
+    if (shell->my_pro->pid < 0)
+        exit(1);
     //freees?
 }
-
+/*
 //EXE//
 
 void exe_command(char *order, t_pro *proc, t_env *env) 
@@ -87,13 +97,17 @@ void exe_command(char *order, t_pro *proc, t_env *env)
 	char **command;
 
     i = 0;
+	//Mirar que el 1. commanado no tengo piquito?
     command = ft_split(order, ' ');
     while (env->paths[i])
     {
         temp_access = ft_strjoin(env->paths[i], command[0]);
         if (!access(temp_access, X_OK))
         {
-            //if(proc->nprocess > 1)
+			//Comprobar
+			//	1. Redirigir
+			//	2. Que se el sea el ultimo hijo: Stdout o file (>)
+            //if(proc->nchild == ncprocess) //si soy el ultimo hijo
 				//dup2(com->fd[child][0], 0);
             	//dup2(com->fd[child + 1][1], 1);
             	//ft_close(com);
