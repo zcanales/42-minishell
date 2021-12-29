@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/27 17:30:48 by zcanales         ###   ########.fr       */
+/*   Updated: 2021/12/29 11:39:10 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void get_environment(t_env  *my_env, char **env)
         temp = ft_strjoin(my_env->paths[i], "/");
         free(my_env->paths[i]);
         my_env->paths[i] = temp;
-        printf("PATH = %s\n", my_env->paths[i]);
+        //printf("PATH = %s\n", my_env->paths[i]);
         i++;
     }
 }
