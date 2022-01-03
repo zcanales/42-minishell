@@ -3,17 +3,12 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
+#    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2022/01/03 11:12:04 by eperaita         ###   ########.fr        #
-=======
-#    Updated: 2021/12/29 17:42:15 by eperaita         ###   ########.fr        #
->>>>>>> 12653f4bf25c09645309b61054080ec57f30751e
+#    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
+#    Updated: 2022/01/03 16:38:01 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 NAME = minishell
 
 SRCS =	src/main.c\
@@ -23,10 +18,8 @@ SRCS =	src/main.c\
 		src/terminal.c\
 		src/attributes.c\
 		src/utils.c\
-<<<<<<< HEAD
 		src/processes.c\
-=======
->>>>>>> 12653f4bf25c09645309b61054080ec57f30751e
+
 
 OBJS = $(SRCS:.c=.o)
 OBJ_DIR = obj
