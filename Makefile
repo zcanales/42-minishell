@@ -6,7 +6,7 @@
 #    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
-#    Updated: 2021/12/27 14:15:42 by zcanales         ###   ########.fr        #
+#    Updated: 2021/12/29 17:42:15 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,10 @@ NAME = minishell
 SRCS =	src/main.c\
 		src/init.c\
 		src/exe.c\
+		src/processes.c\
 		src/terminal.c\
 		src/attributes.c\
+		src/utils.c\
 
 OBJS = $(SRCS:.c=.o)
 OBJ_DIR = obj
@@ -31,8 +33,8 @@ LIB_A = Libft/libft.a
 
 CC = gcc
 PWD_RL = /System/Volumes/Data/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/
-RLFLAGS = -L /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/lib\
-		  -I /sgoinfre/goinfre/Perso/zcanales/homebrew/opt/readline/include\
+RLFLAGS = -L /sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/lib\
+		  -I /sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/include\
 		  -lreadline\
 
 CFLAGS = -Wall -Wextra -Werror
