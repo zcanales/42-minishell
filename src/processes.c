@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 16:18:35 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:58:34 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,15 +109,18 @@ int input(t_shell *shell)
         }
     }
     //printf("nbr_proccess = %d\n", shell->my_pro->nprocess);
-    shell->my_pro->orders = ft_split(shell->line, '|'); //split del input con pipes
+    shell->my_pro->orders = ft_split_2(shell->line, '|'); //split del input con pipes
     if (shell->my_pro->orders[0] == NULL) //si metes enter hace exit. NOOOO!
     {
         printf("Error argumentos\n");
         exit (1);
     }
-    alloc_processes(shell);
+	i = -1;
+	while (shell->my_pro->orders[++i])
+		printf("%d = %s\n", i, shell->my_pro->orders[i]);
+   // alloc_processes(shell);
    // is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
-    create_processes(shell);
+   // create_processes(shell);
     return (0);
 }
 

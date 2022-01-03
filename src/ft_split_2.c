@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/03 16:52:47 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:33:45 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,22 @@ char	**ft_fill(char **p, char *s, char c, size_t num_arrays)
 	{
 		if (s[i] != c)
 		{
-			j = 0;
-			while (s[i] != c && s[i])
+			j = i;
+			while (s[i] && s[i] != c)
 			{
-				j++;
+				if (s[i] == 34)
+				{
+					 while (s[++i] != 34)
+						continue ;
+				}
+				else if (s[i] == 39)
+				{
+					 while (s[++i] != 39)
+						continue ;
+				}
 				i++;
 			}
-			p[a] = ft_substr(s, i - j, j);
+			p[a] = ft_substr(s, j, i - j);
 			if (!p[a])
 				return (ft_freepointer(p, num_arrays));
 			a++;
@@ -60,23 +69,30 @@ size_t	ft_num_arrays(char *s, char c)
 	size_t	i;
 	size_t	n;
 
-	i = 0;
+	i = -1;
 	n = 0;
-	while (s[i])
+	while (s[++i])
 	{
 		if (s[i] == 34)
 		{
-			while (s[i] != 34)
-				i++;
+			printf("%c\n", s[i]);
+			while (s[++i] != 34 )
+				continue ;
 		}
-		if (s[i] == c)
+		else if (s[i] == 39)
 		{
-			while (s[i] == c && s[i])
-				i++;
+			while (s[++i] !=  39)
+				continue ;
+		}
+		else if (s[i] == c)
+		{
+			i++;
+			if (s[i] && s[i] == c)
+				exit(1);
 		}
 		else
 		{
-			while (s[i] != c && s[i])
+			while (s[i] && s[i] != c && s[i] != 34)
 				i++;
 			n++;
 		}
