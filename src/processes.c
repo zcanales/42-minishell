@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2021/12/29 17:48:19 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:18:35 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void create_processes(t_shell *shell)
         if (shell->my_pro->pid[i] < 0)
             perror("Error");
         if (shell->my_pro->pid[i] == 0)
-			exe_command(shell->my_pro->orders[i], shell, i);
+			exe_command(shell->my_pro->orders[i], shell, i);//ejecucion de child (archivo exe.c)
         i++;
     }
 	close_pipes(shell);//Hay que cerrar todas las pipes(bucle)
@@ -46,6 +46,7 @@ void create_processes(t_shell *shell)
 	//printf("Process OK\n");
 	return ;
 }
+
 //ALLOC PROCESSES//
 
 void alloc_processes(t_shell *shell)
@@ -115,6 +116,7 @@ int input(t_shell *shell)
         exit (1);
     }
     alloc_processes(shell);
+   // is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
     create_processes(shell);
     return (0);
 }

@@ -6,7 +6,11 @@
 #    By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 09:49:26 by zcanales          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2022/01/03 11:12:04 by eperaita         ###   ########.fr        #
+=======
+#    Updated: 2021/12/29 17:42:15 by eperaita         ###   ########.fr        #
+>>>>>>> 12653f4bf25c09645309b61054080ec57f30751e
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +19,14 @@ NAME = minishell
 SRCS =	src/main.c\
 		src/init.c\
 		src/exe.c\
+		src/processes.c\
 		src/terminal.c\
 		src/attributes.c\
 		src/utils.c\
+<<<<<<< HEAD
 		src/processes.c\
+=======
+>>>>>>> 12653f4bf25c09645309b61054080ec57f30751e
 
 OBJS = $(SRCS:.c=.o)
 OBJ_DIR = obj
