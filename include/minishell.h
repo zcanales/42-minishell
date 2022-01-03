@@ -6,11 +6,11 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:40 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/27 17:30:03 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/03 11:11:10 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+# ifndef MINISHELL_H
 # define MINISHELL_H
 #include "../Libft/libft.h"
 #include <unistd.h>
@@ -18,13 +18,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef struct s_ch //NO ME DEJA CREAR ESTA ESTRUCTURA DENTRO DE T_PRO PRO ???
+{
+    int     nchild;
+    char    **command;
+	//char *infile;
+	//char *outfile;
+}   t_ch;
+
 typedef struct s_pro
 {
 	int 	nprocess;
     int     *pid;
     int     **fd;
-    char    **commands;
-
+    char    **orders; //he cambiado commands por orders, que es todo el churro entre pipes. Luego el child lo splitea en comands, que es comando + flags
+	//t_ch	*child;
+    int     nchild;
+    char    **command;
+	char *infile;//no es array porque omite pero no los modifica
+    char **outfile;//es array porque bash los crea aunque los omita.
+    int *infile_fd;//
+    int **outfile_fd;//los fd de los archivos
 }   t_pro;
 
 typedef struct s_env
@@ -55,8 +69,26 @@ void    attributes();
 
 /*PROCESSES*/
 int input(t_shell *shell);
-void exe_command(char *order, t_pro *proc, t_env *env);
-void alloc_process(t_shell *shell);
+void alloc_processes(t_shell *shell);
+void is_redirected(t_shell *shell);
+void create_processes(t_shell *shell);
+
+/*EXE*/
+void exe_command(char *order, t_shell *shell, int child);
+void re_in_out(t_shell *shell);
+void re_pipe(t_shell *shell);
+
+/*UTILS*/
+void close_pipes(t_shell *shell);
 
 /*	BUILTINS	*/
+
+
+//////LIBERAR MEMORIA: ////
+/*shell->my_env->paths[i];(bucle)
+shell->my_pro->pid;
+shell->my_pro->fd;(bucle)
+shell->my_pro->orders;(bucle)
+shell->my_pro->child->command;(bucle)*/
+
 #endif
