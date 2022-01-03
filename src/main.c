@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:16 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/28 17:46:34 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:34:16 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@
  * 		-crear el environment (GET_ENVIRONMENT)
  * 2. PASO = CREATE_TERMINAL ->
  * 		-crear la terminal
- * 		2. 1 ->Dentro de CREAT_TERMINAL -> analizar el comando que nos han pasado
+ * 		2.1 ->INPUT -> analizar el comando que nos han pasado
+ * 		-nbr_process (ft_split_2)
+ * 		2.2 ->
+ *
  * 		*/
 
 int main(int argc, char **argv, char **env)
@@ -33,8 +36,7 @@ int main(int argc, char **argv, char **env)
 	t_shell	*shell;
 	(void)argc;
 	(void)argv;
-	if (init(&shell, env))
-		return (1);
+	init(&shell, env);
 	create_terminal(shell);
 	return (0);
 }

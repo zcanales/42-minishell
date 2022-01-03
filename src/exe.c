@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 16:22:31 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:34:12 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,22 @@
 
 //EXE//
 
-void exe_command(char *order, t_shell *shell, int child) 
+void exe_command(char *order, t_shell *shell) 
 {
     int     i;
     char    *temp_access;
-    char    *reading;
-//	char **command;//todo en la struct, mas comodo pero las lineas son larguisimas
 
-    i = 0;
-	reading = NULL;
-	shell->my_pro->nchild = child; //no me deja hacerlo en una sub-estructura 
+    i = -1;
+	shell->my_pro->child->order = order;
+//	printf("id =%d\n", shell->my_pro->nchild); //ID. No me deja hacerlo en una sub-estructura 
+	//shell->my_pro->nchild = child; //ID. No me deja hacerlo en una sub-estructura 
 	//re_in_out(shell); //todos pasan por aqui? mirar redireccions posibles
 	///OJO! Y si el comando es ./ ????
-    shell->my_pro->command = ft_split(order, ' ');
-	//printf("Hijo %d - command : %s\n", shell->my_pro->nchild, shell->my_pro->command[0]);
-    while (shell->my_env->paths[i])
+    shell->my_pro->command = ft_split_2(order, ' ', &shell->my_pro->nbr_comm);
+    while (shell->my_pro->command[++i])
+		printf("id =%d %s\n", shell->my_pro->nchild, shell->my_pro->command[i]);
+	i = -1;
+    while (shell->my_env->paths[++i])
     {
         temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->command[0]);
         if (!access(temp_access, X_OK))
@@ -47,7 +48,6 @@ void exe_command(char *order, t_shell *shell, int child)
 				perror("Error: \n");//funcion errores
         }
         free(temp_access);
-        i++;
     }
 	exit(0);
 }
@@ -58,15 +58,15 @@ void exe_command(char *order, t_shell *shell, int child)
 void re_pipe(t_shell *shell)
 {
 	dup2(shell->my_pro->fd[shell->my_pro->nchild][0], 0);
-	if (shell->my_pro->nchild != shell->my_pro->nprocess - 1)
+	if (shell->my_pro->nchild != shell->my_pro->nbr_process - 1)
 		dup2(shell->my_pro->fd[shell->my_pro->nchild + 1][1], 1);
 	close_pipes(shell);  //Hay que cerrar todas las pipes(bucle)
 
 /*	//if (anterior hijo NO ha tenido outfile) 
 		dup2(shell->my_pro->fd[shell->my_pro->nchild][0], 0);
-	if (shell->my_pro->nchild != shell->my_pro->nprocess - 1)// && !outfile)
+	if (shell->my_pro->nchild != shell->my_pro->nbr_process - 1)// && !outfile)
 		dup2(shell->my_pro->fd[shell->my_pro->nchild + 1][1], 1);
-	else if(shell->my_pro->nchild != shell->my_pro->nprocess - 1)//&& outfile)
+	else if(shell->my_pro->nchild != shell->my_pro->nbr_process - 1)//&& outfile)
 		re_in_out(shell);
 
 	close_pipes(shell);  //Hay que cerrar todas las pipes(bucle)*/
@@ -75,7 +75,7 @@ void re_pipe(t_shell *shell)
 ////////////////////////////////////////
 //IS_REDIRECTED//
 
-/*char *get_files(char *order, t_shell *shell)
+char *get_files(char *order, t_shell *shell)
 {
 	char *new_order;
 	int i;
@@ -90,8 +90,8 @@ void re_pipe(t_shell *shell)
 		if (strchr(order, '<'))// INFILE ->solo tiene que devolver el ultimo, porque no modifica el resto
 		{
 			j = 0;
-			while (eres espacio -> j++ / order++)
-			while (eres ascii -> j++ /order++)
+			while (eres espacio -> i++)
+			while (!otro piquito -> i++ 
 			shell->my_pro->infile = substr(order, i, j);//lo coge
 			order += strlen(shell->my_pro->infile);
 		}
@@ -114,16 +114,16 @@ void re_pipe(t_shell *shell)
 //Gestionar << (here_doc) limitador
 void is_redirected(t_shell *shell)
 {
-    if (strchr(shell->my_pro->orders[shell->my_pro->nchild], '<') || strchr(shell->my_pro->orders[shell->my_pro->nchild], '>')) //in/out file en orders[nprocess]
+    if (strchr(shell->my_pro->orders[shell->my_pro->nchild], '<') || strchr(shell->my_pro->orders[shell->my_pro->nchild], '>')) //in/out file en orders[nbr_process]
 	{
-		shell->my_pro->orders[shell->my_pro->nchild] = get_outfiles(shell->my_pro->orders[shell->my_pro->nchild], shell);
+		shell->my_pro->orders[shell->my_pro->nchild] = get_files(shell->my_pro->orders[shell->my_pro->nchild], shell);
 	}
 	if (infile || outfile)
 	{	
 		//create (open) ommited files//or redirect and redirect 
 		re_in_out(shell);
 	}
-}*/
+}
 
 //RE_IN_OUT : Sin adaptar. 
 //
@@ -144,4 +144,20 @@ void re_out(t_shell *shell)
 	}
 }*/
 
+/*void    count_piquitos(t_shell *shell, t_ch *ch, int type_file);
+{
+    int i;
 
+    i = -1;
+    while (++i < ch->order[i])
+	{
+		if (ch->order[i] == '<')
+		{
+			if (ch->order[++i] == '<')
+				ch->infile++;
+		}
+		if (ch->order[i] == '<')
+			exit(1);
+		while (
+	}
+}*/

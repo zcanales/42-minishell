@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/03 17:18:59 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:34:17 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	free_and_init(t_shell *shell)
 	free(shell->line);
 	shell->line = NULL;
 	ft_memset(shell->my_pro, 0, sizeof(t_pro));
+	ft_memset(shell->my_pro->child, 0, sizeof(t_ch));
 }
 
 char    *get_line(t_shell *shell)
@@ -72,7 +73,10 @@ int create_terminal(t_shell *shell)
 			break;
 		}
 		else
+		{
 			input(shell);
+
+		}
 		free_and_init(shell);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/29 11:39:10 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:34:15 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,21 @@ void get_environment(t_env  *my_env, char **env)
         temp = ft_strjoin(my_env->paths[i], "/");
         free(my_env->paths[i]);
         my_env->paths[i] = temp;
-        //printf("PATH = %s\n", my_env->paths[i]);
         i++;
     }
 }
 
-int init(t_shell **shell, char **env)
+void init(t_shell **shell, char **env)
 {
     *shell = (t_shell *)ft_calloc(sizeof(t_shell), 1);
     if (!(*shell))
-        return (1);
+        exit (1);
     (*shell)->my_env = (t_env *)ft_calloc(sizeof(t_env), 1);
     (*shell)->my_pro = (t_pro *)ft_calloc(sizeof(t_pro), 1);
     if (!(*shell)->my_env || !(*shell)->my_pro)
-        return (1);
+       exit (1);
+	(*shell)->my_pro->child = (t_ch*)ft_calloc(sizeof(t_ch), 1);
+    if (!(*shell)->my_pro->child)
+        exit (1);
     get_environment((*shell)->my_env, env);
-    return (0);
 }
