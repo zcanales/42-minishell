@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/03 16:38:01 by eperaita         ###   ########.fr        #
+#    Updated: 2022/01/03 16:48:20 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -18,6 +18,7 @@ SRCS =	src/main.c\
 		src/terminal.c\
 		src/attributes.c\
 		src/utils.c\
+		src/ft_split_2.c\
 		src/processes.c\
 
 

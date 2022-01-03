@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 16:38:33 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:49:06 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ void close_pipes(t_shell *shell);
 
 /*	BUILTINS	*/
 
-
+/* FT_SLIPT_2 */
+char    **ft_split_2(char const *s, char c);
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)
 shell->my_pro->pid;
