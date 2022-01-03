@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2021/12/31 12:35:35 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:22:31 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,25 @@ void exe_command(char *order, t_shell *shell, int child)
 
 void re_pipe(t_shell *shell)
 {
-	//if (anterior hijo NO ha tenido outfile) 
-		dup2(shell->my_pro->fd[shell->my_pro->nchild][0], 0);
-	if (shell->my_pro->nchild != shell->my_pro->nprocess - 1 && !outfile)
+	dup2(shell->my_pro->fd[shell->my_pro->nchild][0], 0);
+	if (shell->my_pro->nchild != shell->my_pro->nprocess - 1)
 		dup2(shell->my_pro->fd[shell->my_pro->nchild + 1][1], 1);
-	else if(shell->my_pro->nchild != shell->my_pro->nprocess - 1 && outfile)
-		re_in_out();
-
 	close_pipes(shell);  //Hay que cerrar todas las pipes(bucle)
+
+/*	//if (anterior hijo NO ha tenido outfile) 
+		dup2(shell->my_pro->fd[shell->my_pro->nchild][0], 0);
+	if (shell->my_pro->nchild != shell->my_pro->nprocess - 1)// && !outfile)
+		dup2(shell->my_pro->fd[shell->my_pro->nchild + 1][1], 1);
+	else if(shell->my_pro->nchild != shell->my_pro->nprocess - 1)//&& outfile)
+		re_in_out(shell);
+
+	close_pipes(shell);  //Hay que cerrar todas las pipes(bucle)*/
 }
 
 ////////////////////////////////////////
 //IS_REDIRECTED//
 
-char *get_files(char *order, t_shell *shell)
+/*char *get_files(char *order, t_shell *shell)
 {
 	char *new_order;
 	int i;
@@ -118,11 +123,11 @@ void is_redirected(t_shell *shell)
 		//create (open) ommited files//or redirect and redirect 
 		re_in_out(shell);
 	}
-}
+}*/
 
 //RE_IN_OUT : Sin adaptar. 
 //
-void re_in(t_shell *shell)
+/*void re_in(t_shell *shell)
 {
     com->fd[0][0] = open(infile, O_RDONLY);
     if (com->fd[0][0] < 0)
@@ -137,6 +142,6 @@ void re_out(t_shell *shell)
     	if (com->fd[com->nchild][1] < 0)
         	exit(1);
 	}
-}
+}*/
 
 

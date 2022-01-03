@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:40 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/31 12:35:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:19:17 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ typedef struct s_pro
     char    **command;
 	char *infile;//no es array porque omite pero no los modifica
     char **outfile;//es array porque bash los crea aunque los omita.
-    int *infile;//
-    int **outfile;//los fd de los archivos
+    int *infile_fd;//
+    int **outfile_fd;//los fd de los archivos
 }   t_pro;
 
 typedef struct s_env

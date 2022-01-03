@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2021/12/30 20:56:09 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:18:35 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int input(t_shell *shell)
         exit (1);
     }
     alloc_processes(shell);
-    is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
+   // is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
     create_processes(shell);
     return (0);
 }
