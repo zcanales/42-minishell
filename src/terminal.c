@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:17 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 19:20:50 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,7 @@
 
 void	free_and_init(t_shell *shell)
 {
-	int i;
-
-	i = -1;
-	while (shell->my_pro->orders[++i])
-		free(shell->my_pro->orders[i]);
-	free(shell->my_pro->orders);
+	free_double(shell->my_pro->orders);
 	free(shell->line);
 	shell->line = NULL;
 	ft_memset(shell->my_pro, 0, sizeof(t_pro));
@@ -55,7 +50,6 @@ void    sig_handler(int signum)
 		rl_replace_line("", 0); // no aparece en el historial
 		rl_redisplay(); //Aparece otra vez
     }
-
 }
 
 int create_terminal(t_shell *shell)

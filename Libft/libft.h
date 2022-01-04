@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 12:52:50 by zcanales          #+#    #+#             */
-/*   Updated: 2021/12/30 13:18:06 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 12:38:29 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H

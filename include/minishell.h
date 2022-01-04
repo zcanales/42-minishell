@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:18 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 20:31:32 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,31 @@
 
 typedef struct s_piquito
 {
-	int		type;		// "</<<" o  ">/>>"
+	int		type;		// simple = 1; double = 2; 
 	int 	fd;			//Su fd
 	int 	priority;	// 0 - 1
+	char	*file_name;
 }t_piquito;
 
-typedef struct s_ch //NO ME DEJA CREAR ESTA ESTRUCTURA DENTRO DE T_PRO PRO ???
+typedef struct s_ch 
 {
-	char	*order;
-    int     id_child;
-    char    **command;
-	char *infile;
-	char *outfile;
-    int *infile_fd;//
-    int **outfile_fd;//los fd de los archivos
+    int     id_child;	//identificardor
+	char	*order;		//churro
+    char    **command;	//comando bueno se tiene que convertir en eso, un split de espacios. 
+	int    	nbr_command;
+
+	//para ejecutar
+	char	*comando_bueno;
+	char	**command_real;
+
+	//info files
+	int		nbr_infile;
+	int		nbr_outfile;
+
+	t_piquito	*infile_t;
+	t_piquito	*outfile_t;
+	int		index_in;
+	int		index_out;
 }   t_ch;
 
 typedef struct s_pro
@@ -42,16 +53,8 @@ typedef struct s_pro
 	int 	nbr_process;
     int     *pid;
     int     **fd;
-    char    **orders; //he cambiado commands por orders, que es todo el churro entre pipes. Luego el child lo splitea en comands, que es comando + flags
+    char    **orders;
 	t_ch	*child;
-	
-    int     nchild;
-	int		nbr_comm;
-    char    **command;
-	char *infile;//no es array porque omite pero no los modifica
-    char **outfile;//es array porque bash los crea aunque los omita.
-    int *infile_fd;//
-    int **outfile_fd;//los fd de los archivos
 }   t_pro;
 
 typedef struct s_env
@@ -81,17 +84,27 @@ void    attributes();
 /*PROCESSES*/
 int input(t_shell *shell);
 void alloc_processes(t_shell *shell);
-void is_redirected(t_shell *shell);
 void create_processes(t_shell *shell);
+void    child_process(char *order, t_shell *shell);
+void    mother_process(t_shell *shell);
 
-/*EXE*/
-void exe_command(char *order, t_shell *shell);
+/*CHOP_ORDER*/
+void    count_piquitos(t_ch *ch, int *nbr_file, char c, t_piquito **file_t);
+void    chop_order(t_ch *ch);
+void    chop_file_info(t_ch *ch, char c, char no_c, int *i);
+char	*get_real_command(t_ch *ch, int *i);
+
+/*EXECUTE*/
+void exe_command(t_shell *shell);
 void re_in_out(t_shell *shell);
 void re_pipe(t_shell *shell);
-
-/*UTILS*/
-void close_pipes(t_shell *shell);
-void    check_quotes(char *s, size_t *index);
+void is_redirected(t_shell *shell);
+	
+	/*UTILS*/
+void 	close_pipes(t_shell *shell);
+void    check_quotes(char *s, int *index);
+void    free_double(char **s);
+void    imprimir(t_ch *ch); //QUITAR
 
 /*	BUILTINS	*/
 

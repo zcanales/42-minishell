@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:14 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 19:20:47 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**ft_freepointer(char **p, size_t num_arrays)
 char	**ft_fill(char **p, char *s, char c, size_t num_arrays)
 {
 	size_t	a;
-	size_t	i;
+	int		i;
 	size_t	start;
 
 	i = 0;
@@ -41,16 +41,7 @@ char	**ft_fill(char **p, char *s, char c, size_t num_arrays)
 			start = i;
 			while (s[i] && s[i] != c)
 			{
-				if (s[i] == 34)
-				{
-					 while (s[++i] && s[i] != 34)
-						continue ;
-				}
-				else if (s[i] == 39)
-				{
-					 while (s[++i] && s[i] != 39)
-						continue ;
-				}
+				check_quotes(s, &i);
 				i++;
 			}
 			p[a] = ft_substr(s, start, i - start);
@@ -58,7 +49,7 @@ char	**ft_fill(char **p, char *s, char c, size_t num_arrays)
 				return (ft_freepointer(p, num_arrays));
 			a++;
 		}
-		if (s[i])
+		if (s[i] == c)
 			i++;
 	}
 	p[a] = NULL;
@@ -67,33 +58,29 @@ char	**ft_fill(char **p, char *s, char c, size_t num_arrays)
 
 size_t	ft_num_arrays(char *s, char c, int *nbr_array)
 {
-	size_t	i;
+	int	i;
 	size_t	n;
-
-	i = -1;
+	
 	n = 1;
+	i = -1;
 	while (s[++i])
 	{
-		if (s[i] == 34) //COMILLAS DOBLES
+		check_quotes(s, &i);
+		if (s[i] == c) 
 		{
-			while (s[++i] && s[i] != 34 )
-				continue ;
-		}
-		else if (s[i] == 39) //COMILLAS SIMPLES
-		{
-			while (s[++i] && s[i] !=  39)
-				continue ;
-		}
-	//	check_quotes(s, &i);
-		if (s[i] == c) //PIPE 
-		{
-			i++;
-			if (s[i] && s[i] == c)
+			if (s[i + 1] && s[i + 1] == '|') //ERROR: EN CASO DE 2 || SEGUIDAS
 				exit(1);
+			if (s[i + 1] && s[i + 1] == c && c != 32) //ERROR: 3 piquitos seguidos
+			{
+				i++;
+				if (s[i + 1] && s[i + 1] == c && c != 32)
+				{
+					printf("Error\n");
+					exit (1);
+				}
+			}
 			n++;
 		}
-		if (s[i] == '\0')
-			break ;
 	}
 	*nbr_array = n;
 	return (n);
@@ -113,5 +100,7 @@ char	**ft_split_2(char const *s, char c, int *nbr_array)
 	if (!p)
 		return (0);
 	p = ft_fill(p, (char *)s, c, num_arrays);
+	if (c != '|') //ESTO IGUAL HAY QUE PONERLO MEJOR
+		*nbr_array = *nbr_array - 1;
 	return (p);
 }

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:14 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 20:31:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,58 @@
 
 #include "../include/minishell.h"
 
+//	CHILD PROCESS //
+
+void	child_process(char *order, t_shell *shell)
+{
+	int     i;
+
+    i = -1;
+    shell->my_pro->child->order = order;
+    ///OJO! Y si el comando es ./ ????
+
+    /*CONTAMOS PIQUITOS*/
+	count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_infile, '<', &shell->my_pro->child->infile_t);
+    count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_outfile, '>', &shell->my_pro->child->outfile_t);
+   // printf("infile = %d outfile = %d\n", shell->my_pro->child->nbr_infile, shell->my_pro->child->nbr_outfile);
+
+	/*CHOP EL CHURRO COMANDO */
+	chop_order(shell->my_pro->child);
+	imprimir(shell->my_pro->child);
+  
+
+  	/*SPLIT EL ARRAY REAL_COMANDO*/
+	shell->my_pro->child->command_real = ft_split_2(shell->my_pro->child->comando_bueno, ' ', &shell->my_pro->child->nbr_command); 
+	
+	/*HACER LAS REDIRECIONES */
+	// is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
+	//re_in_out(shell); //todos pasan por aqui? mirar redireccions posibles
+
+	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
+	exe_command(shell);//ejecucion de child (archivo exe.c)
+
+}
+
+//MOTHER //
+
+void	mother_process(t_shell *shell)
+{
+	int i;
+	int status;
+	
+	i = -1;
+    while (++i < shell->my_pro->nbr_process)
+		waitpid(shell->my_pro->pid[i], &status, 0);
+	/*if (WIFEXITED(status))
+		state = WEXITSTATUS(status);*/
+	//printf("Process OK\n");
+}
 
 //CREATE PROCESSES//
 
 void create_processes(t_shell *shell)
 {
     int i;
-	int status;
 
     i = -1;
     while (++i < shell->my_pro->nbr_process)
@@ -32,19 +77,12 @@ void create_processes(t_shell *shell)
             perror("Error");
         if (shell->my_pro->pid[i] == 0)
 		{
-			shell->my_pro->nchild = i;
-		//	shell->my_pro->child->id_child = i;
-			exe_command(shell->my_pro->orders[i], shell);//ejecucion de child (archivo exe.c)
+			shell->my_pro->child->id_child = i;
+			child_process(shell->my_pro->orders[i], shell);
 		}
     }
-	close_pipes(shell);//Hay que cerrar todas las pipes(bucle)
-	i = -1;
-    while (++i < shell->my_pro->nbr_process)
-		waitpid(shell->my_pro->pid[i], &status, 0);
-	/*if (WIFEXITED(status))
-		state = WEXITSTATUS(status);*/
-	//printf("Process OK\n");
-	return ;
+	close_pipes(shell); //Hay que cerrar todas las pipes(bucle)
+	mother_process(shell);
 }
 
 //ALLOC PROCESSES//
@@ -55,6 +93,7 @@ void alloc_processes(t_shell *shell)
     int npipes;
 
     i = -1;
+    shell->my_pro->orders = ft_split_2(shell->line, '|', &shell->my_pro->nbr_process); //split del input con pipes
     npipes = (shell->my_pro->nbr_process + 1);
     shell->my_pro->fd = (int **)malloc(npipes * sizeof(int *)); //alojo array de pipes
     if (!shell->my_pro->fd)
@@ -79,24 +118,11 @@ void alloc_processes(t_shell *shell)
 }
 
 //INPUT STRING//
-//Gestionar comillas primero: las comillas ignoran lo que hay dentro como comando, se convierten en string(parametro) de lo que funcione como comando fuera de ellas. Si hay una pipe dentro puede influir en el split. Igual con los (><)
-// Gestionar tambien && y ; ???
-
-
 int input(t_shell *shell)
 {
-    int i;
-
-    if (shell->line[0] == '|') //  -Que no nos hayan metido solo |
-        exit (1);
-    shell->my_pro->orders = ft_split_2(shell->line, '|', &shell->my_pro->nbr_process); //split del input con pipes
-	i = -1;
-	while (shell->my_pro->orders[++i])
-		printf("%d = %s\n", i, shell->my_pro->orders[i]);
+    /*if (shell->line[0] == '|') //  ERROR completar. Ej: Que no nos hayan metido solo |, <<< ...
+        exit (1);*/
     alloc_processes(shell);
-   // is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
     create_processes(shell);
     return (0);
 }
-
-

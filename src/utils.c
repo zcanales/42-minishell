@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:17 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/04 19:20:49 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,55 @@ void close_pipes(t_shell *shell)
     }
 }
 
-void	check_quotes(char *s, size_t *index)
+void	check_quotes(char *s, int *index)
 {
 	int i;
 
 	i = *index;
 	if (s[i] == 34)
 	{
-		while (s[i] != 34)
+		while (s[++i] && s[i] != 34)
 			continue ;
 	}
 	else if (s[i] == 39)
 	{
-		while (s[++i] != 39)
+		while (s[++i] && s[i] != 39)
 			continue ;
 	}
 	*index = i;
+}
+
+void	free_double(char **s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+		free(s[i]);
+	free(s);
+}
+
+void	imprimir(t_ch *ch)
+{
+	int i;
+
+	i = -1;
+	printf("		\033[0;31mINFO\033[0m\n");
+    printf("	id child \033[0m == %d\n", ch->id_child);   //identificardor
+    printf("	churro = %s\n",ch->order);     //churro
+	printf("	comando bueno == %s\n",ch->comando_bueno);
+
+    //info files
+    printf("	n infile == %d\n",ch->nbr_infile);
+	while(++i < ch->nbr_infile)
+    	printf("	   infile name  == %s / type = %d\n", ch->infile_t[i].file_name, ch->infile_t[i].type);
+    
+	i = -1;
+	printf("	n outfile == %d\n",ch->nbr_outfile);
+	while(++i < ch->nbr_outfile)
+    	printf("	   outfile name  == %s - type = %d\n", ch->outfile_t[i].file_name, ch->outfile_t[i].type);
+	printf("		\033[0;31mEND\033[0m\n");
+
+
+
 }
