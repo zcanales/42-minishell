@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/04 20:31:30 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/05 17:38:49 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,16 @@
 
 //	CHILD PROCESS //
 
+//cat <infile infile_real// probar esto
+
 void	child_process(char *order, t_shell *shell)
 {
 	int     i;
 
     i = -1;
+	unlink("here_doc.txt");
+//	if (tcsetattr(0,TCSANOW, &shell->old) ==-1) 
+//		 perror ("ioctl/TCSETA changed:");
     shell->my_pro->child->order = order;
     ///OJO! Y si el comando es ./ ????
 
@@ -33,16 +38,16 @@ void	child_process(char *order, t_shell *shell)
 
 	/*CHOP EL CHURRO COMANDO */
 	chop_order(shell->my_pro->child);
-	imprimir(shell->my_pro->child);
   
 
   	/*SPLIT EL ARRAY REAL_COMANDO*/
 	shell->my_pro->child->command_real = ft_split_2(shell->my_pro->child->comando_bueno, ' ', &shell->my_pro->child->nbr_command); 
+	//imprimir(shell->my_pro->child);
 	
 	/*HACER LAS REDIRECIONES */
-	// is_redirected(shell);//Filtro redirecciones, (archivo exe.c)//
-	//re_in_out(shell); //todos pasan por aqui? mirar redireccions posibles
-
+	is_redirected(shell->my_pro);//Filtro redirecciones, (archivo execute.c)//
+	re_pipe(shell);	
+	//re_in_out(shell); //preguntar si ha hecho redirect de/a file Y sino read-write en pipes correspondientes
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
 	exe_command(shell);//ejecucion de child (archivo exe.c)
 
@@ -74,7 +79,7 @@ void create_processes(t_shell *shell)
     {
         shell->my_pro->pid[i] = fork();
         if (shell->my_pro->pid[i] < 0)
-            perror("Error");
+	perror("Error");echo hola
         if (shell->my_pro->pid[i] == 0)
 		{
 			shell->my_pro->child->id_child = i;

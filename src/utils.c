@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/04 19:20:49 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/05 11:14:20 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	imprimir(t_ch *ch)
 	printf("		\033[0;31mINFO\033[0m\n");
     printf("	id child \033[0m == %d\n", ch->id_child);   //identificardor
     printf("	churro = %s\n",ch->order);     //churro
-	printf("	comando bueno == %s\n",ch->comando_bueno);
 
     //info files
     printf("	n infile == %d\n",ch->nbr_infile);
@@ -79,8 +78,12 @@ void	imprimir(t_ch *ch)
 	printf("	n outfile == %d\n",ch->nbr_outfile);
 	while(++i < ch->nbr_outfile)
     	printf("	   outfile name  == %s - type = %d\n", ch->outfile_t[i].file_name, ch->outfile_t[i].type);
-	printf("		\033[0;31mEND\033[0m\n");
+	printf("------\n");
+	i = -1;
+	while(ch->command_real[++i])
+		printf("	comand real == %s\n",ch->command_real[i]);
 
+	printf("		\033[0;31mEND\033[0m\n");
 
 
 }

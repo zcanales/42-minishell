@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/04 20:31:32 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/05 17:38:53 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ char	*get_real_command(t_ch *ch, int *i);
 
 /*EXECUTE*/
 void exe_command(t_shell *shell);
-void re_in_out(t_shell *shell);
+void re_in_out(t_pro *pro, int in_out);
 void re_pipe(t_shell *shell);
-void is_redirected(t_shell *shell);
+void is_redirected(t_pro *pro);
 	
 	/*UTILS*/
 void 	close_pipes(t_shell *shell);
@@ -111,6 +111,8 @@ void    imprimir(t_ch *ch); //QUITAR
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);
 
+/*HERE_DOC*/
+void here_doc(t_pro *pro);
 
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)
