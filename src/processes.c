@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 17:45:21 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/05 20:45:32 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	mother_process(t_shell *shell)
 void create_processes(t_shell *shell)
 {
     int i;
+	//int status;
 
     i = -1;
     while (++i < shell->my_pro->nbr_process)
@@ -85,7 +86,12 @@ void create_processes(t_shell *shell)
 			shell->my_pro->child->id_child = i;
 			child_process(shell->my_pro->orders[i], shell);
 		}
+		/*else
+		{
+			waitpid(shell->my_pro->pid[i], &status, 0);
+		}*/
     }
+	printf("a cerrar pipes|\n");
 	close_pipes(shell); //Hay que cerrar todas las pipes(bucle)
 	mother_process(shell);
 }
