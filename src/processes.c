@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 17:38:49 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/05 17:45:21 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void create_processes(t_shell *shell)
     {
         shell->my_pro->pid[i] = fork();
         if (shell->my_pro->pid[i] < 0)
-	perror("Error");echo hola
-        if (shell->my_pro->pid[i] == 0)
+			perror("Error");
+		if (shell->my_pro->pid[i] == 0)
 		{
 			shell->my_pro->child->id_child = i;
 			child_process(shell->my_pro->orders[i], shell);
