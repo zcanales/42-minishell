@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/07 12:29:11 by eperaita         ###   ########.fr        #
+#    Updated: 2022/01/07 20:16:19 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -22,6 +22,7 @@ SRCS =	src/main.c\
 		src/ft_split_2.c\
 		src/processes.c\
 		src/here_doc.c\
+		src/builtins.c\
 
 
 OBJS = $(SRCS:.c=.o)

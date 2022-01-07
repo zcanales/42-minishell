@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/07 18:01:43 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 21:19:41 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,16 @@ typedef struct s_pro
 	t_ch	*child;
 }   t_pro;
 
+/*typedef struct variable{
+	char	*name;
+	char	*value;
+}t_var;*/
+
 typedef struct s_env
 {
     char    **env;
     char    **paths;
+	char	**var;
 }t_env;
 
 typedef struct	s_shell
@@ -108,6 +114,7 @@ void    free_double(char **s);
 void    imprimir(t_ch *ch); //QUITAR
 
 /*	BUILTINS	*/
+void    ft_sort_builtins(t_shell *shell);
 
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);

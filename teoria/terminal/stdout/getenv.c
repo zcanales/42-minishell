@@ -21,9 +21,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
-
-/*
- * OPCION 1
+/*OPCION 1*/
 int main()
 {
    char *value;
@@ -33,9 +31,10 @@ int main()
    value = getenv("USER");
    printf("USER = %s\n", value);
    value = getenv("PASSWORD");
-   printf("PASSWORe	 = %s\n", value);
+   printf("PASSWORD	 = %s\n", value);
    return (0);
-}*/
+}
+
 
 /*
  * OPCION 2
@@ -47,7 +46,7 @@ int main(int argc, char **argv, char **envp)
    return (0);
 }
 */
- OPCION 3
+/* OPCION 3
 extern char **environ;
 
 int main(int argc, char **argv, char **envp)
@@ -57,7 +56,7 @@ int main(int argc, char **argv, char **envp)
        printf("%d : %s\n", i, environ[i]);
    return (0);
 }
-
+*/
 
 //OPCION 4 -> Poner en la terminal
 //PASSCODE=HereThereBeMonster ./a.out

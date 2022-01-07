@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/07 18:01:36 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 21:19:46 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ void	child_process(char *order, t_shell *shell)
 	/*HACER LAS REDIRECIONES */
 	is_redirected(shell->my_pro);
 	re_pipe(shell);	
+	
+	/*BUILTINGS*/
+	ft_sort_builtins(shell);
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
 	if (shell->my_pro->child->id_child != shell->my_pro->nbr_process - 1)
