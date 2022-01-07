@@ -12,7 +12,7 @@ typedef struct s_ch
 }t_ch;
 
 
-
+/*
 int main(void)
 {
 	t_ch	ch;

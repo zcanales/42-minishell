@@ -6,13 +6,16 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/04 19:20:52 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:01:37 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 //GET_ENV -> consigue el env y las paths (alojadas en struct t_env)
+//INIT -> inicializa SHELL
+
+
 void get_environment(t_env  *my_env, char **env)
 {
     char    *path;

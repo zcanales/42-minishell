@@ -6,13 +6,17 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 11:10:42 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:01:39 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//COUNT_PIQUITOS -> Numero de infiles y oufiles para hacer malloc de cada t_piquito
+//CHOP_ORDER + CHOP_FILE_INFO -> Substrae del order los infiles
+//GET_REAL_COMMAND -> Se queda con el comando LIMPIO y en un array. 
+
 #include "../include/minishell.h"
 
-void    count_piquitos(t_ch *ch, int *nbr_file, char c, t_piquito **file_t) //cambiar t_tiype
+void    count_piquitos(t_ch *ch, int *nbr_file, char c, t_piquito **file_t) 
 {
 	int i;
 	char **file;
@@ -36,11 +40,11 @@ void	chop_order(t_ch *ch)
 		while (ch->order[i] == 32)
 			i++;
 		check_quotes(ch->order, &i);
-        if (ch->order[i] ==  '<')// INFILE ->solo tiene que devolver el ultimo, porque no modifica el resto
+        if (ch->order[i] ==  '<')// INFILES
 			chop_file_info(ch, '<', '>', &i);
-		else  if (ch->order[i] == '>')//este guarda un array de outfiles, tiene que crearlos
+		else  if (ch->order[i] == '>') //OUTFILES
 			chop_file_info(ch, '>', '<', &i);
-        else //es comando
+        else //COMMAND
 			ch->comando_bueno = get_real_command(ch, &i);
     }
 }
@@ -57,19 +61,19 @@ void	chop_file_info(t_ch *ch, char c, char no_c, int *i)
 		type = 2;
 		*i += 1;
 	}
-	while (ch->order[*i] && ch->order[*i] == 32) 	//ESPACIOS
+	while (ch->order[*i] && ch->order[*i] == 32) 	//Espacios
 		*i += 1;
-	start = *i;	//EMPIEZA
-	while (ch->order[*i] && ch->order[*i] != 32 && ch->order[*i] != no_c) //acaba
+	start = *i;
+	while (ch->order[*i] && ch->order[*i] != 32 && ch->order[*i] != no_c) 
 		*i = *i +1;
 	if (c == '<')
 	{
-		ch->infile_t[ch->index_in].file_name = ft_substr(ch->order, start, *i - start);//lo coge
+		ch->infile_t[ch->index_in].file_name = ft_substr(ch->order, start, *i - start); 
 		ch->infile_t[ch->index_in++].type = type;
 	}
 	else
 	{
-		ch->outfile_t[ch->index_out].file_name = ft_substr(ch->order, start, *i - start);//lo coge
+		ch->outfile_t[ch->index_out].file_name = ft_substr(ch->order, start, *i - start);
 		ch->outfile_t[ch->index_out++].type = type;
 	}
 }

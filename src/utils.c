@@ -6,11 +6,16 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 20:45:33 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:41:34 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//CLOSE_PIPES -> Bucle que cierra todas las pipes. 
+//CHECK_QUOTES -> Cuando se encuentra comillas, avanza en string SIN PARAR hasta que encuentre otras iguales. 
+//FREE_DOUBLE -> Libera un array doble
+//IMPRIMIR -> Imprime struct. 
 
 //CLOSE PIPES//
 
@@ -32,6 +37,8 @@ void close_pipes(t_shell *shell)
     }
 }
 
+//CHECK_QUOTES//
+
 void	check_quotes(char *s, int *index)
 {
 	int i;
@@ -50,6 +57,8 @@ void	check_quotes(char *s, int *index)
 	*index = i;
 }
 
+//FREE_DOUBLE//
+
 void	free_double(char **s)
 {
 	int	i;
@@ -60,6 +69,8 @@ void	free_double(char **s)
 	free(s);
 }
 
+//IMPRIMIR//
+
 void	imprimir(t_ch *ch)
 {
 	int i;
@@ -69,7 +80,6 @@ void	imprimir(t_ch *ch)
     printf("	id child \033[0m == %d\n", ch->id_child);   //identificardor
     printf("	churro = %s\n",ch->order);     //churro
 
-    //info files
     printf("	n infile == %d\n",ch->nbr_infile);
 	while(++i < ch->nbr_infile)
     	printf("	   infile name  == %s / type = %d\n", ch->infile_t[i].file_name, ch->infile_t[i].type);

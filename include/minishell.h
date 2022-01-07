@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 19:41:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:01:43 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_shell
 	struct termios old;
 	struct termios changed;
 	char	*line;
+	int		mother;
 	t_env	*my_env;
 	t_pro	*my_pro;
 
@@ -96,7 +97,7 @@ char	*get_real_command(t_ch *ch, int *i);
 
 /*EXECUTE*/
 void exe_command(t_shell *shell);
-void re_in_out(t_pro *pro, int in_out);
+void re_in_out(t_pro *pro, int in_out, int index);
 void re_pipe(t_shell *shell);
 void is_redirected(t_pro *pro);
 	
@@ -112,7 +113,7 @@ void    imprimir(t_ch *ch); //QUITAR
 char    **ft_split_2(char const *s, char c, int *nbr_array);
 
 /*HERE_DOC*/
-void here_doc(t_pro *pro);
+void here_doc(t_pro *pro, int index);
 
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)
@@ -120,5 +121,8 @@ shell->my_pro->pid;
 shell->my_pro->fd;(bucle)
 shell->my_pro->orders;(bucle)
 shell->my_pro->child->command;(bucle)*/
+
+/////////NOTAS////////
+//Cambiar nombre de piquito (ingles)
 
 #endif

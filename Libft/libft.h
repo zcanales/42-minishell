@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 12:52:50 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/04 12:38:29 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/07 12:29:57 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -30,6 +30,7 @@ int				ft_isprint(int c);
 char			*ft_itoa(int n);
 int				ft_tolower(int c);
 int				ft_toupper(int c);
+int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(char *s1, char *s2, unsigned int n);
 void			ft_bzero(void *s, size_t n);
 void			*ft_calloc(size_t nmemb, size_t n);

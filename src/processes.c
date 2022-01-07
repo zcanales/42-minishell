@@ -6,26 +6,34 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 20:45:32 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:01:36 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //INPUT -> Del input [shell->line] determina n* procesos [shell->my_pro->nbr_process]y splitea line en [shell->my_pro->orders]
 //ALLOC_PROCESS -> aloja array de pipes, crea pipes y aloja array de pids de procesos.
-//CREATE PROCESSES -> Fork * nbr_process -> redirige cada uno a EXE_COMMAND (exe.c)
+//CREATE PROCESSES -> Fork * nbr_process -> redirige cada uno a CHILD_PROCESS
+////CHILD PROCESS -> Ejecucion de hija
+	//Contamos piquitos
+	//Chop churro comando (chop_order.c)
+	//Split real_comando (chop_order.c)
+	//Redirecciones (exe.c)
+	//Unlock siguiente hija
+	//Exe (exe.c)
+//MOTHER PROCESS -> Ejecucion de madre//
+	
+//imprimir(shell->my_pro->child);
 
 #include "../include/minishell.h"
+#include <signal.h>
 
 //	CHILD PROCESS //
-
-//cat <infile infile_real// probar esto
 
 void	child_process(char *order, t_shell *shell)
 {
 	int     i;
 
     i = -1;
-	unlink("here_doc.txt");
 //	if (tcsetattr(0,TCSANOW, &shell->old) ==-1) 
 //		 perror ("ioctl/TCSETA changed:");
     shell->my_pro->child->order = order;
@@ -34,7 +42,6 @@ void	child_process(char *order, t_shell *shell)
     /*CONTAMOS PIQUITOS*/
 	count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_infile, '<', &shell->my_pro->child->infile_t);
     count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_outfile, '>', &shell->my_pro->child->outfile_t);
-   // printf("infile = %d outfile = %d\n", shell->my_pro->child->nbr_infile, shell->my_pro->child->nbr_outfile);
 
 	/*CHOP EL CHURRO COMANDO */
 	chop_order(shell->my_pro->child);
@@ -42,14 +49,16 @@ void	child_process(char *order, t_shell *shell)
 
   	/*SPLIT EL ARRAY REAL_COMANDO*/
 	shell->my_pro->child->command_real = ft_split_2(shell->my_pro->child->comando_bueno, ' ', &shell->my_pro->child->nbr_command); 
-	//imprimir(shell->my_pro->child);
 	
 	/*HACER LAS REDIRECIONES */
-	is_redirected(shell->my_pro);//Filtro redirecciones, (archivo execute.c)//
+	is_redirected(shell->my_pro);
 	re_pipe(shell);	
-	//re_in_out(shell); //preguntar si ha hecho redirect de/a file Y sino read-write en pipes correspondientes
+	
+	/*DESBLOQUEAR SIGUIENTE HIJA */
+	if (shell->my_pro->child->id_child != shell->my_pro->nbr_process - 1)
+		kill(shell->my_pro->pid[shell->my_pro->child->id_child], SIGCONT);
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
-	exe_command(shell);//ejecucion de child (archivo exe.c)
+	exe_command(shell);
 
 }
 
@@ -62,9 +71,16 @@ void	mother_process(t_shell *shell)
 	
 	i = -1;
     while (++i < shell->my_pro->nbr_process)
-		waitpid(shell->my_pro->pid[i], &status, 0);
-	/*if (WIFEXITED(status))
-		state = WEXITSTATUS(status);*/
+	{
+		waitpid(-1, &status, 0);
+		if (status != 0)
+		{
+			printf("Hijos %d con problemas\n", i);
+			if (i != (shell->my_pro->nbr_process - 1))
+				kill(shell->my_pro->pid[i + 1], SIGCONT);
+		}
+	}
+	//unlink("here_doc.txt");
 	//printf("Process OK\n");
 }
 
@@ -72,26 +88,18 @@ void	mother_process(t_shell *shell)
 
 void create_processes(t_shell *shell)
 {
-    int i;
-	//int status;
-
-    i = -1;
-    while (++i < shell->my_pro->nbr_process)
+	shell->my_pro->child->id_child = shell->my_pro->nbr_process;
+    while (shell->my_pro->child->id_child--)
     {
-        shell->my_pro->pid[i] = fork();
-        if (shell->my_pro->pid[i] < 0)
+        shell->my_pro->pid[shell->my_pro->child->id_child] = fork();
+        if (shell->my_pro->pid[shell->my_pro->child->id_child] < 0)
 			perror("Error");
-		if (shell->my_pro->pid[i] == 0)
-		{
-			shell->my_pro->child->id_child = i;
-			child_process(shell->my_pro->orders[i], shell);
-		}
-		/*else
-		{
-			waitpid(shell->my_pro->pid[i], &status, 0);
-		}*/
+		if (shell->my_pro->pid[shell->my_pro->child->id_child] != 0)
+			kill(shell->my_pro->pid[shell->my_pro->child->id_child], SIGSTOP);
+		else
+			child_process(shell->my_pro->orders[shell->my_pro->child->id_child], shell);
     }
-	printf("a cerrar pipes|\n");
+	kill(shell->my_pro->pid[0], SIGCONT);
 	close_pipes(shell); //Hay que cerrar todas las pipes(bucle)
 	mother_process(shell);
 }
@@ -133,6 +141,7 @@ int input(t_shell *shell)
 {
     /*if (shell->line[0] == '|') //  ERROR completar. Ej: Que no nos hayan metido solo |, <<< ...
         exit (1);*/
+	unlink("here_doc.txt");
     alloc_processes(shell);
     create_processes(shell);
     return (0);

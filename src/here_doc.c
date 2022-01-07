@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/05 20:21:18 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:19:42 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,53 +16,46 @@
 # include <readline/readline.h>
 # include <signal.h>
 
-void new_filename(t_pro *pro)
+static void new_filename(t_pro *pro, int index)
 {
 	free(pro->child->infile_t->file_name);
-	pro->child->infile_t->file_name = ft_strdup("here_doc.txt");
+	pro->child->infile_t[index].file_name = ft_strdup("here_doc.txt");
 }
 
-
-void here_doc(t_pro *pro)
+void here_doc(t_pro *pro, int index)
 {
     char    *line;
     char    *limit;
-    int     fd;
+	int		fd;
 
-    limit = ft_strjoin(pro->child->infile_t->file_name, "\n");
-    fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0755);
-    if (fd < 0)
+    limit = ft_strdup(pro->child->infile_t[index].file_name);
+	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0755);
+    if (pro->child->outfile_t[index].fd < 0)
     {
         free(limit);
         exit (0);
     }
-	  while (1)
+	 while (1)
     {
         line = readline(">");
-        if (!ft_strncmp(line, limit, ft_strlen(line)))
+        if (ft_strcmp(line, limit))
         {
-			//kill(pro->pid[pro->child->id_child + 1], SIGCONT);
             free(line);
             break ;
+        }
+		else if (!line)
+        {
+            printf("exit\n");
+            break;
         }
         ft_putstr_fd(line, fd);
         ft_putstr_fd("\n", fd);
         free(line);
         line = NULL;
     }
-	new_filename(pro);
-   /* while (1)
-    {
-        line = get_next_line(0);
-        if (ft_strcmp(line, limit))
-        {
-            free(line);
-            break ;
-        }
-        ft_putstr_fd(line, fd);
-        free(line);
-        line = NULL;
-    }*/
+	new_filename(pro, index);
     free(limit);
     close(fd);
+	pro->fd[pro->child->id_child][0] = open("here_doc.txt", O_RDONLY);
 }
+

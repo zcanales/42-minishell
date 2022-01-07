@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/04 19:20:50 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:20:53 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void    sig_handler(int signum)
 
 int create_terminal(t_shell *shell)
 {
-
 	shell->line = NULL;
 	attributes(shell);
     signal(SIGINT, sig_handler);
@@ -67,10 +66,7 @@ int create_terminal(t_shell *shell)
 			break;
 		}
 		else
-		{
 			input(shell);
-
-		}
 		free_and_init(shell);
 	}
 	return (0);
