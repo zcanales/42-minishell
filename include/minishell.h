@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/07 21:19:41 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/08 14:31:54 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_env
     char    **env;
     char    **paths;
 	char	**var;
+	char	**var_real;
 }t_env;
 
 typedef struct	s_shell
