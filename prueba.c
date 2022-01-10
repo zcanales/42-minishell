@@ -3,8 +3,9 @@
 #include <signal.h>
 #define N 5
 #include <sys/wait.h>
+#include "Libft/libft.h"
 #include <stdlib.h>
-
+#include <string.h>
 typedef struct s_ch
 {
 	int i;
@@ -57,4 +58,19 @@ int main(void)
 		}
 	}	
 	return (0);
+}
+*/
+
+int main()
+{
+	char *s1 = "hola";
+	char *s2 = "\0";
+	char *s3 = "quetal";
+	
+//	printf("s3 = %s\n", strjoin(s1, s2));
+	printf("s4 = %s\n", ft_strjoin(s2, s3));
+	printf("s5 = %s\n", ft_strjoin(ft_strjoin(s1, s2), s3));
+
+	return (0);
+
 }

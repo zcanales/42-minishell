@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/08 14:34:07 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/10 22:09:55 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,42 +22,100 @@
      free env
      return new_env
      */
-    //La reconoce auto con $VAR????
-	//
-	//
+	//NO FUNCIONA: export a=$USER'$USER'
 
-static char *ft_substr_strjoin(t_shell *shell, int a, int start, int i)
+
+char *expand_dollar(t_shell *shell, char *str, int *i)
+{
+	int a;
+	char *expanded;
+	char *dollar_var;
+	int	start;
+
+	start = *i;
+	a = -1;
+	*i += 1;
+	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$') //len de la variable
+		*i += 1;
+	dollar_var = ft_substr(str, start + 1, *i - start - 1); // dollar_var = variable
+	while (shell->my_env->env[++a]) //buscarla en env
+	{
+		if (!ft_strncmp(shell->my_env->env[a], dollar_var, ft_strlen(dollar_var)))
+		{
+			if(shell->my_env->env[a][ft_strlen(dollar_var)] == '=')
+			{
+				expanded = ft_substr(shell->my_env->env[a], ft_strlen(dollar_var) + 1, ft_strlen(shell->my_env->env[a]) - ft_strlen(dollar_var) + 1);
+				return(expanded);
+			}
+		}
+	}
+	expanded = (char *)malloc(sizeof(char) * 1);
+	if (!expanded)
+		exit(1);
+	expanded[0] = '\0';
+	return (expanded);
+}
+
+void	ft_replace_var(char **str, int start, int len, char *replace)
+{
+	int i;
+	char *temp;
+	int total_len;
+
+	i = -1;
+	total_len = ft_strlen(*str) - len + ft_strlen(replace);
+	temp = (char *)ft_calloc(sizeof(char), total_len + 1);
+	if (!temp)
+		exit(1);
+	ft_strlcpy(temp, *str, start + 1);
+	ft_strlcat(temp, replace, ft_strlen(replace) + ft_strlen(temp) + 1);
+	ft_strlcat(temp, *str + start + len, total_len + 1);
+	free(*str);
+	*str = NULL;
+	*str = ft_strdup(temp);
+	free(temp);
+	
+}
+
+char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
 {
     char    *real_temp;
     char    *temp;
 
-    temp = ft_substr(shell->my_env->var[a], start, i - start);
-    if (!shell->my_env->var_real[a])
+    temp = ft_substr(to_sub, start, end - start);
+    if (!to_join)
         real_temp  = ft_strdup(temp);
     else
-	{
-        real_temp = ft_strjoin(shell->my_env->var_real[a], temp);
-		free(shell->my_env->var_real[a]);
-	}
-	free(temp);
+    {
+        real_temp = ft_strjoin(to_join, temp);
+        free(to_join);
+    }
+    free(temp);
     return (real_temp);
 }
 
-static void    *decode_quotes(t_shell *shell, int *i, int a)
+void    *decode_quotes(t_shell *shell, char *dest, char **str, int *i) 
 {
     int     start;
+    int     dollar_pos;
 	char	quote;
+	char	*dollar_var;
 
-	quote = shell->my_env->var[a][*i];
+	quote = *(*str + (*i));
 	*i += 1;
     start = *i;
-    while (shell->my_env->var[a][*i] && shell->my_env->var[a][*i] != quote)
+    while (*(*str + (*i)) && *(*str + (*i)) != quote)
 	{
-//		if (shell->my_env->var[a][*i] == '$' && shell->my_env->var[a][*i] == 34)
-//			expand_dollar(shell, i);
+		if (*(*str + (*i)) == '$' && quote == 34)
+		{
+			dollar_pos = *i;
+			dollar_var = expand_dollar(shell, *str, i);
+			ft_replace_var(str, dollar_pos, *i - dollar_pos, dollar_var);
+			*i = dollar_pos + ft_strlen(dollar_var) - 1;
+		}
 		*i += 1;
 	}
-	return (ft_substr_strjoin(shell, a, start, *i));
+	return (ft_substr_strjoin(*str, dest,  start, *i));
 }
 
 static  void get_real_variable(char **var, t_shell *shell)
@@ -65,7 +123,10 @@ static  void get_real_variable(char **var, t_shell *shell)
 	int a;
 	int	i;
 	int start;
+    int     dollar_pos;
+	char	*dollar_var;
 
+	
 	a = -1;
 	while(var[++a])
 	{
@@ -73,16 +134,23 @@ static  void get_real_variable(char **var, t_shell *shell)
 		while(var[a][++i])
 		{
 			if (var[a][i] == 34 || var[a][i] == 39)
-				shell->my_env->var_real[a] = decode_quotes(shell, &i, a);
+			{
+				shell->my_env->var_real[a] = decode_quotes(shell, shell->my_env->var_real[a], &var[a], &i);
+				i--;
+			}
 			else if (var[a][i] == '$')
-				i++;
-//				expand_dollar(shell, &i);// tambien hace substr_join
+			{
+				dollar_pos = i;
+				dollar_var = expand_dollar(shell, var[a], &i); 
+				ft_replace_var(&var[a], dollar_pos, i - dollar_pos, dollar_var);
+				i = dollar_pos - 1;
+			}
 			else
 			{
 				start = i;
 				while (var[a][i] && var[a][i] != 34 && var[a][i] != 39 && var[a][i] != '$')
 					i++;
-				shell->my_env->var_real[a] = ft_substr_strjoin(shell, a, start, i);
+				shell->my_env->var_real[a] = ft_substr_strjoin(shell->my_env->var[a], shell->my_env->var_real[a], start, i);
 				i--;
 			}
 		}
@@ -130,7 +198,6 @@ void	ft_export(t_shell *shell)
    export_name(shell->my_pro->child->command_real, shell);
    while (shell->my_env->var[++a])//contar cuantas no son null
 	   continue;
-	   //printf("value == %s, a= %d\n", shell->my_env->var[a], a);// print, pero es CONTINUE
    shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), a + 1);
    if (!shell->my_env->var_real)
        exit(1);
