@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/08 14:31:50 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:21:02 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void alloc_processes(t_shell *shell)
     int npipes;
 
     i = -1;
-    shell->my_pro->orders = ft_split_2(shell->line, '|', &shell->my_pro->nbr_process); //split del input con pipes
+    shell->my_pro->orders = ft_split_2(shell->line, '|', &shell->my_pro->nbr_process);	//split del input con pipes
+	check_error_pipe(shell->my_pro->orders);
     npipes = (shell->my_pro->nbr_process + 1);
     shell->my_pro->fd = (int **)malloc(npipes * sizeof(int *)); //alojo array de pipes
     if (!shell->my_pro->fd)
@@ -145,6 +146,7 @@ int input(t_shell *shell)
     /*if (shell->line[0] == '|') //  ERROR completar. Ej: Que no nos hayan metido solo |, <<< ...
         exit (1);*/
 	unlink("here_doc.txt");
+	check_error(shell->line);
     alloc_processes(shell);
     create_processes(shell);
     return (0);

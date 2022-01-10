@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/07 18:01:40 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:21:01 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,10 @@ void	ft_num_arrays(char *s, char c, int *nbr_array)
 		check_quotes(s, &i);
 		if (s[i] == c) 
 		{
-			if (s[i + 1] && s[i + 1] == '|') //ERROR: EN CASO DE 2 || SEGUIDAS
+			if (s[i + 1] && s[i + 1] == '|') 
+			{				//ERROR: EN CASO DE 2 || SEGUIDAS
+				printf("Error: 2 pipes not allowed\n");
 				exit(1);
-			if (s[i + 1] && s[i + 1] == c && c != 32) //ERROR: 3 piquitos seguidos
-			{
-				i++;
-				if (s[i + 1] && s[i + 1] == c && c != 32)
-				{
-					printf("Error\n");
-					exit (1);
-				}
 			}
 			*nbr_array +=1;
 		}

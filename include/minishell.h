@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/08 14:31:54 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:21:06 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,10 @@ char    **ft_split_2(char const *s, char c, int *nbr_array);
 
 /*HERE_DOC*/
 void here_doc(t_pro *pro, int index);
+
+/*ERRORS */
+void    check_error( char *line);
+void    check_error_pipe(char **orders);
 
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)
