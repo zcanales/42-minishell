@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/10 22:09:58 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:57:45 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,17 @@ void get_environment(t_env  *my_env, char **env)
     char    *temp;
     int     i;
 
-    my_env->env = env;
+	my_env->env = env;
+	i = -1;
+	while (env[++i])
+		continue ;
+	my_env->env = (char **)ft_calloc(sizeof(char *), i + 1);
+    if (!my_env->env)
+        exit (1);
+	i = -1;
+	while (env[++i])
+    	my_env->env[i] = ft_strdup(env[i]);
+	my_env->env[i] = NULL;
     path = getenv("PATH");
     my_env->paths = ft_split(path, ':');
     i = 0;
@@ -47,5 +57,6 @@ void init(t_shell **shell, char **env)
 	(*shell)->my_pro->child = (t_ch*)ft_calloc(sizeof(t_ch), 1);
     if (!(*shell)->my_pro->child)
         exit (1);
+//	(*shell)->my_env->env = (char ***)ft_calloc(sizeof(char **), 1);
     get_environment((*shell)->my_env, env);
 }

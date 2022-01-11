@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/06 12:52:50 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/10 18:25:57 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/11 15:37:43 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -16,9 +16,9 @@
 
 typedef struct s_list
 {
+	struct s_list	*prev;
 	void			*content;
 	struct s_list	*next;
-	int				group;
 }	t_list;
 
 int				ft_atoi(const char *str);

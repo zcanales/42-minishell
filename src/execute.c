@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/10 22:10:03 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:57:39 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void exe_command(t_shell *shell)
         temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child->command_real[0]);
         if (!access(temp_access, X_OK))
         {
-            if (execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child->command_real[0]), shell->my_pro->child->command_real, shell->my_env->env) < 0)
+            if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child->command_real[0]), shell->my_pro->child->command_real, shell->my_env->env)) < 0)
                 perror("Error: \n");//funcion errores
         }
         free(temp_access);

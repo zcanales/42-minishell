@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/10 19:18:44 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:57:48 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <termios.h> /*struct termios*/
 #include <stdlib.h>
 #include <stdio.h>
+
 
 typedef struct s_piquito
 {
@@ -57,17 +58,16 @@ typedef struct s_pro
 	t_ch	*child;
 }   t_pro;
 
-/*typedef struct variable{
-	char	*name;
-	char	*value;
-}t_var;*/
-
 typedef struct s_env
 {
     char    **env;
+	int 	nbr_env;
     char    **paths;
 	char	**var;
 	char	**var_real;
+	int 	nbr_var_real;
+	t_list	*list_var_real;
+	t_list	*list_env;
 }t_env;
 
 typedef struct	s_shell
@@ -113,9 +113,14 @@ void 	close_pipes(t_shell *shell);
 void    check_quotes(char *s, int *index);
 void    free_double(char **s);
 void    imprimir(t_ch *ch); //QUITAR
+void	ft_freelist(t_list **head);
 
-/*	BUILTINS	*/
-void    ft_sort_builtins(t_shell *shell);
+/*	EXPORT	*/
+void    ft_export(t_shell *shell);
+
+
+/*  BUILTINS    */
+void    ft_sort_builtins(t_shell **shell);
 
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);

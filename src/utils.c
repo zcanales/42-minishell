@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/08 14:31:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/11 14:23:04 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,23 @@ void	free_double(char **s)
 		free(s[i]);
 	free(s);
 }
+
+//FREELIST///
+void    ft_freelist(t_list **head)
+{
+    t_list  *temp;
+
+    if (!*head)
+        return ;
+    while (*head)
+    {
+        temp = *head;
+        *head = (*head)->next;
+        free (temp);
+    }
+	*head = NULL;
+}
+
 
 //IMPRIMIR//
 
