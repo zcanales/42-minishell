@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:24 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:29 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ char *expand_dollar(t_shell *shell, char *str, int *i)
 	start = *i;
 	a = -1;
 	*i += 1;
-	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$') //len de la variable
+	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$' && str[*i] != 39) //len de la variable
 		*i += 1;
 	dollar_var = ft_substr(str, start + 1, *i - start - 1); // dollar_var = variable
+	printf("dolar =%s\n", dollar_var);
 	while (shell->my_env->env[0][++a]) //buscarla en env
 	{
 		if (!ft_strncmp(shell->my_env->env[a], dollar_var, ft_strlen(dollar_var)))
@@ -181,9 +182,12 @@ static void filter_variables(char **s, t_shell *shell)
 		start = ++i;
 		if (ft_isalpha(s[a][i]) || s[a][i] == '_' || s[a][i] == 34 || s[a][i] == 39)
 		{
-			while (s[a][++i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
+			while (s[a][i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
 						|| s[a][i] == '_' || s[a][i] == 34 || s[a][i] == 39))
+			{
 				check_quotes(s[a], &i);
+				i++;
+			}
 			if (s[a][i] == '=')
 			{
 				while (s[a][++i] && s[a][i] != ' ')
@@ -195,17 +199,13 @@ static void filter_variables(char **s, t_shell *shell)
 	 shell->my_env->var[++nbr_var] = NULL;
 }
 
-void	get_real_vars(t_shell *shell, char *builtin)
+void	get_real_vars(t_shell *shell, char **command_real, int nbr_command_real)
 {
-	char	**builtin_split;
-   /*SPLIT*/
-	builtin_split = ft_split_2(builtin, ' ', &shell->my_env->nbr_var); 
-
 	/*FILTRO VARIABLES*/
-   shell->my_env->var = (char **)ft_calloc(sizeof(char *), (shell->my_env->nbr_var + 1));
+   shell->my_env->var = (char **)ft_calloc(sizeof(char *), nbr_command_real + 1);
    if (!shell->my_env->var)
 	   exit(1);
-   filter_variables(builtin_split, shell);
+   filter_variables(command_real, shell);
 
    /*INTERPRETAT COMILLAS Y DOLLAR*/
    shell->my_env->nbr_var = 0;
@@ -219,7 +219,6 @@ void	get_real_vars(t_shell *shell, char *builtin)
 	/*PRINT*/
 	int	a = -1;
 	while (shell->my_env->var_real[++a])
- 		//continue;
 		printf("real_value == %s\n", shell->my_env->var_real[a]);// print, pero es CONTINUE
 }
 

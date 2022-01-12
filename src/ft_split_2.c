@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:21 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:35 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,12 @@ void	ft_num_arrays(char *s, char c, int *nbr_array)
 				printf("Error: 2 pipes not allowed\n");
 				exit(1);
 			}
+			if (s[i + 1] && s[i + 1] == c && c != 32) //si es dos piquitos solo cuenta 1
+				i++;
 			*nbr_array +=1;
 		}
+//		if (!s[i])
+//			break ;
 	}
 }
 

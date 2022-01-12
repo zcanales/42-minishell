@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:28 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 19:49:12 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_pro
     int     *pid;
     int     **fd;
     char    **orders;
-	t_ch	*child;
+	t_ch	*child;//array de hijos
 }   t_pro;
 
 typedef struct s_env
@@ -81,6 +81,7 @@ typedef struct	s_shell
 
 }t_shell;
 
+
 /*	INIT	*/
 void	init(t_shell **shell, char **env);
 void get_environment(t_env *my_env, char **env);
@@ -93,21 +94,21 @@ void    attributes();
 int input(t_shell *shell);
 void alloc_processes(t_shell *shell);
 void create_processes(t_shell *shell);
-void    child_process(char *order, t_shell *shell);
+void    child_process(t_ch *child, t_shell *shell);
 void    mother_process(t_shell *shell);
 
-/*CHOP_ORDER*/
-void    count_piquitos(t_ch *ch, int *nbr_file, char c, t_piquito **file_t);
-void    chop_order(t_ch *ch);
-void    chop_file_info(t_ch *ch, char c, char no_c, int *i);
-char	*get_real_command(t_ch *ch, int *i);
-void    chop_mother_orders(t_shell *shell, char **orders);
+/*CHILD_INFO*/
+void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order);
+void    chop_order(t_ch *ch, char *order);
+void    chop_file_info(t_ch *ch, char c, char no_c, int *i, char *order);
+char	*get_real_command(t_ch *ch, int *i, char *order);
+void    get_child_info(t_shell *shell);
 
 /*EXECUTE*/
-void exe_command(t_shell *shell);
-void re_in_out(t_pro *pro, int in_out, int index);
-void re_pipe(t_shell *shell);
-void is_redirected(t_pro *pro);
+void exe_command(t_shell *shell, int id);
+void re_in_out(t_pro *pro, int in_out, int index, int id);
+void re_pipe(t_shell *shell, int id);
+void is_redirected(t_pro *pro, int id);
 	
 	/*UTILS*/
 void 	close_pipes(t_shell *shell);
@@ -117,19 +118,18 @@ void    imprimir(t_ch *ch); //QUITAR
 void	ft_freelist(t_list **head);
 
 /*	EXPORT	*/
-void    get_real_vars(t_shell *shell, char *builtin);
+void    get_real_vars(t_shell *shell, char **commnad_real, int nbr_commnad_real);
 
 
 /*  BUILTINS    */
-void    check_builtins_child(t_shell **shell);
-void    ft_sort_builtins(t_shell **shell);
-void    check_builtins_mother(t_shell **shell, char *builtin);
+void    check_builtins_child(t_shell **shell, int id);
+void    check_builtins_mother(t_shell **shell, int id);
 
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);
 
 /*HERE_DOC*/
-void here_doc(t_pro *pro, int index);
+void here_doc(t_pro *pro, int index, int id);
 
 /*ERRORS */
 void    check_error( char *line);

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:23 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:36 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,46 @@
 
 //IS_REDIRECTED//
 
-void is_redirected(t_pro *pro)
+void is_redirected(t_pro *pro, int id)
 {
 	int i;
 
 	i = -1;
-    while (++i <  pro->child->nbr_infile)
+    while (++i <  pro->child[id].nbr_infile)
 	{
 		if (i == 0)
 			unlink("here_doc.txt");
-		if (pro->child->infile_t[i].type == 2)
+		if (pro->child[id].infile_t[i].type == 2)
 		{
-			here_doc(pro, i);
-			if (i != (pro->child->nbr_infile - 1))
+			here_doc(pro, i, id);
+			if (i != (pro->child[id].nbr_infile - 1))
 				unlink("here_doc.txt");
 		}
 		else
-        	re_in_out(pro, 0, i);
+        	re_in_out(pro, 0, i, id);
 	}
 	i = -1;
-    while (++i < pro->child->nbr_outfile)         
-		re_in_out(pro, 1, i);
+    while (++i < pro->child[id].nbr_outfile)         
+		re_in_out(pro, 1, i, id);
 }
 
 //RE_IN_OUT  
 
-void re_in_out(t_pro *pro, int in_out, int index)
+void re_in_out(t_pro *pro, int in_out, int index, int id)
 {
 	if (in_out == 0) //INFILE
 	{
-		pro->fd[pro->child->id_child][0] = open(pro->child->infile_t[index].file_name, O_RDONLY);
-    	if (pro->fd[pro->child->id_child][0]< 0)
-        	exit(1);
+		pro->fd[id][0] = open(pro->child[id].infile_t[index].file_name, O_RDONLY);
+    	if (pro->fd[id][0]< 0)
+        	exit(1);//no such or deirectory
 	}
 	if (in_out == 1) //OUTFILE
 	{
-		if(pro->child->outfile_t[index].type == 1)
-			pro->fd[pro->child->id_child + 1][1] = open(pro->child->outfile_t[index].file_name, O_RDWR | O_TRUNC | O_CREAT, 0755);
-		if(pro->child->outfile_t[index].type == 2)
-			pro->fd[pro->child->id_child + 1][1] = open(pro->child->outfile_t[index].file_name, O_RDWR | O_CREAT | O_APPEND, 0755);
-		if (pro->fd[pro->child->id_child + 1][1] < 0)
+		if(pro->child[id].outfile_t[index].type == 1)
+			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_TRUNC | O_CREAT, 0755);
+		if(pro->child[id].outfile_t[index].type == 2)
+			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_CREAT | O_APPEND, 0755);
+		if (pro->fd[id + 1][1] < 0)
             exit(1);
 	}
 }
@@ -71,36 +71,39 @@ void re_in_out(t_pro *pro, int in_out, int index)
 
 //RE_PIPE//
 
-void re_pipe(t_shell *shell)
+void re_pipe(t_shell *shell, int id)
 {
-	if (shell->my_pro->child->id_child != 0 || (shell->my_pro->child->id_child == 0 && shell->my_pro->child->nbr_infile))
-		dup2(shell->my_pro->fd[shell->my_pro->child->id_child][0], 0);
+	if (id != 0 || (id == 0 && shell->my_pro->child[id].nbr_infile))
+		dup2(shell->my_pro->fd[id][0], 0);
 
-    if (shell->my_pro->child->id_child != shell->my_pro->nbr_process - 1)
-        dup2(shell->my_pro->fd[shell->my_pro->child->id_child + 1][1], 1);
-    else if(shell->my_pro->child->id_child == shell->my_pro->nbr_process - 1 && shell->my_pro->child->nbr_outfile)//el ultimo hijo tambien escribe en la pipe si tiene out
-		dup2(shell->my_pro->fd[shell->my_pro->child->id_child + 1][1], 1);
+    if (id != shell->my_pro->nbr_process - 1)
+        dup2(shell->my_pro->fd[id + 1][1], 1);
+    else if(id  == shell->my_pro->nbr_process - 1 && shell->my_pro->child[id].nbr_outfile)//el ultimo hijo tambien escribe en la pipe si tiene out
+		dup2(shell->my_pro->fd[id + 1][1], 1);
     close_pipes(shell);
 }
 
 
 //EXE//
 
-void exe_command(t_shell *shell)
+void exe_command(t_shell *shell, int id)
 {
     int     i;
     char    *temp_access;
 
     i = -1;
+	if (!shell->my_pro->child[id].command_real[0])
+		exit(0);
     while (shell->my_env->paths[++i])
     {
-        temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child->command_real[0]);
+        temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_real[0]);
         if (!access(temp_access, X_OK))
         {
-            if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child->command_real[0]), shell->my_pro->child->command_real, shell->my_env->env)) < 0)
+            if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_real[0]), shell->my_pro->child[id].command_real, shell->my_env->env)) < 0)
                 perror("Error: \n");//funcion errores
         }
         free(temp_access);
     }
+	printf("Pink: %s comand not found\n", shell->my_pro->child[id].command_real[0]);
     exit(0);
 }

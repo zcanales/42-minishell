@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:26 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:38 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,40 +29,25 @@
 
 //	CHILD PROCESS //
 
-void	child_process(char *order, t_shell *shell)
+///OJO! Y si el comando es ./ ????
+void	child_process(t_ch *child, t_shell *shell)
 {
-	int     i;
-
-    i = -1;
-//	if (tcsetattr(0,TCSANOW, &shell->old) ==-1) 
-//		 perror ("ioctl/TCSETA changed:");
-    shell->my_pro->child->order = order;
-    ///OJO! Y si el comando es ./ ????
-
-	/*CONTAMOS PIQUITOS*/
-	count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_infile, '<', &shell->my_pro->child->infile_t);
-    count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_outfile, '>', &shell->my_pro->child->outfile_t);
-
-	/*CHOP EL CHURRO COMANDO */
-	chop_order(shell->my_pro->child);
-  
-
-  	/*SPLIT EL ARRAY REAL_COMANDO*/
-	shell->my_pro->child->command_real = ft_split_2(shell->my_pro->child->comando_bueno, ' ', &shell->my_pro->child->nbr_command); 
-
 	/*HACER LAS REDIRECIONES */
-	is_redirected(shell->my_pro);
-//	re_pipe(shell); --------------------------------------------------------------------//DESCOMENTAR	
+	is_redirected(shell->my_pro, child->id_child);
+		//printf("jfhsjf\n");
+	re_pipe(shell, child->id_child);	
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
-	if (shell->my_pro->child->id_child != shell->my_pro->nbr_process - 1)
-		kill(shell->my_pro->pid[shell->my_pro->child->id_child], SIGCONT);
+	if (child->id_child != shell->my_pro->nbr_process - 1)
+		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 
 	 /*BUILTINGS*/
-     check_builtins_child(&shell);
+	if (!child->command_real)
+		exit(0);
+     check_builtins_child(&shell, child->id_child);
 
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
-	exe_command(shell);
+	exe_command(shell, child->id_child);
 
 }
 
@@ -79,7 +64,7 @@ void	mother_process(t_shell *shell)
 		waitpid(-1, &status, 0);
 		if (status != 0)
 		{
-			printf("Hijos %d con problemas\n", i);
+			printf("Hijo %d en problemas\n", i);
 			if (i != (shell->my_pro->nbr_process - 1))
 				kill(shell->my_pro->pid[i + 1], SIGCONT);
 		}
@@ -92,18 +77,22 @@ void	mother_process(t_shell *shell)
 
 void create_processes(t_shell *shell)
 {
-	shell->my_pro->child->id_child = shell->my_pro->nbr_process;
-    while (shell->my_pro->child->id_child--)
+	int id;
+
+	id = shell->my_pro->nbr_process;
+    while (id--)
     {
-        shell->my_pro->pid[shell->my_pro->child->id_child] = fork();
-        if (shell->my_pro->pid[shell->my_pro->child->id_child] < 0)
+        shell->my_pro->pid[id] = fork();
+        if (shell->my_pro->pid[id] < 0)
 			perror("Error");
-		if (shell->my_pro->pid[shell->my_pro->child->id_child] != 0)
-			kill(shell->my_pro->pid[shell->my_pro->child->id_child], SIGSTOP);
+		if (shell->my_pro->pid[id] != 0)
+			kill(shell->my_pro->pid[id], SIGSTOP);
 		else
-			child_process(shell->my_pro->orders[shell->my_pro->child->id_child], shell);
+		{	
+			shell->my_pro->child[id].id_child = id;
+			child_process(&shell->my_pro->child[id], shell);
+		}
     }
-	chop_mother_orders(shell, shell->my_pro->orders);
 	kill(shell->my_pro->pid[0], SIGCONT);
 	close_pipes(shell); //Hay que cerrar todas las pipes(bucle)
 	mother_process(shell);
@@ -138,18 +127,20 @@ void alloc_processes(t_shell *shell)
     shell->my_pro->pid = (int *)malloc(shell->my_pro->nbr_process * sizeof (int)); //alojo array de hijos
     if (shell->my_pro->pid < 0)
         exit(1);
+	get_child_info(shell);
 }
 
-//INPUT STRING//
+//INPUT //
+
 int input(t_shell *shell)
 {
     /*if (shell->line[0] == '|') //  ERROR completar. Ej: Que no nos hayan metido solo |, <<< ...
         exit (1);*/
-	int i =-1;
+/*	int i =-1;
 	printf("--------------PADRE-----------------\n");
 	while (shell->my_env->env[++i])
 		printf("new_env= %s\n",shell->my_env->env[i]);
-	printf("-------------------------------\n");
+	printf("-------------------------------\n");*/
 	unlink("here_doc.txt");
 	check_error(shell->line);
     alloc_processes(shell);

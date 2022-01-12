@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:22 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:34 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	imprimir(t_ch *ch)
 	i = -1;
 	printf("		\033[0;31mINFO\033[0m\n");
     printf("	id child \033[0m == %d\n", ch->id_child);   //identificardor
-    printf("	churro = %s\n",ch->order);     //churro
 
     printf("	n infile == %d\n",ch->nbr_infile);
 	while(++i < ch->nbr_infile)

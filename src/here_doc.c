@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/07 17:19:42 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 20:10:50 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ static void new_filename(t_pro *pro, int index)
 	pro->child->infile_t[index].file_name = ft_strdup("here_doc.txt");
 }
 
-void here_doc(t_pro *pro, int index)
+void here_doc(t_pro *pro, int index, int id)
 {
     char    *line;
     char    *limit;
 	int		fd;
 
-    limit = ft_strdup(pro->child->infile_t[index].file_name);
+    limit = ft_strdup(pro->child[id].infile_t[index].file_name);
 	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0755);
-    if (pro->child->outfile_t[index].fd < 0)
+    if (fd < 0)
     {
         free(limit);
         exit (0);
@@ -56,6 +56,6 @@ void here_doc(t_pro *pro, int index)
 	new_filename(pro, index);
     free(limit);
     close(fd);
-	pro->fd[pro->child->id_child][0] = open("here_doc.txt", O_RDONLY);
+	pro->fd[pro->child[id].id_child][0] = open("here_doc.txt", O_RDONLY);
 }
 

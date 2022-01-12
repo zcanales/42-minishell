@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:50:16 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:41 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:42 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@
  * 				"2" REDIRECTION
  * 				"3" EXECUTE
  * 		*/
+
+
+
 
 int main(int argc, char **argv, char **env)
 {

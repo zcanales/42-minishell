@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 14:18:27 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:12:27 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,17 @@ int replace_repeated(t_list *temp_env, t_list *temp_var)
 void replace_env(t_shell *shell) 
 {
 	t_list *temp_var;
-	
+
 	temp_var = shell->my_env->list_var_real;
 	while (temp_var)
 	{
 			if (!replace_repeated(shell->my_env->list_env, temp_var))
-				break;
+				temp_var = temp_var->next;
 			else
+			{
 				ft_lstadd_back(&shell->my_env->list_env, ft_lstnew((char *)temp_var->content));
-			temp_var = temp_var->next;
+				temp_var = temp_var->next;
+			}
 	}
 	ft_freelist(&shell->my_env->list_var_real);
 }
@@ -79,7 +81,6 @@ char **convert_list_array(t_shell *shell)
 		exit(1);
 	while (shell->my_env->list_env)
 	{
-//		printf("list env= %s\n", (char *)shell->my_env->list_env->content);
 		temp_env[++i] = ft_strdup((char *)shell->my_env->list_env->content);
 		shell->my_env->list_env = shell->my_env->list_env->next;
 	}
@@ -89,30 +90,38 @@ char **convert_list_array(t_shell *shell)
 	return (temp_env);
 }
 
-void	check_builtins_child(t_shell **shell)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void	check_builtins_child(t_shell **shell, int id)
 {
-	if (!ft_strncmp((*shell)->my_pro->child->command_real[0], "export", ft_strlen("export")))
+	if (!ft_strncmp((*shell)->my_pro->child[id].command_real[0], "export", ft_strlen("export")))
 	{
 	printf("Soy el hijo tengo export --> MUERO\n");
 		exit(0);
 	}
-	else if (ft_strcmp((*shell)->my_pro->child->command_real[0], "unset"))
+	else if (ft_strcmp((*shell)->my_pro->child[id].command_real[0], "unset"))
 		exit(0);
 }
    
-void    check_builtins_mother(t_shell **shell, char *builtin)
+void    check_builtins_mother(t_shell **shell, int id)
 {
-		printf("Soy la madre y busco export --> %s y char %d\n", builtin, builtin[6]);
-    if (!ft_strncmp(builtin, "export", ft_strlen("export")) && builtin[6] && builtin[6] == 32)
-	{
-		//printf("Soy la madre y busco export --> %s y char %d\n", builtin, builtin[6]);
-		get_real_vars(*shell, builtin);
-	//	create_lists(*shell);
-	//	replace_env((*shell));
-	//	(*shell)->my_env->env = convert_list_array(*shell);
+	int i;
 
-/*		int i =-1;
-		while (new_env[++i])
-			printf("env= %s\n", new_env[i]);*/
+    if (!ft_strncmp((*shell)->my_pro->child[id].command_real[0], "export", ft_strlen("export")) && !(*shell)->my_pro->child[id].command_real[0][6])
+	{
+		printf("Soy la madre y tengo export --> %s \n",(*shell)->my_pro->child[id].command_real[0]);
+		get_real_vars(*shell, (*shell)->my_pro->child[id].command_real, (*shell)->my_pro->child[id].nbr_command);
+		create_lists(*shell);
+		replace_env((*shell));
+		(*shell)->my_env->env = convert_list_array(*shell);
+
+	}
+    if (!ft_strncmp((*shell)->my_pro->child[id].command_real[0], "env", ft_strlen("env")) && !(*shell)->my_pro->child[id].command_real[0][3])
+	{
+		i = -1;
+		//ya lo hace solo, como si fuera un binario. Si lo hcemos builtin, impedimos su ejecucion en hijo?
+		/*while ((*shell)->my_env->env[++i])
+			printf("%s\n", (*shell)->my_env->env[i]);*/
 	}
 }

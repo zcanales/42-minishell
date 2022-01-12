@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/12 11:13:41 by eperaita         ###   ########.fr        #
+#    Updated: 2022/01/12 17:14:12 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -14,7 +14,7 @@ NAME = minishell
 SRCS =	src/main.c\
 		src/init.c\
 		src/processes.c\
-		src/chop_order.c\
+		src/child_info.c\
 		src/execute.c\
 		src/terminal.c\
 		src/attributes.c\
