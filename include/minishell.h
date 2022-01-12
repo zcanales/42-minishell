@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 19:49:12 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:21:14 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ typedef struct s_piquito
 
 typedef struct s_ch 
 {
-    int     id_child;	//identificardor
-	char	*order;		//churro
-    char    **command;	//comando bueno se tiene que convertir en eso, un split de espacios. 
+    int     id_child;
+	//char	*order;		//NO SE USA
+    //char    **command;	// NO SE USA
 	int    	nbr_command;
 
 	//para ejecutar
-	char	*comando_bueno;
+	char	*comando_bueno; //Cambiar nombre (Por my_order por ejemplo) (Se usa en child_info.c)
 	char	**command_real;
 
 	//info files

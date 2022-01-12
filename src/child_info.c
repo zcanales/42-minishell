@@ -6,13 +6,15 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:12:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 21:23:53 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//GET_CHILD_INFO -> Madre hace todas las siguientes funciones para pasar a ada hijo su t_ch (array de order y infiles y outfiles)
+
 //COUNT_PIQUITOS -> Numero de infiles y oufiles para hacer malloc de cada t_piquito
 //CHOP_ORDER + CHOP_FILE_INFO -> Substrae del order los infiles
-//GET_REAL_COMMAND -> Se queda con el comando LIMPIO y en un array. 
+//GET_REAL_COMMAND -> Se queda con los comandos LIMPIOS en un array. 
 
 #include "../include/minishell.h"
 
