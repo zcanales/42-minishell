@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/11 11:19:19 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:21 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ char	**ft_fill(char **p, char *s, char c, int *num_arrays)
 		if (s[i] == c)
 			i++;
 	}
+	p[a] = NULL;
 	return (p);
 }
 
@@ -89,7 +90,7 @@ char	**ft_split_2(char const *s, char c, int *nbr_array)
 	if (!p)
 		return (0);
 	p = ft_fill(p, (char *)s, c, nbr_array);
-	p[*nbr_array] = NULL;
+//	p[*nbr_array] = NULL;
 	if (c != '|') 
 		*nbr_array = *nbr_array - 1;
 	return (p);

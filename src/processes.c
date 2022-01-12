@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:37 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:26 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	child_process(char *order, t_shell *shell)
     shell->my_pro->child->order = order;
     ///OJO! Y si el comando es ./ ????
 
-    /*CONTAMOS PIQUITOS*/
+	/*CONTAMOS PIQUITOS*/
 	count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_infile, '<', &shell->my_pro->child->infile_t);
     count_piquitos(shell->my_pro->child, &shell->my_pro->child->nbr_outfile, '>', &shell->my_pro->child->outfile_t);
 
@@ -49,17 +49,18 @@ void	child_process(char *order, t_shell *shell)
 
   	/*SPLIT EL ARRAY REAL_COMANDO*/
 	shell->my_pro->child->command_real = ft_split_2(shell->my_pro->child->comando_bueno, ' ', &shell->my_pro->child->nbr_command); 
-	
+
 	/*HACER LAS REDIRECIONES */
 	is_redirected(shell->my_pro);
-	re_pipe(shell);	
-	
-	/*BUILTINGS*/
-	ft_sort_builtins(&shell);
+//	re_pipe(shell); --------------------------------------------------------------------//DESCOMENTAR	
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
 	if (shell->my_pro->child->id_child != shell->my_pro->nbr_process - 1)
 		kill(shell->my_pro->pid[shell->my_pro->child->id_child], SIGCONT);
+
+	 /*BUILTINGS*/
+     check_builtins_child(&shell);
+
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
 	exe_command(shell);
 
@@ -102,6 +103,7 @@ void create_processes(t_shell *shell)
 		else
 			child_process(shell->my_pro->orders[shell->my_pro->child->id_child], shell);
     }
+	chop_mother_orders(shell, shell->my_pro->orders);
 	kill(shell->my_pro->pid[0], SIGCONT);
 	close_pipes(shell); //Hay que cerrar todas las pipes(bucle)
 	mother_process(shell);
@@ -136,8 +138,6 @@ void alloc_processes(t_shell *shell)
     shell->my_pro->pid = (int *)malloc(shell->my_pro->nbr_process * sizeof (int)); //alojo array de hijos
     if (shell->my_pro->pid < 0)
         exit(1);
-//	freees?
-//	printf("Alloc Processes OK\n");
 }
 
 //INPUT STRING//
@@ -145,6 +145,11 @@ int input(t_shell *shell)
 {
     /*if (shell->line[0] == '|') //  ERROR completar. Ej: Que no nos hayan metido solo |, <<< ...
         exit (1);*/
+	int i =-1;
+	printf("--------------PADRE-----------------\n");
+	while (shell->my_env->env[++i])
+		printf("new_env= %s\n",shell->my_env->env[i]);
+	printf("-------------------------------\n");
 	unlink("here_doc.txt");
 	check_error(shell->line);
     alloc_processes(shell);

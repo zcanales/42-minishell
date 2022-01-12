@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:48 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:28 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_env
     char    **paths;
 	char	**var;
 	char	**var_real;
-	int 	nbr_var_real;
+	int 	nbr_var;
 	t_list	*list_var_real;
 	t_list	*list_env;
 }t_env;
@@ -101,6 +101,7 @@ void    count_piquitos(t_ch *ch, int *nbr_file, char c, t_piquito **file_t);
 void    chop_order(t_ch *ch);
 void    chop_file_info(t_ch *ch, char c, char no_c, int *i);
 char	*get_real_command(t_ch *ch, int *i);
+void    chop_mother_orders(t_shell *shell, char **orders);
 
 /*EXECUTE*/
 void exe_command(t_shell *shell);
@@ -116,11 +117,13 @@ void    imprimir(t_ch *ch); //QUITAR
 void	ft_freelist(t_list **head);
 
 /*	EXPORT	*/
-void    ft_export(t_shell *shell);
+void    get_real_vars(t_shell *shell, char *builtin);
 
 
 /*  BUILTINS    */
+void    check_builtins_child(t_shell **shell);
 void    ft_sort_builtins(t_shell **shell);
+void    check_builtins_mother(t_shell **shell, char *builtin);
 
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);

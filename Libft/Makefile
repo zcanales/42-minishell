@@ -72,7 +72,7 @@ $(NAME) : $(OBJS)
 	@$(LIB) $(NAME) $(OBJS)
 
 bonus: $(OBJS_BONUS) $(OBJS)
-	$(LIB) $(NAME) $(OBJS)  $(OBJS_BONUS)
+	@$(LIB) $(NAME) $(OBJS)  $(OBJS_BONUS)
 
 %.o : %.c
 	@$(CC) $(CFLAGS) -I libft.h -g -c $< -o $@

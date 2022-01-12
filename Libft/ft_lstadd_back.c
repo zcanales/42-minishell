@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/05 13:11:18 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:34 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 11:00:14 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 	temp = *lst;
 	while (temp->next != NULL)
-	{
 		temp = temp->next;
-	}
-	new->prev = temp;
+//	new->prev = temp;
 	temp->next = new;
 	new->next = NULL;
 }

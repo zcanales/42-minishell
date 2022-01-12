@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:27 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,51 @@ void replace_env(t_shell *shell)
 
 char **convert_list_array(t_shell *shell)
 {
-	char **new_env;
+	char **temp_env;
 	int i;
 
 	i = -1;
 	
 	shell->my_env->nbr_env = ft_lstsize(shell->my_env->list_env);
-	new_env= (char **)malloc(sizeof(char *) * shell->my_env->nbr_env + 1);
-	if (!new_env)
+	temp_env= (char **)malloc(sizeof(char *) * (shell->my_env->nbr_env + 1));
+	if (!temp_env)
 		exit(1);
 	while (shell->my_env->list_env)
 	{
-		new_env[++i] = ft_strdup((char *)shell->my_env->list_env->content);
+//		printf("list env= %s\n", (char *)shell->my_env->list_env->content);
+		temp_env[++i] = ft_strdup((char *)shell->my_env->list_env->content);
 		shell->my_env->list_env = shell->my_env->list_env->next;
 	}
-	new_env[shell->my_env->nbr_env] = NULL;
+	temp_env[shell->my_env->nbr_env] = NULL;
 	free_double(shell->my_env->env);
 	shell->my_env->env = NULL;
-	return (new_env);
+	return (temp_env);
+}
+
+void	check_builtins_child(t_shell **shell)
+{
+	if (!ft_strncmp((*shell)->my_pro->child->command_real[0], "export", ft_strlen("export")))
+	{
+	printf("Soy el hijo tengo export --> MUERO\n");
+		exit(0);
+	}
+	else if (ft_strcmp((*shell)->my_pro->child->command_real[0], "unset"))
+		exit(0);
 }
    
-void    ft_sort_builtins(t_shell **shell)
+void    check_builtins_mother(t_shell **shell, char *builtin)
 {
-    if (ft_strcmp((*shell)->my_pro->child->command_real[0], "export"))
+		printf("Soy la madre y busco export --> %s y char %d\n", builtin, builtin[6]);
+    if (!ft_strncmp(builtin, "export", ft_strlen("export")) && builtin[6] && builtin[6] == 32)
 	{
-		ft_export(*shell);
-		create_lists(*shell);
-		replace_env((*shell));
-		(*shell)->my_env->env = convert_list_array(*shell);
-		int i =-1;
-		while ((*shell)->my_env->env[++i])
-			printf("env= %s\n", (*shell)->my_env->env[i]);
+		//printf("Soy la madre y busco export --> %s y char %d\n", builtin, builtin[6]);
+		get_real_vars(*shell, builtin);
+	//	create_lists(*shell);
+	//	replace_env((*shell));
+	//	(*shell)->my_env->env = convert_list_array(*shell);
+
+/*		int i =-1;
+		while (new_env[++i])
+			printf("env= %s\n", new_env[i]);*/
 	}
-	exit(0);
 }

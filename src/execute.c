@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:39 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:23 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void re_pipe(t_shell *shell)
     else if(shell->my_pro->child->id_child == shell->my_pro->nbr_process - 1 && shell->my_pro->child->nbr_outfile)//el ultimo hijo tambien escribe en la pipe si tiene out
 		dup2(shell->my_pro->fd[shell->my_pro->child->id_child + 1][1], 1);
     close_pipes(shell);
-   }
+}
 
 
 //EXE//

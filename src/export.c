@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:42 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:24 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void    *decode_quotes(t_shell *shell, char *dest, char **str, int *i)
 	return (ft_substr_strjoin(*str, dest,  start, *i));
 }
 
-static  void get_real_variable(char **var, t_shell *shell)
+static  void fill_quote_dollar(char **var, t_shell *shell)
 {
 	int a;
 	int	i;
@@ -166,7 +166,7 @@ static  void get_real_variable(char **var, t_shell *shell)
 	shell->my_env->var_real[a] = NULL;
 }
 
-static void export_name(char **s, t_shell *shell)
+static void filter_variables(char **s, t_shell *shell)
 {
 	int     i;
 	int		start;
@@ -195,25 +195,31 @@ static void export_name(char **s, t_shell *shell)
 	 shell->my_env->var[++nbr_var] = NULL;
 }
 
-void	ft_export(t_shell *shell)
+void	get_real_vars(t_shell *shell, char *builtin)
 {
-   int a;
-   
-   shell->my_env->var = (char **)ft_calloc(sizeof(char *), (shell->my_pro->child->nbr_command + 1));
+	char	**builtin_split;
+   /*SPLIT*/
+	builtin_split = ft_split_2(builtin, ' ', &shell->my_env->nbr_var); 
+
+	/*FILTRO VARIABLES*/
+   shell->my_env->var = (char **)ft_calloc(sizeof(char *), (shell->my_env->nbr_var + 1));
    if (!shell->my_env->var)
 	   exit(1);
-   export_name(shell->my_pro->child->command_real, shell);
-   while (shell->my_env->var[shell->my_env->nbr_var_real])//contar cuantas no son null
-	   shell->my_env->nbr_var_real++;
-   shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), shell->my_env->nbr_var_real + 1);
+   filter_variables(builtin_split, shell);
+
+   /*INTERPRETAT COMILLAS Y DOLLAR*/
+   shell->my_env->nbr_var = 0;
+   while (shell->my_env->var[shell->my_env->nbr_var])//contar cuantas no son null
+	   shell->my_env->nbr_var++;
+   shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), shell->my_env->nbr_var + 1);
    if (!shell->my_env->var_real)
        exit(1);
-	get_real_variable(shell->my_env->var, shell);
-	a = -1;
+	fill_quote_dollar(shell->my_env->var, shell);
+
+	/*PRINT*/
+	int	a = -1;
 	while (shell->my_env->var_real[++a])
  		//continue;
 		printf("real_value == %s\n", shell->my_env->var_real[a]);// print, pero es CONTINUE
-	//realloc env
-	//substr var en env
 }
 

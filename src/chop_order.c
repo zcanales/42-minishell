@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/08 14:31:45 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:18:20 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	chop_order(t_ch *ch)
 	i = 0;
     while (ch->order[i])
     {
-		while (ch->order[i] == 32)
+		while (ch->order[i] && ch->order[i] == 32)
 			i++;
 		check_quotes(ch->order, &i);
-        if (ch->order[i] ==  '<')// INFILES
+        if (ch->order[i] && ch->order[i] ==  '<')// INFILES
 			chop_file_info(ch, '<', '>', &i);
-		else  if (ch->order[i] == '>') //OUTFILES
+		else if (ch->order[i] && ch->order[i] == '>') //OUTFILES
 			chop_file_info(ch, '>', '<', &i);
         else //COMMAND
 			ch->comando_bueno = get_real_command(ch, &i);
@@ -94,4 +94,27 @@ char	*get_real_command(t_ch *ch, int *i)
 		real_temp = ft_strjoin(ch->comando_bueno,temp);
 	free(temp);
 	return (real_temp);
+}
+
+void	chop_mother_orders(t_shell *shell, char **orders) ////fallo piquito is ascii
+{
+	int i;
+	int	j;
+
+	i = -1;
+	while (orders[++i])
+	{
+		j = 0;
+		while (orders[i][j] && (orders[i][j] == '>' || orders[i][j] == '<' || orders[i][j] == 32))
+		{
+			while (orders[i][++j] && orders[i][j] == 32)
+				 continue;
+			while (orders[i][j] && ft_isascii(orders[i][j]))
+				j++;
+			while (orders[i][j] && orders[i][j] == 32)
+				 j++;
+		}
+		if (orders[i][j])
+			check_builtins_mother(&shell, &orders[i][j]);
+	}
 }
