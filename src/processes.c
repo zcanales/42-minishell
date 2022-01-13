@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:18:16 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 16:29:37 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	child_process(t_ch *child, t_shell *shell)
 {
 	/*HACER LAS REDIRECIONES */
 	is_redirected(shell->my_pro, child->id_child);
-		//printf("jfhsjf\n");
 	re_pipe(shell, child->id_child);	
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
@@ -42,10 +41,12 @@ void	child_process(t_ch *child, t_shell *shell)
 		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 
 	 /*BUILTINGS*/
-	if (!child->command_real)
+	if (!child->command_split)
 		exit(0);
      check_builtins_child(&shell, child->id_child);
 
+	 //expandir resto command_split[] cuales???? COMILLAS!!!
+	
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
 	exe_command(shell, child->id_child);
 

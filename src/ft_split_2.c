@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/12 21:12:35 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 20:06:11 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ void	ft_num_arrays(char *s, char c, int *nbr_array)
 	
 	*nbr_array = 1;
 	i = -1;
+//	printf("split --> %s y el char = %d\n", &s[i], c);
 	while (s[++i])
 	{
+//		printf("split --> %s y el char = %d\n", &s[i], c);
 		check_quotes(s, &i);
 		if (s[i] == c) 
 		{
@@ -95,7 +97,7 @@ char	**ft_split_2(char const *s, char c, int *nbr_array)
 		return (0);
 	p = ft_fill(p, (char *)s, c, nbr_array);
 //	p[*nbr_array] = NULL;
-	if (c != '|') 
+	if (c != '|' && c != 32) 
 		*nbr_array = *nbr_array - 1;
 	return (p);
 }

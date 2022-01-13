@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:23:53 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 20:06:09 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ void	chop_order(t_ch *ch, char *order)
     {
 		while (order[i] && order[i] == 32)
 			i++;
-		check_quotes(order, &i);
+	//	check_quotes(order, &i);
         if (order[i] && order[i] ==  '<')// INFILES
 			chop_file_info(ch, '<', '>', &i, order);
 		else if (order[i] && order[i] == '>') //OUTFILES
 			chop_file_info(ch, '>', '<', &i, order);
         else //COMMAND
-			ch->comando_bueno = get_real_command(ch, &i, order);
+			ch->command_group = get_real_command(ch, &i, order);
     }
 }
 
@@ -85,24 +85,49 @@ void	chop_file_info(t_ch *ch, char c, char no_c, int *i, char *order) //sobra 1
 char	*get_real_command(t_ch *ch, int *i, char *order)
 {
 	int		start;
+
 	char	*temp;
 	char	*real_temp;
 
 	start = *i;
+	real_temp = NULL;
+	(void)ch;
 	while (order[*i] && order[*i] != '<' && order[*i] != '>')
+	{
+//		if (order[*i] != 34 && order[*i] != 39)
+//			real_temp = ft_substr_strjoin(&order[*i], real_temp, 0, 1);
 		*i += 1;
+	}
 	temp = ft_substr(order, start, *i - start);
-	if (!ch->comando_bueno)
+	if (!ch->command_group)
 		real_temp  = ft_strdup(temp);
 	else
-		real_temp = ft_strjoin(ch->comando_bueno,temp);
+		real_temp = ft_strjoin(ch->command_group,temp);
+
 	free(temp);
 	return (real_temp);
 }
 
+
+
+
+
+
+char *convert_array_to_string(char **array)
+{
+	char *string;
+
+	string = ft_strdup(array[0]);
+	free_double(array);
+	return(string);
+}
+
+
+
 void	get_child_info(t_shell *shell) ////fallo piquito is ascii
 {
 	int i;
+	int a;
 
 	i = -1;
 	/*ARRAY DE HIJOS (T_CHILD)*/
@@ -112,19 +137,43 @@ void	get_child_info(t_shell *shell) ////fallo piquito is ascii
 
     while (++i < shell->my_pro->nbr_process)
 	{
-		/*CONTAMOS PIQUITOS*/
+		/*CONTAMOS PIQUITOS*/ //Malloc de infiles y outfiles
 		count_piquitos( &shell->my_pro->child[i].nbr_infile, '<', &shell->my_pro->child[i].infile_t, shell->my_pro->orders[i]);
     	count_piquitos(&shell->my_pro->child[i].nbr_outfile, '>', &shell->my_pro->child[i].outfile_t, shell->my_pro->orders[i]);
 		
-		/*CHOP EL CHURRO COMANDO */
+		/*CHOP: ORDER -> COMMAND_GROUP */ //Separa infiles(array) y outfiles(array) y comando (churro)
 		chop_order(&shell->my_pro->child[i], shell->my_pro->orders[i]);
 		
 
-	  	/*SPLIT EL ARRAY REAL_COMANDO*/
-		shell->my_pro->child[i].command_real = ft_split_2(shell->my_pro->child[i].comando_bueno, ' ', &shell->my_pro->child[i].nbr_command); 
+	  	/*SPLIT:COMMAND_GROUP --> SPLIT_COMANDO*/ // comando churro en comando array
+		shell->my_pro->child[i].command_split = ft_split_2(shell->my_pro->child[i].command_group, ' ', &shell->my_pro->child[i].nbr_command); 
 		
-		 /*BUILTINS*///La amdre va a ejecutar los procesos que lleven builting. EL hijo al que le toca este comando muere al entrar.
-		if (shell->my_pro->child[i].command_real)
+	  	/*CLEAN: COMMAND_SPLIT --> COMMNAD_CLEAN */  //Interpretat "" AND $ 
+
+		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
+		/*a= -1;
+		while(shell->my_pro->child[i].command_split[++a])
+			printf("COMMANDO --> %s \n", shell->my_pro->child[i].command_split[a]);*/
+
+	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
+		a= -1;
+		while(++a < shell->my_pro->child[i].nbr_infile)
+		{
+			shell->my_pro->child[i].infile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].infile_t[a].file_name, shell, shell->my_pro->child[i].nbr_infile, 1);
+			shell->my_pro->child[i].infile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].infile_t[a].file_name_clean);
+			//printf("INfile --> %s\n", shell->my_pro->child[i].infile_t[a].file_name);
+		}
+	  	/*CLEAN: OUTFILE --> OUTFILE_CLEAN */  //Interpretat "" AND $ 
+		a= -1;
+		while(++a < shell->my_pro->child[i].nbr_outfile)
+		{
+			shell->my_pro->child[i].outfile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].outfile_t[a].file_name, shell, shell->my_pro->child[i].nbr_outfile, 1);
+			shell->my_pro->child[i].outfile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].outfile_t[a].file_name_clean);
+			//printf("OUTfile --> %s\n", shell->my_pro->child[i].outfile_t[a].file_name);
+		}
+		
+		/*BUILTINS*///La amdre va a ejecutar los procesos que lleven builting. EL hijo al que le toca este comando muere al entrar.
+		if (shell->my_pro->child[i].command_split)
 			check_builtins_mother(&shell, i);	
 
 	}	

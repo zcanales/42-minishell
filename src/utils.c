@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:12:34 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 20:06:14 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,50 @@ void close_pipes(t_shell *shell)
 
 //CHECK_QUOTES//
 
-void	check_quotes(char *s, int *index)
+int	check_quotes(char *s, int *index)
 {
 	int i;
+	int equal;
 
 	i = *index;
+	equal = 0;
 	if (s[i] == 34)
 	{
 		while (s[++i] && s[i] != 34)
-			continue ;
+		{
+			if (s[i] == '=')
+				equal = 1;
+		}
 	}
 	else if (s[i] == 39)
 	{
 		while (s[++i] && s[i] != 39)
-			continue ;
+		{
+			if (s[i] == '=')
+				equal = 1;
+		}
 	}
 	*index = i;
+	return (equal);
 }
 
+//FT_SUB_JOIN
+char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
+{
+    char    *real_temp;
+    char    *temp;
+
+    temp = ft_substr(to_sub, start, end - start);
+    if (!to_join)
+        real_temp  = ft_strdup(temp);
+    else
+    {
+        real_temp = ft_strjoin(to_join, temp);
+        free(to_join);
+    }
+    free(temp);
+    return (real_temp);
+}
 //FREE_DOUBLE//
 
 void	free_double(char **s)
@@ -106,8 +132,8 @@ void	imprimir(t_ch *ch)
     	printf("	   outfile name  == %s - type = %d\n", ch->outfile_t[i].file_name, ch->outfile_t[i].type);
 	printf("------\n");
 	i = -1;
-	while(ch->command_real[++i])
-		printf("	comand real == %s\n",ch->command_real[i]);
+	while(ch->command_split[++i])
+		printf("	comand real == %s\n",ch->command_split[i]);
 
 	printf("		\033[0;31mEND\033[0m\n");
 

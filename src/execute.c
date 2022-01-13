@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:18:11 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 20:06:16 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,18 @@ void exe_command(t_shell *shell, int id)
     char    *temp_access;
 
     i = -1;
-	if (!shell->my_pro->child[id].command_real[0])
+	if (!shell->my_pro->child[id].command_split[0])
 		exit(0);
     while (shell->my_env->paths[++i])
     {
-        temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_real[0]);
+        temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_split[0]);
         if (!access(temp_access, X_OK))
         {
-            if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_real[0]), shell->my_pro->child[id].command_real, shell->my_env->env)) < 0)
+            if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_split[0]), shell->my_pro->child[id].command_split, shell->my_env->env)) < 0)
                 perror("Error: \n");//funcion errores
         }
         free(temp_access);
     }
-	printf("Pink: %s comand not found\n", shell->my_pro->child[id].command_real[0]);
+	printf("Pink: %s comand not found\n", shell->my_pro->child[id].command_split[0]);
     exit(0);
 }

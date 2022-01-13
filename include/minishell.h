@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/12 21:24:50 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/13 20:06:18 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,20 @@
 typedef struct s_piquito
 {
 	int		type;		// simple = 1; double = 2; 
-	int 	fd;			//Su fd
-	int 	priority;	// 0 - 1
+//	int 	fd;			//Su fd
 	char	*file_name;
+	char	**file_name_clean;
 }t_piquito;
 
 typedef struct s_ch 
 {
     int     id_child;
-	//char	*order;		//NO SE USA
-    //char    **command;	// NO SE USA
 	int    	nbr_command;
 
 	//para ejecutar
-	char	*comando_bueno; //Cambiar nombre (Por my_order por ejemplo) (Se usa en child_info.c)
-	char	**command_real;
+	char	*command_group; 
+	char	**command_split;
+	char	**command_clean;
 
 	//info files
 	int		nbr_infile;
@@ -112,14 +111,15 @@ void is_redirected(t_pro *pro, int id);
 	
 	/*UTILS*/
 void 	close_pipes(t_shell *shell);
-void    check_quotes(char *s, int *index);
+int		check_quotes(char *s, int *index);
 void    free_double(char **s);
 void    imprimir(t_ch *ch); //QUITAR
 void	ft_freelist(t_list **head);
+char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end);
 
-/*	EXPORT	*/
+/*	QUOTE_DOLLAR	*/
 void    get_real_vars(t_shell *shell, char **commnad_real, int nbr_commnad_real);
-
+char ** fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check);
 
 /*  BUILTINS    */
 void    check_builtins_child(t_shell **shell, int id);
