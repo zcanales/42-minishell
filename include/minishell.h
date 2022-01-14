@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 14:04:38 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 20:04:49 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_ch
 	//para ejecutar
 	char	*command_group; 
 	char	**command_split;
-	char	**command_clean;
+//	char	**command_clean;
 
 	//info files
 	int		nbr_infile;
@@ -97,32 +97,45 @@ void    mother_process(t_shell *shell);
 
 /*CHILD_INFO*/
 void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order);
-void    chop_order(t_ch *ch, char *order);
-void    chop_file_info(t_ch *ch, char c, char no_c, int *i, char *order);
-char	*get_real_command(t_ch *ch, int *i, char *order);
+void    chop_files(t_ch *ch, char c, char no_c, int *i, char *order);
+char	*chop_command(t_ch *ch, int *i, char *order);
+void    classify_order(t_ch *ch, char *order);
 void    get_child_info(t_shell *shell);
 
 /*EXECUTE*/
+void close_pipes(t_shell *shell);
 void exe_command(t_shell *shell, int id);
 void re_in_out(t_pro *pro, int in_out, int index, int id);
 void re_pipe(t_shell *shell, int id);
 void is_redirected(t_pro *pro, int id);
 	
 	/*UTILS*/
-void 	close_pipes(t_shell *shell);
-int		check_quotes(char *s, int *index);
 void    free_double(char **s, int check);
-void    imprimir(t_ch *ch); //QUITAR
 void	ft_freelist(t_list **head);
+char *convert_array_to_string(char **array);
 char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end);
+void    imprimir(t_ch *ch); //QUITAR
 
 /*	QUOTE_DOLLAR	*/
-void    get_real_vars(t_shell *shell, char **commnad_real, int nbr_commnad_real);
+int		check_quotes(char *s, int *index);
+char *expand_dollar(t_shell *shell, char *str, int *i);
+int replace_dollar(char **str, int start, int len, char *replace);
+void    decode_quotes(t_shell *shell, char **str, int *i);
 char ** fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check);
 
-/*  BUILTINS    */
-void    check_builtins_child(t_shell **shell, int id);
+/*  MOM_BUILTINS    */
+void    get_real_vars(t_shell *shell, char **commnad_real, int nbr_commnad_real, int replace);
 void    check_builtins_mother(t_shell **shell, int id);
+
+/*  EXPORT_UNSET    */
+void create_lists(t_shell *shell);
+int replace_first(t_list **head_env, t_list *temp_var, int replace);
+int replace_repeated(t_list **head_env, t_list *temp_var, int replace);
+void replace_env(t_shell *shell, int replace);
+char **convert_list_array(t_shell *shell);
+
+/*  CHILD_BUILTINS    */
+void    check_builtins_child(t_shell **shell, int id);
 
 /* FT_SLIPT_2 */
 char    **ft_split_2(char const *s, char c, int *nbr_array);

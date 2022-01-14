@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 14:13:04 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 19:47:55 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,26 @@
 #include "../include/minishell.h"
 #include <fcntl.h>
 # include <signal.h>
+
+//CLOSE PIPES//
+
+void close_pipes(t_shell *shell)
+{
+	int i;
+    int j;
+	
+	i = 0;
+    while (i < shell->my_pro->nbr_process + 1)
+    {
+        j = 0;
+        while (j < 2)
+        {
+            close(shell->my_pro->fd[i][j]);
+            j++;
+        }
+        i++;
+    }
+}
 
 //IS_REDIRECTED//
 

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 14:13:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 20:04:41 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,54 +17,7 @@
 //FREE_DOUBLE -> Libera un array doble
 //IMPRIMIR -> Imprime struct. 
 
-//CLOSE PIPES//
 
-void close_pipes(t_shell *shell)
-{
-	int i;
-    int j;
-	
-	i = 0;
-    while (i < shell->my_pro->nbr_process + 1)
-    {
-        j = 0;
-        while (j < 2)
-        {
-            close(shell->my_pro->fd[i][j]);
-            j++;
-        }
-        i++;
-    }
-}
-
-//CHECK_QUOTES//
-
-int	check_quotes(char *s, int *index)
-{
-	int i;
-	int equal;
-
-	i = *index;
-	equal = 0;
-	if (s[i] == 34)
-	{
-		while (s[++i] && s[i] != 34)
-		{
-			if (s[i] == '=')
-				equal = 1;
-		}
-	}
-	else if (s[i] == 39)
-	{
-		while (s[++i] && s[i] != 39)
-		{
-			if (s[i] == '=')
-				equal = 1;
-		}
-	}
-	*index = i;
-	return (equal);
-}
 
 //FT_SUB_JOIN
 char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
@@ -112,6 +65,16 @@ void    ft_freelist(t_list **head)
 	*head = NULL;
 }
 
+/*CONVERT ARRAY TO STRING*/ //La mayor ñapa de la historia de 42
+
+char *convert_array_to_string(char **array)
+{
+	char *string;
+
+	string = ft_strdup(array[0]);
+	free_double(array, 2);
+	return(string);
+}
 
 //IMPRIMIR//
 

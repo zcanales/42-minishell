@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 14:13:08 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 20:04:37 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,11 @@ void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order)
 	(*file_t) = (t_piquito *)ft_calloc(sizeof(t_piquito), (*nbr_file + 1));
 	if (!(*file_t))
 		exit(1);
-//	file_t[*nbr_file] = NULL;
-	printf("nbr_file = %d\n", *nbr_file);
 
 }
 
-void	chop_order(t_ch *ch, char *order)
-{
-    int i;
 
-	i = 0;
-	if (!order)
-		return ;
-    while (order[i])
-    {
-		while (order[i] && order[i] == 32)
-			i++;
-	//	check_quotes(order, &i);
-        if (order[i] && order[i] ==  '<')// INFILES
-			chop_file_info(ch, '<', '>', &i, order);
-		else if (order[i] && order[i] == '>') //OUTFILES
-			chop_file_info(ch, '>', '<', &i, order);
-        else //COMMAND
-			ch->command_group = get_real_command(ch, &i, order);
-		printf("command_group --> %s\n", ch->command_group);
-    }
-}
-
-void	chop_file_info(t_ch *ch, char c, char no_c, int *i, char *order) //sobra 1 
+void	chop_files(t_ch *ch, char c, char no_c, int *i, char *order) //sobra 1 
 {
 	int type;
 	int start;
@@ -85,7 +62,7 @@ void	chop_file_info(t_ch *ch, char c, char no_c, int *i, char *order) //sobra 1
 	}
 }
 
-char	*get_real_command(t_ch *ch, int *i, char *order)
+char	*chop_command(t_ch *ch, int *i, char *order)
 {
 	int		start;
 
@@ -110,16 +87,27 @@ char	*get_real_command(t_ch *ch, int *i, char *order)
 	return (real_temp);
 }
 
-char *convert_array_to_string(char **array)
+void	classify_order(t_ch *ch, char *order)
 {
-	char *string;
+    int i;
 
-	string = ft_strdup(array[0]);
-	free_double(array, 2);
-	return(string);
+	i = 0;
+	if (!order)
+		return ;
+    while (order[i])
+    {
+		while (order[i] && order[i] == 32)
+			i++;
+        if (order[i] && order[i] ==  '<')// INFILES
+			chop_files(ch, '<', '>', &i, order);
+		else if (order[i] && order[i] == '>') //OUTFILES
+			chop_files(ch, '>', '<', &i, order);
+        else //COMMAND
+			ch->command_group = chop_command(ch, &i, order);
+    }
 }
 
-void	get_child_info(t_shell *shell) ////fallo piquito is ascii
+void	get_child_info(t_shell *shell) 
 {
 	int i;
 	int a;
@@ -137,8 +125,7 @@ void	get_child_info(t_shell *shell) ////fallo piquito is ascii
     	count_piquitos(&shell->my_pro->child[i].nbr_outfile, '>', &shell->my_pro->child[i].outfile_t, shell->my_pro->orders[i]);
 		
 		/*CHOP: ORDER -> COMMAND_GROUP */ //Separa infiles(array) y outfiles(array) y comando (churro)
-		chop_order(&shell->my_pro->child[i], shell->my_pro->orders[i]);
-		printf("COMMANDO_GROUP --> %s \n", shell->my_pro->child[i].command_group);
+		classify_order(&shell->my_pro->child[i], shell->my_pro->orders[i]);
 		
 
 	  	/*SPLIT:COMMAND_GROUP --> SPLIT_COMANDO*/ // comando churro en comando array
@@ -147,9 +134,6 @@ void	get_child_info(t_shell *shell) ////fallo piquito is ascii
 	  	/*CLEAN: COMMAND_SPLIT --> COMMNAD_CLEAN */  //Interpretat "" AND $ 
 
 		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
-		a= -1;
-		while(shell->my_pro->child[i].command_split[++a])
-			printf("COMMANDO --> %s \n", shell->my_pro->child[i].command_split[a]);
 
 	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;
@@ -157,7 +141,6 @@ void	get_child_info(t_shell *shell) ////fallo piquito is ascii
 		{
 			shell->my_pro->child[i].infile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].infile_t[a].file_name, shell, shell->my_pro->child[i].nbr_infile, 1);
 			shell->my_pro->child[i].infile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].infile_t[a].file_name_clean);
-			//printf("INfile --> %s\n", shell->my_pro->child[i].infile_t[a].file_name);
 		}
 	  	/*CLEAN: OUTFILE --> OUTFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;
@@ -165,11 +148,10 @@ void	get_child_info(t_shell *shell) ////fallo piquito is ascii
 		{
 			shell->my_pro->child[i].outfile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].outfile_t[a].file_name, shell, shell->my_pro->child[i].nbr_outfile, 1);
 			shell->my_pro->child[i].outfile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].outfile_t[a].file_name_clean);
-			printf("OUTfile --> %s\n", shell->my_pro->child[i].outfile_t[a].file_name);
 		}
 		
 		/*BUILTINS*///La amdre va a ejecutar los procesos que lleven builting. EL hijo al que le toca este comando muere al entrar.
-		if (shell->my_pro->child[i].command_split)
+		if (shell->my_pro->child[i].command_split && shell->my_pro->nbr_process == 1)
 			check_builtins_mother(&shell, i);	
 
 	}	

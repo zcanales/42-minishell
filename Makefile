@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/13 17:30:01 by zcanales         ###   ########.fr        #
+#    Updated: 2022/01/14 20:04:45 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -22,7 +22,9 @@ SRCS =	src/main.c\
 		src/ft_split_2.c\
 		src/processes.c\
 		src/here_doc.c\
-		src/builtins.c\
+		src/mom_builtins.c\
+		src/child_builtins.c\
+		src/export_unset.c\
 		src/quote_dollar.c\
 		src/error.c\
 

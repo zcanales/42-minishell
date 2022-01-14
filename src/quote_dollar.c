@@ -6,13 +6,14 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/14 14:13:22 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 19:46:41 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 //EXPORT
+//CHECK_QUOTES//
 //EXPORT_NAME -> Aloja lo que hay detras del export completo (a=hola$USER),(Si no es sintaxis ok -> no aloja)
 //GET_REAL_VARIABLE -> Recompone el array de variables ok en real_var: DECODE_QUOTES + EXPAND_DOLLAR y va pegando los cachos (texto, comillas, var)
 //**DECOCE_QUOTES -> Quita las comillas (siempre que cierren)
@@ -20,18 +21,35 @@
 //****FT_REPLACE_VAR -> Trocea la string, y copia en la nueva var_real cacho pre + variable desde env  + cacho post
 //**FT_SUBSTR_STRJOIN -> saca un cacho y lo junta a la real_var actual
 
-/*1. BUSCAR mayus/minus/_/"" y avanza
-     2. Busca = y para
-     3. empieza la VARIABLE, fin en espacio o fin de comillas
-    ///
-     Realloc env
-     Copy env
-     strdup VAR en ultimo char*
-     free env
-     return new_env
-     */
-	//NO FUNCIONA: export a=$USER'$USER'
 
+int	check_quotes(char *s, int *index)
+{
+	int i;
+	int equal;
+
+	i = *index;
+	equal = 0;
+	if (s[i] == 34)
+	{
+		while (s[++i] && s[i] != 34)
+		{
+			/*if (s[i] == '=')
+				equal = 1;*/
+			continue;
+		}
+	}
+	else if (s[i] == 39)
+	{
+		while (s[++i] && s[i] != 39)
+		{
+			/*if (s[i] == '=')
+				equal = 1;*/
+			continue;
+		}
+	}
+	*index = i;
+	return (equal);
+}
 
 char *expand_dollar(t_shell *shell, char *str, int *i)
 {
@@ -64,7 +82,7 @@ char *expand_dollar(t_shell *shell, char *str, int *i)
 	return (expanded);
 }
 
-int	ft_replace_var(char **str, int start, int len, char *replace)
+int	replace_dollar(char **str, int start, int len, char *replace)
 {
 	int i;
 	char *temp;
@@ -102,7 +120,7 @@ void	decode_quotes(t_shell *shell, char **str, int *i)
 		{
 			dollar_pos = *i;
 			dollar_var = expand_dollar(shell, *str, i);
-			ft_replace_var(str, dollar_pos, *i - dollar_pos, dollar_var);
+			replace_dollar(str, dollar_pos, *i - dollar_pos, dollar_var);
 			*i = dollar_pos + ft_strlen(dollar_var) - 1;
 		}
 		*i += 1;
@@ -122,7 +140,7 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
     new_array = (char **)ft_calloc(sizeof(char *), nbr_array + 1);   
   	if (!new_array)
         exit(1);
-	while(check && array[++a]) 
+	while(array[++a]) 
 	{
 		i = 0;
 		while(array[a][i])
@@ -137,62 +155,19 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 			{
 				start = i;
 				dollar_var = expand_dollar(shell, array[a], &i);
-				ft_replace_var(&array[a], start, i - start, dollar_var);
+				replace_dollar(&array[a], start, i - start, dollar_var);
 				i = ft_strlen(dollar_var) + start -1;
-				//start++;
 			}
 			while (array[a][i] && array[a][i] != 34 && array[a][i] != 39 && array[a][i] != '$')
 				i++;
 			new_array[a] = ft_substr_strjoin(array[a], new_array[a], start, i);
-		//	if (check == 1)
-		//		check = 0;
 		}
 	}
 	new_array[nbr_array] = NULL;
-//	if (check == 2)
-		free_double(array, check);
-//	else
-//		free(array[0]);
+	free_double(array, check);
 	array = NULL;
 	return (new_array);
 }
 
 
-static void find_equal_char(char **s, t_shell *shell)
-{
-	int     i;
-	int		a;
-
-	shell->my_env->nbr_var = -1;
-	a = 0;
-    while (s[++a])
-    {
-    	i = 0;
-		while (s[a][i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
-					|| s[a][i] == '_' || s[a][i] == 34 || s[a][i] == 39 ||
-				   	s[a][i] == '$' || ft_isdigit(s[a][i])))
-			i++;
-		if (s[a][i] == '=')
-			shell->my_env->var_real[++shell->my_env->nbr_var] = ft_substr(s[a], 0, ft_strlen(s[a]));
-    }
-	 shell->my_env->var_real[++shell->my_env->nbr_var] = NULL;
-}
-
-void	get_real_vars(t_shell *shell, char **command_split, int nbr_command_split)
-{
-	/*FILTRO VARIABLES*/ //Busca un '='
-   shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), nbr_command_split + 1);
-   if (!shell->my_env->var_real)
-	   exit(1);
-   find_equal_char(command_split, shell);
-
-
-
-   /*INTERPRETAT COMILLAS Y DOLLAR*/
- /*  shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), shell->my_env->nbr_var + 1);
-   if (!shell->my_env->var_real)
-       exit(1);*/
-//	shell->my_env->var_real = fill_quote_dollar(shell->my_env->var, shell, shell->my_env->nbr_var, 2);
-
-}
 
