@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/13 16:28:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 13:51:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 # include <readline/readline.h>
 # include <signal.h>
 
-static void new_filename(t_pro *pro, int index)
+static void new_filename(t_pro *pro, int index, int id)
 {
-	free(pro->child->infile_t->file_name);
-	pro->child->infile_t[index].file_name = ft_strdup("here_doc.txt");
+	free(pro->child[id].infile_t[index].file_name);
+	pro->child[id].infile_t[index].file_name = ft_strdup("here_doc.txt");
 }
 
 void here_doc(t_pro *pro, int index, int id)
@@ -29,7 +29,7 @@ void here_doc(t_pro *pro, int index, int id)
 	int		fd;
 
     limit = ft_strdup(pro->child[id].infile_t[index].file_name);
-	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0755);
+	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
     if (fd < 0)
     {
         free(limit);
@@ -53,7 +53,7 @@ void here_doc(t_pro *pro, int index, int id)
         free(line);
         line = NULL;
     }
-	new_filename(pro, index);
+	new_filename(pro, index, id);
     free(limit);
     close(fd);
 	pro->fd[pro->child[id].id_child][0] = open("here_doc.txt", O_RDONLY);

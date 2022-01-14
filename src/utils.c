@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/13 20:06:14 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:13:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,15 @@ char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
 }
 //FREE_DOUBLE//
 
-void	free_double(char **s)
+void	free_double(char **s, int check)
 {
 	int	i;
 
 	i = -1;
-//	while (s[++i])
-//		free(s[i]);
-	free(s);
+	while (s[++i])
+		free(s[i]);
+	if (check == 2)
+		free(s);
 }
 
 //FREELIST///

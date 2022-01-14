@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/13 16:28:30 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 13:51:16 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,12 @@ void get_environment(t_env  *my_env, char **env)
 	while (env[++i])
 		continue ;
 	my_env->env = (char **)ft_calloc(sizeof(char *), i + 1);
-//	new_env = (char **)ft_calloc(sizeof(char *), i + 1);
     if (!my_env->env)
         exit (1);
 	i = -1;
 	while (env[++i])
-	{
     	my_env->env[i] = ft_strdup(env[i]);
-//    	new_env[i] = ft_strdup(env[i]);
-	}
 	my_env->env[i] = NULL;
-//  new_env[i] = NULL;
     path = getenv("PATH");
     my_env->paths = ft_split(path, ':');
     i = 0;

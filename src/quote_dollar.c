@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/13 20:06:12 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:13:22 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	decode_quotes(t_shell *shell, char **str, int *i)
 }
 
 
-char ** fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
+char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 {
 	int a;
 	int	i;
@@ -122,7 +122,7 @@ char ** fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check
     new_array = (char **)ft_calloc(sizeof(char *), nbr_array + 1);   
   	if (!new_array)
         exit(1);
-	while(array[++a] && check) 
+	while(check && array[++a]) 
 	{
 		i = 0;
 		while(array[a][i])
@@ -138,18 +138,21 @@ char ** fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check
 				start = i;
 				dollar_var = expand_dollar(shell, array[a], &i);
 				ft_replace_var(&array[a], start, i - start, dollar_var);
-				i = start;
+				i = ft_strlen(dollar_var) + start -1;
 				//start++;
 			}
 			while (array[a][i] && array[a][i] != 34 && array[a][i] != 39 && array[a][i] != '$')
 				i++;
 			new_array[a] = ft_substr_strjoin(array[a], new_array[a], start, i);
-			if (check == 1)
-			check = 0;
+		//	if (check == 1)
+		//		check = 0;
 		}
 	}
 	new_array[nbr_array] = NULL;
-//	free_double(array);
+//	if (check == 2)
+		free_double(array, check);
+//	else
+//		free(array[0]);
 	array = NULL;
 	return (new_array);
 }
@@ -170,16 +173,16 @@ static void find_equal_char(char **s, t_shell *shell)
 				   	s[a][i] == '$' || ft_isdigit(s[a][i])))
 			i++;
 		if (s[a][i] == '=')
-			shell->my_env->var[++shell->my_env->nbr_var] = ft_substr(s[a], 0, ft_strlen(s[a]));
+			shell->my_env->var_real[++shell->my_env->nbr_var] = ft_substr(s[a], 0, ft_strlen(s[a]));
     }
-	 shell->my_env->var[++shell->my_env->nbr_var] = NULL;
+	 shell->my_env->var_real[++shell->my_env->nbr_var] = NULL;
 }
 
 void	get_real_vars(t_shell *shell, char **command_split, int nbr_command_split)
 {
 	/*FILTRO VARIABLES*/ //Busca un '='
-   shell->my_env->var = (char **)ft_calloc(sizeof(char *), nbr_command_split + 1);
-   if (!shell->my_env->var)
+   shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), nbr_command_split + 1);
+   if (!shell->my_env->var_real)
 	   exit(1);
    find_equal_char(command_split, shell);
 
@@ -189,6 +192,7 @@ void	get_real_vars(t_shell *shell, char **command_split, int nbr_command_split)
  /*  shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), shell->my_env->nbr_var + 1);
    if (!shell->my_env->var_real)
        exit(1);*/
-	shell->my_env->var_real = fill_quote_dollar(shell->my_env->var, shell, shell->my_env->nbr_var, 2);
+//	shell->my_env->var_real = fill_quote_dollar(shell->my_env->var, shell, shell->my_env->nbr_var, 2);
+
 }
 

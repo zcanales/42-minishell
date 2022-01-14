@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/12 20:10:58 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:13:01 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 
 void	free_and_init(t_shell *shell)
 {
-	free_double(shell->my_pro->orders);
+	free_double(shell->my_pro->orders, 2);
+	//free_double(shell->my_pro->infile_t);
 	free(shell->line);
 	shell->line = NULL;
 	ft_memset(shell->my_pro, 0, sizeof(t_pro));
@@ -60,7 +61,7 @@ int create_terminal(t_shell *shell)
 	while (1)
 	{
 		shell->line = get_line(shell);
-		if (!shell->line)
+		if (!shell->line || shell->line[0] == '\0')
 		{
 			printf("exit\n");
 			break;

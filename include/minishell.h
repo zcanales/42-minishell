@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/13 20:06:18 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:04:38 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 typedef struct s_piquito
 {
 	int		type;		// simple = 1; double = 2; 
-//	int 	fd;			//Su fd
 	char	*file_name;
 	char	**file_name_clean;
 }t_piquito;
@@ -62,7 +61,7 @@ typedef struct s_env
     char    **env;
 	int 	nbr_env;
     char    **paths;
-	char	**var;
+//	char	**var;
 	char	**var_real;
 	int 	nbr_var;
 	t_list	*list_var_real;
@@ -112,7 +111,7 @@ void is_redirected(t_pro *pro, int id);
 	/*UTILS*/
 void 	close_pipes(t_shell *shell);
 int		check_quotes(char *s, int *index);
-void    free_double(char **s);
+void    free_double(char **s, int check);
 void    imprimir(t_ch *ch); //QUITAR
 void	ft_freelist(t_list **head);
 char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end);

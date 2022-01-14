@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/13 20:06:15 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:13:00 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,24 @@ void create_lists(t_shell *shell)
 int replace_repeated(t_list *temp_env, t_list *temp_var)
 {
 	int len;
+	t_list	*temp_back;
 
+	temp_back = temp_env;
 	while (temp_env)
 	{
 		len = ft_strlen((char *)temp_var->content)
 		   	- ft_strlen(ft_strchr((char *)temp_var->content, '='));
 		if (!ft_strncmp((char *)temp_var->content, (char *)temp_env->content, len))
 		{
-			free(temp_env->content);
-			temp_env->content = ft_strdup(temp_var->content);
+		//	free(temp_env->content);
+		//	temp_env->content = ft_strdup(temp_var->content);
+			temp_back->next = ft_lstnew(temp_var->content);
+			temp_back->next->next = temp_env->next;
+			free(temp_env);
 			return (0);
 		}
-		temp_env = temp_env->next;
+		temp_back = temp_back->next;
+		temp_env = temp_back->next;
 	}
 	return (1);
 }	
@@ -89,7 +95,7 @@ char **convert_list_array(t_shell *shell)
 		shell->my_env->list_env = shell->my_env->list_env->next;
 	}
 	temp_env[shell->my_env->nbr_env] = NULL;
-	free_double(shell->my_env->env);
+	free_double(shell->my_env->env, 2);
 	shell->my_env->env = NULL;
 	return (temp_env);
 }

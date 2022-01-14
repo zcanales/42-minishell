@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/13 20:06:16 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/14 14:13:04 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void re_in_out(t_pro *pro, int in_out, int index, int id)
 	if (in_out == 1) //OUTFILE
 	{
 		if(pro->child[id].outfile_t[index].type == 1)
-			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_TRUNC | O_CREAT, 0755);
+			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_TRUNC | O_CREAT, 0644);
 		if(pro->child[id].outfile_t[index].type == 2)
-			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_CREAT | O_APPEND, 0755);
+			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (pro->fd[id + 1][1] < 0)
             exit(1);
 	}
