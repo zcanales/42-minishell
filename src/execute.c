@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 19:47:55 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,10 @@ void exe_command(t_shell *shell, int id)
         if (!access(temp_access, X_OK))
         {
             if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_split[0]), shell->my_pro->child[id].command_split, shell->my_env->env)) < 0)
-                perror("Error: \n");//funcion errores
+                printf("%s", strerror(errno));//funcion errores
         }
         free(temp_access);
     }
 	printf("Pink: %s comand not found\n", shell->my_pro->child[id].command_split[0]);
-    exit(0);
+    exit(1);
 }

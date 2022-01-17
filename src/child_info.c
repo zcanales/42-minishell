@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 14:16:21 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:29 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,11 @@ void	get_child_info(t_shell *shell)
 
 		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
 
-	/*	a = -1;
+		a = -1;
 		while (++a < shell->my_pro->child[i].nbr_command)
 		{
-
-		}ç*/
-
+			printf("commna-- > %s\n", shell->my_pro->child[i].command_split[a]);
+		}
 
 	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;

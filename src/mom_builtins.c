@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 14:16:17 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:33 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void find_equal_char(char **s, t_shell *shell)
 	int		a;
 
 	shell->my_env->nbr_var = -1;
-	a = 0;
+	a = -1;
     while (s[++a])
     {
     	i = 0;
@@ -44,17 +44,17 @@ void	get_real_vars(t_shell *shell, char **command_split, int nbr_command_split, 
 {
 	int a;
 
-	shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), nbr_command_split + replace);
+	shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), nbr_command_split);
 	if (!shell->my_env->var_real)
 		exit(1);
 	if (replace == 1)//Busca un '=' Si eres EXPORT
 		  find_equal_char(command_split, shell);
 	else //copia tal cual todas menos la primera
 	{
-		a = 0;
+		a = -1;
 		while(command_split[++a])
-			shell->my_env->var_real[a - 1] = ft_strdup(command_split[a]);
-		shell->my_env->var_real[a - 1] = NULL; 
+			shell->my_env->var_real[a] = ft_strdup(command_split[a]);
+		shell->my_env->var_real[a] = NULL; 
 	}
 }
 
@@ -92,12 +92,44 @@ void get_new_paths(char **env, t_shell *shell)
 	}
 }
 //////////////////CD///////////////////////////
-//
-void cd_builtin(char **env, char *command_split)
+
+
+char *special_paths(char **env, char *command_split)
+{
+	int a;
+	char *temp;
+	char *find;
+	
+    if (ft_strcmp(command_split, "-"))
+		find = "OLD_PWD=";
+	else if (command_split[0] == '~')
+		find = "HOME=";
+	else
+		return (command_split);
+	a = -1;
+    while (env[++a])
+    {
+		if (!ft_strncmp(env[a], find, ft_strlen(find)))
+        {
+			if (command_split[0] == '~')
+				temp = ft_strdup(&command_split[1]);
+			else 
+				temp = (char *)ft_calloc(1, 1);
+            free(command_split);
+            command_split = ft_strjoin(ft_strdup(&env[a][ft_strlen(find)]), temp);
+			free(temp);
+			break ;
+		}
+	}
+	return (command_split);
+}
+
+char **cd_builtin(char **env, char *command_split, char **new_vars)
 {
 	int a;
     char   path[1024];
 
+	new_vars[0] = ft_strjoin("OLD_PWD=", ft_strdup(getcwd(path,  1024)));
 	if (!command_split)
 	{
    		a = -1;
@@ -112,19 +144,18 @@ void cd_builtin(char **env, char *command_split)
     }
 	else 
 	{
-		if (chdir(command_split) != 0)
-			printf("%s\n", strerror(errno));
-	}
-    getcwd(path, 1024);
-	a = -1;
-	while (env[++a])
-	{
-		if (!ft_strncmp(env[a], "PWD=", ft_strlen("PWD=")))
+		command_split = special_paths(env, command_split);
+		if (command_split[0] == '-')
 		{
-			free(env[a]);
-			env[a] = ft_strjoin("PWD=", path);
+			printf("cd: OLDPWD not set\n");
+			return (NULL);
 		}
+		if (chdir(command_split) != 0)
+			printf("%s: %s\n", command_split, strerror(errno));
 	}
+	new_vars[1] = ft_strjoin("PWD=", ft_strdup(getcwd(path,  1024)));
+	new_vars[2] = NULL;
+   return (new_vars);	
 }
  ////////////////////EXIT///////////////////////////////////
  /*malloc
@@ -146,36 +177,45 @@ void cd_builtin(char **env, char *command_split)
 		1.2.4. list_var_real
 		1.2.5. list_env
 	1.3. line
-
 */
+
+void	exit_builtin(char *command_split, int nbr_command)
+{
+	printf("exit\n");
+	if (nbr_command > 2)
+		perror("Pink: exit: too many arguments\n");
+	else
+		exit(ft_atoi(command_split));
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////77
-   
+void	change_enviroment(t_shell **shell, char **var, int nbr_command, int replace)
+{
+		get_real_vars(*shell, var, nbr_command, replace);
+		create_lists(*shell);
+		replace_env((*shell), replace);
+		(*shell)->my_env->env = convert_list_array(*shell);
+		get_new_paths((*shell)->my_env->env, *shell);
+}	
+
 void    check_builtins_mother(t_shell **shell, int id)
 {
+	char **new_vars;
 
     if (!ft_strncmp((*shell)->my_pro->child[id].command_split[0], "export", ft_strlen("export")) && !(*shell)->my_pro->child[id].command_split[0][6])
-	{
-		get_real_vars(*shell, (*shell)->my_pro->child[id].command_split, (*shell)->my_pro->child[id].nbr_command, 1);
-		create_lists(*shell);
-		replace_env((*shell), 1);
-		(*shell)->my_env->env = convert_list_array(*shell);
-		get_new_paths((*shell)->my_env->env, *shell);
-
-	}
+		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 1);
 	else  if (!ft_strncmp((*shell)->my_pro->child[id].command_split[0], "unset", ft_strlen("unset")) && !(*shell)->my_pro->child[id].command_split[0][5])
-	{
-		get_real_vars(*shell, (*shell)->my_pro->child[id].command_split, (*shell)->my_pro->child[id].nbr_command, 0);
-		create_lists(*shell);
-		replace_env((*shell), 0);
-		(*shell)->my_env->env = convert_list_array(*shell);
-		get_new_paths((*shell)->my_env->env, *shell);
-		
-	}
+		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 0);
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "cd"))
 	{
-		printf("Soy la madre tengo cd \n");
-		cd_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].command_split[1]);
+		new_vars = (char **)ft_calloc(sizeof(char *), 3);
+		if (!new_vars)
+			exit(1);
+		new_vars = cd_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].command_split[1], new_vars);
+		if (!new_vars)
+			return ;
+		change_enviroment(shell,new_vars, 3, 1);
 	}
-/*	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
-		exit_builtin((*shell)->my_pro->child[id].command_split[1])*/
+//	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
+//		exit_builtin(&(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command);
 }

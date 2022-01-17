@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 14:16:25 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:35 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
 
+
+int		g_status;
 
 typedef struct s_piquito
 {

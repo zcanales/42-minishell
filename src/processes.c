@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 11:01:06 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:32 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	child_process(t_ch *child, t_shell *shell)
 	re_pipe(shell, child->id_child);	
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
-	if (child->id_child != shell->my_pro->nbr_process - 1)
-		kill(shell->my_pro->pid[child->id_child], SIGCONT);
+//	if (child->id_child != shell->my_pro->nbr_process - 1)
+//		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 
 	 /*BUILTINGS*/
 	if (!child->command_split)
@@ -65,11 +65,15 @@ void	mother_process(t_shell *shell)
 		waitpid(-1, &status, 0);
 		if (status != 0)
 		{
+			g_status = WEXITSTATUS(status);
 			printf("Hijo %d en problemas\n", i);
-			if (i != (shell->my_pro->nbr_process - 1))
-				kill(shell->my_pro->pid[i + 1], SIGCONT);
 		}
+		else 
+			g_status = 0;
+		if (i != shell->my_pro->nbr_process - 1)
+			kill(shell->my_pro->pid[i + 1], SIGCONT);
 	}
+	printf("status --> %d\n", g_status);
 	//unlink("here_doc.txt");
 	//printf("Process OK\n");
 }

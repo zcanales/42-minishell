@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 14:16:18 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:26 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,8 @@ void	check_builtins_child(t_shell **shell, int id)
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "echo"))
 		echo_builtin((*shell)->my_pro->child[id].command_split); 
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
-		exit(0);
+	{
+		printf("Soy un hijo me voy\n");
+		exit(10);
+	}
 }

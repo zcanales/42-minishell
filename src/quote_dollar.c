@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 14:16:19 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 20:15:24 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,13 @@ char *expand_dollar(t_shell *shell, char *str, int *i)
 	start = *i;
 	a = -1;
 	*i += 1;
-	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$' && str[*i] != 39 && str[*i] != '=') //len de la variable
+
+	if (str[*i] == '?')
+	{	
+		*i += 1;
+		return (ft_itoa(g_status));
+	}
+	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$' && str[*i] != 39 && str[*i] != '=' && str[*i] != '?') //para siempre ue no sea alpha o digit o....
 		*i += 1;
 	dollar_var = ft_substr(str, start + 1, *i - start - 1); // dollar_var = variable
 	while (shell->my_env->env[++a]) //buscarla en env
@@ -119,6 +125,8 @@ void	decode_quotes(t_shell *shell, char **str, int *i)
 		if (*(*str + (*i)) == '$' && quote == 34)
 		{
 			dollar_pos = *i;
+			if (*(*str + (*i + 1)) == '?' && quote == 34)
+
 			dollar_var = expand_dollar(shell, *str, i);
 			replace_dollar(str, dollar_pos, *i - dollar_pos, dollar_var);
 			*i = dollar_pos + ft_strlen(dollar_var) - 1;
@@ -140,10 +148,10 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
     new_array = (char **)ft_calloc(sizeof(char *), nbr_array + 1);   
   	if (!new_array)
         exit(1);
-	while(array[++a]) 
+	while (array[++a]) 
 	{
 		i = 0;
-		while(array[a][i])
+		while (array[a][i])
 		{
 			start = i;
 			if (array[a][i] == 34 || array[a][i] == 39)
@@ -154,9 +162,18 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 			else if (array[a][i] == '$')
 			{
 				start = i;
-				dollar_var = expand_dollar(shell, array[a], &i);
+		/*		if (array[a][i + 1] == '?')
+				{
+					dollar_var = ft_itoa(g_status);
+					i += 3;
+				}
+				else*/
+					dollar_var = expand_dollar(shell, array[a], &i);
+				printf("dollar_var --> %s\n", dollar_var);
 				replace_dollar(&array[a], start, i - start, dollar_var);
-				i = ft_strlen(dollar_var) + start -1;
+				i = ft_strlen(dollar_var) + start - 1;
+				if (i < 0)
+					i++;
 			}
 			while (array[a][i] && array[a][i] != 34 && array[a][i] != 39 && array[a][i] != '$')
 				i++;
