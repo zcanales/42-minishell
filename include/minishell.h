@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 20:04:49 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 14:16:25 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <termios.h> /*struct termios*/
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
 
 typedef struct s_piquito

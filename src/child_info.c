@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 20:04:37 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 14:16:21 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,13 @@ void	get_child_info(t_shell *shell)
 
 		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
 
+	/*	a = -1;
+		while (++a < shell->my_pro->child[i].nbr_command)
+		{
+
+		}ç*/
+
+
 	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;
 		while(++a < shell->my_pro->child[i].nbr_infile)
@@ -149,7 +156,7 @@ void	get_child_info(t_shell *shell)
 			shell->my_pro->child[i].outfile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].outfile_t[a].file_name, shell, shell->my_pro->child[i].nbr_outfile, 1);
 			shell->my_pro->child[i].outfile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].outfile_t[a].file_name_clean);
 		}
-		
+	//	imprimir(&shell->my_pro->child[i]);
 		/*BUILTINS*///La amdre va a ejecutar los procesos que lleven builting. EL hijo al que le toca este comando muere al entrar.
 		if (shell->my_pro->child[i].command_split && shell->my_pro->nbr_process == 1)
 			check_builtins_mother(&shell, i);	

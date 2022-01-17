@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 20:05:10 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 14:16:17 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 //ALLOC_NEW_VARS
 
 #include "../include/minishell.h"
+#include <string.h>
 
 ////////////////////VARS/////////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +91,63 @@ void get_new_paths(char **env, t_shell *shell)
 		shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 1);
 	}
 }
+//////////////////CD///////////////////////////
+//
+void cd_builtin(char **env, char *command_split)
+{
+	int a;
+    char   path[1024];
 
+	if (!command_split)
+	{
+   		a = -1;
+		while (env[++a])
+   		{
+       		 if (!ft_strncmp(env[a], "HOME=", ft_strlen("HOME=")))
+			 {
+				if (chdir(&env[a][5]) != 0)
+					printf("%s\n", strerror(errno));
+			 }
+        }
+    }
+	else 
+	{
+		if (chdir(command_split) != 0)
+			printf("%s\n", strerror(errno));
+	}
+    getcwd(path, 1024);
+	a = -1;
+	while (env[++a])
+	{
+		if (!ft_strncmp(env[a], "PWD=", ft_strlen("PWD=")))
+		{
+			free(env[a]);
+			env[a] = ft_strjoin("PWD=", path);
+		}
+	}
+}
+ ////////////////////EXIT///////////////////////////////////
+ /*malloc
+ 1. shell
+ 	1.1. my_pro
+		1.1.1. pid
+		1.1.2. fd
+		1.1.3. orders
+		1.1.4. ch
+			-piquito(out/in)
+				-file_name
+				-file_name_clean
+			-command_group
+			-commando_split
+	1.2. my_env
+		1.2.1. env
+		1.2.2. path
+		1.2.3. var_real
+		1.2.4. list_var_real
+		1.2.5. list_env
+	1.3. line
+
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////77
    
 void    check_builtins_mother(t_shell **shell, int id)
@@ -107,7 +164,6 @@ void    check_builtins_mother(t_shell **shell, int id)
 	}
 	else  if (!ft_strncmp((*shell)->my_pro->child[id].command_split[0], "unset", ft_strlen("unset")) && !(*shell)->my_pro->child[id].command_split[0][5])
 	{
-		//printf("Soy la madre y tengo unset --> %s \n",(*shell)->my_pro->child[id].command_split[0]);
 		get_real_vars(*shell, (*shell)->my_pro->child[id].command_split, (*shell)->my_pro->child[id].nbr_command, 0);
 		create_lists(*shell);
 		replace_env((*shell), 0);
@@ -115,5 +171,11 @@ void    check_builtins_mother(t_shell **shell, int id)
 		get_new_paths((*shell)->my_env->env, *shell);
 		
 	}
-	//aqui irian las dos ultimas lineas que se repiten
+	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "cd"))
+	{
+		printf("Soy la madre tengo cd \n");
+		cd_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].command_split[1]);
+	}
+/*	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
+		exit_builtin((*shell)->my_pro->child[id].command_split[1])*/
 }

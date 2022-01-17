@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/14 16:28:13 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 11:01:02 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int create_terminal(t_shell *shell)
 {
 	shell->line = NULL;
 	attributes(shell);
-    signal(SIGINT, sig_handler);
+	signal(SIGINT, sig_handler);
 	while (1)
 	{
 		shell->line = get_line(shell);

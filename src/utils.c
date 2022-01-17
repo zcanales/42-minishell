@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/14 20:04:41 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/17 11:01:00 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 //CHECK_QUOTES -> Cuando se encuentra comillas, avanza en string SIN PARAR hasta que encuentre otras iguales. 
 //FREE_DOUBLE -> Libera un array doble
 //IMPRIMIR -> Imprime struct. 
-
-
 
 //FT_SUB_JOIN
 char *ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)

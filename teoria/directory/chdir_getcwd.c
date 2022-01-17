@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include <string.h>
+#include <errno.h>
 
 // chdir function is declared
 // inside this header
@@ -7,12 +9,14 @@
 int main()
 {
 	char s[100];
+	int error;
 
 	// printing current working directory
 	printf("%s\n", getcwd(s, 100));
 
 	// using the command
-	chdir("..");
+	if (chdir("cd_1") != 0)
+		printf("Pink: %s\n", strerror(errno));
 
 	// printing current working directory
 	printf("%s\n", getcwd(s, 100));
