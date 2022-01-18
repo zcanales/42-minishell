@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:45:33 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,9 @@ void re_pipe(t_shell *shell, int id)
 {
 	if (id != 0 || (id == 0 && shell->my_pro->child[id].nbr_infile))
 		dup2(shell->my_pro->fd[id][0], 0);
-
     if (id != shell->my_pro->nbr_process - 1)
         dup2(shell->my_pro->fd[id + 1][1], 1);
-    else if(id  == shell->my_pro->nbr_process - 1 && shell->my_pro->child[id].nbr_outfile)//el ultimo hijo tambien escribe en la pipe si tiene out
+    else if (id  == shell->my_pro->nbr_process - 1 && shell->my_pro->child[id].nbr_outfile)//el ultimo hijo tambien escribe en la pipe si tiene out
 		dup2(shell->my_pro->fd[id + 1][1], 1);
     close_pipes(shell);
 }

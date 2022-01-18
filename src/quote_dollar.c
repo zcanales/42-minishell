@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:24 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:45:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,11 @@ char *expand_dollar(t_shell *shell, char *str, int *i)
 	if (str[*i] == '?')
 	{	
 		*i += 1;
-		return (ft_itoa(g_status));
+		return (ft_itoa(shell->status));
 	}
-	while(str[*i] && str[*i] != ' ' && str[*i] != 34 && str[*i] != '$' && str[*i] != 39 && str[*i] != '=' && str[*i] != '?') //para siempre ue no sea alpha o digit o....
+	if (str[*i] == '\0' || str[*i] == ' ' || str[*i] == 34)
+		return (ft_strdup("$"));
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_')) 
 		*i += 1;
 	dollar_var = ft_substr(str, start + 1, *i - start - 1); // dollar_var = variable
 	while (shell->my_env->env[++a]) //buscarla en env
@@ -125,8 +127,6 @@ void	decode_quotes(t_shell *shell, char **str, int *i)
 		if (*(*str + (*i)) == '$' && quote == 34)
 		{
 			dollar_pos = *i;
-			if (*(*str + (*i + 1)) == '?' && quote == 34)
-
 			dollar_var = expand_dollar(shell, *str, i);
 			replace_dollar(str, dollar_pos, *i - dollar_pos, dollar_var);
 			*i = dollar_pos + ft_strlen(dollar_var) - 1;
@@ -162,14 +162,7 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 			else if (array[a][i] == '$')
 			{
 				start = i;
-		/*		if (array[a][i + 1] == '?')
-				{
-					dollar_var = ft_itoa(g_status);
-					i += 3;
-				}
-				else*/
-					dollar_var = expand_dollar(shell, array[a], &i);
-				printf("dollar_var --> %s\n", dollar_var);
+				dollar_var = expand_dollar(shell, array[a], &i);
 				replace_dollar(&array[a], start, i - start, dollar_var);
 				i = ft_strlen(dollar_var) + start - 1;
 				if (i < 0)
@@ -177,6 +170,8 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 			}
 			while (array[a][i] && array[a][i] != 34 && array[a][i] != 39 && array[a][i] != '$')
 				i++;
+			if (array[a][i] == '$' && (array[a][i + 1] == '\0' || array[a][i + 1] == ' '))
+					i += 1;
 			new_array[a] = ft_substr_strjoin(array[a], new_array[a], start, i);
 		}
 	}

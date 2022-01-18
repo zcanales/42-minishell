@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:35 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 13:51:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 #include <errno.h>
 #include <string.h>
 
-
-int		g_status;
+int		g_mother;
 
 typedef struct s_piquito
 {
@@ -39,7 +38,6 @@ typedef struct s_ch
 	//para ejecutar
 	char	*command_group; 
 	char	**command_split;
-//	char	**command_clean;
 
 	//info files
 	int		nbr_infile;
@@ -57,7 +55,7 @@ typedef struct s_pro
     int     *pid;
     int     **fd;
     char    **orders;
-	t_ch	*child;//array de hijos
+	t_ch	*child;
 }   t_pro;
 
 typedef struct s_env
@@ -65,7 +63,6 @@ typedef struct s_env
     char    **env;
 	int 	nbr_env;
     char    **paths;
-//	char	**var;
 	char	**var_real;
 	int 	nbr_var;
 	t_list	*list_var_real;
@@ -77,7 +74,7 @@ typedef struct	s_shell
 	struct termios old;
 	struct termios changed;
 	char	*line;
-	int		mother;
+	int		status;
 	t_env	*my_env;
 	t_pro	*my_pro;
 

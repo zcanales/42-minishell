@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:26 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:45:37 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,18 @@ void	echo_builtin(char **command_split)
 	exit (0);
 }
 
-void env_builtin(char **env)
+void env_builtin(char **env, int nbr_command, char **command_split)
 {
 	int i;
 		
-	i = -1;
-	while (env[++i])
-		printf("%s\n",env[i]);
+	if (nbr_command > 1)
+		printf("Pink: : env %s No such file or directory\n", command_split[1]);
+	else
+	{
+		i = -1;
+		while (env[++i])
+			printf("%s\n",env[i]);
+	}
 	exit(0);
 }
 
@@ -62,7 +67,7 @@ void	check_builtins_child(t_shell **shell, int id)
 	if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "export"))
 		exit(0);
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "env"))
-		env_builtin((*shell)->my_env->env); 
+		env_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].nbr_command, &(*shell)->my_pro->child[id].command_split[0]); 
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "unset"))
 		exit(0);
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "cd"))

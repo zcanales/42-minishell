@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:29 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:45:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,16 +130,16 @@ void	get_child_info(t_shell *shell)
 
 	  	/*SPLIT:COMMAND_GROUP --> SPLIT_COMANDO*/ // comando churro en comando array
 		shell->my_pro->child[i].command_split = ft_split_2(shell->my_pro->child[i].command_group, ' ', &shell->my_pro->child[i].nbr_command); 
+		/*a = -1;
+		while (++a < shell->my_pro->child[i].nbr_command)
+		{
+			printf("commna-- > %s\n", shell->my_pro->child[i].command_split[a]);
+		}*/
 		
 	  	/*CLEAN: COMMAND_SPLIT --> COMMNAD_CLEAN */  //Interpretat "" AND $ 
 
 		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
 
-		a = -1;
-		while (++a < shell->my_pro->child[i].nbr_command)
-		{
-			printf("commna-- > %s\n", shell->my_pro->child[i].command_split[a]);
-		}
 
 	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;
@@ -155,7 +155,6 @@ void	get_child_info(t_shell *shell)
 			shell->my_pro->child[i].outfile_t[a].file_name_clean = fill_quote_dollar(&shell->my_pro->child[i].outfile_t[a].file_name, shell, shell->my_pro->child[i].nbr_outfile, 1);
 			shell->my_pro->child[i].outfile_t[a].file_name = convert_array_to_string(shell->my_pro->child[i].outfile_t[a].file_name_clean);
 		}
-	//	imprimir(&shell->my_pro->child[i]);
 		/*BUILTINS*///La amdre va a ejecutar los procesos que lleven builting. EL hijo al que le toca este comando muere al entrar.
 		if (shell->my_pro->child[i].command_split && shell->my_pro->nbr_process == 1)
 			check_builtins_mother(&shell, i);	

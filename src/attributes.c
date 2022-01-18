@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/24 10:24:00 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 11:00:56 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 13:51:32 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ void	attributes()
    	 return ;
 	 }
 
-	  changed.c_lflag=changed.c_lflag & ~ICANON & ECHO; // ~ICANON | ECHO;
+	  changed.c_lflag=changed.c_lflag & ~ICANON; // & ~ICANON & ECHO; // ~ICANON | ECHO;
+	  changed.c_lflag=changed.c_lflag | ECHO; // & ~ICANON & ECHO; // ~ICANON | ECHO;
 	   changed.c_cc[VQUIT] = 0;
    	 if (tcsetattr(0,TCSANOW, &changed)==-1) 
     perror ("ioctl/TCSETA changed:");
 
-//	  tcsetattr(0,TCSANOW, &old);
+//	tcsetattr(0,TCSANOW, &old);
 }

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 11:01:02 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 13:51:34 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,31 @@ char    *get_line(t_shell *shell)
 
 void    sig_handler(int signum)
 {
-    if (signum == SIGINT)
+/*    if (signum == SIGINT && g_mother == 1)
     {
         printf("\n");
 		rl_on_new_line(); //Para que aparezce Minishell otra vez prompt
 		rl_replace_line("", 0); // no aparece en el historial
 		rl_redisplay(); //Aparece otra vez
     }
+	if (g_mother == 0)
+	{
+        printf("\n");
+		exit(0);
+	}*/
+    if (signum == SIGINT )
+    {
+        printf("\n");
+		rl_on_new_line(); //Para que aparezce Minishell otra vez prompt
+		rl_replace_line("", 0); // no aparece en el historial
+		rl_redisplay(); //Aparece otra vez
+	}
+	
 }
 
 int create_terminal(t_shell *shell)
 {
+	g_mother = 1;
 	shell->line = NULL;
 	attributes(shell);
 	signal(SIGINT, sig_handler);
@@ -68,7 +82,9 @@ int create_terminal(t_shell *shell)
 		}
 		else if (shell->line[0] != '\0')
 		{
+			g_mother = 2;
 			input(shell);
+			g_mother = 1;
 			free_and_init(shell);
 		}
 	}

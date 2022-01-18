@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:32 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 13:51:36 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,23 @@
 #include "../include/minishell.h"
 #include <signal.h>
 
+
+///////////////// -  "./" -  //////////////////
+
+char *get_exe_path(t_shell *shell, char *command_split)
+{
+	char *new_command;
+
+	free_double(shell->my_env->paths, 2);
+	shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 2);
+	shell->my_env->paths[0] = ft_substr(command_split, 0, ft_strlen(command_split) - ft_strlen(ft_strrchr(command_split, '/')) + 1);
+	new_command = ft_strdup(ft_strrchr(command_split, '/') + 1);
+	free (command_split);
+	return (new_command);
+}
+
 //	CHILD PROCESS //
 
-///OJO! Y si el comando es ./ ????
 void	child_process(t_ch *child, t_shell *shell)
 {
 	/*HACER LAS REDIRECIONES */
@@ -37,17 +51,17 @@ void	child_process(t_ch *child, t_shell *shell)
 	re_pipe(shell, child->id_child);	
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
-//	if (child->id_child != shell->my_pro->nbr_process - 1)
-//		kill(shell->my_pro->pid[child->id_child], SIGCONT);
+	if (child->id_child != shell->my_pro->nbr_process - 1)
+		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 
 	 /*BUILTINGS*/
 	if (!child->command_split)
 		exit(0);
      check_builtins_child(&shell, child->id_child);
 
-	 //expandir resto command_split[] cuales???? COMILLAS!!!
-	
 	/*EL ULTIMO PASO MANDAMOS A EJECUTAR */
+	if (child->command_split[0][0] == '.' || child->command_split[0][0] == '/')
+		child->command_split[0] = get_exe_path(shell, child->command_split[0]);
 	exe_command(shell, child->id_child);
 
 }
@@ -58,22 +72,18 @@ void	mother_process(t_shell *shell)
 {
 	int i;
 	int status;
+	int pid;
 	
 	i = -1;
     while (++i < shell->my_pro->nbr_process)
 	{
-		waitpid(-1, &status, 0);
-		if (status != 0)
-		{
-			g_status = WEXITSTATUS(status);
-			printf("Hijo %d en problemas\n", i);
-		}
-		else 
-			g_status = 0;
+		pid = waitpid(-1, &status, 0);
+		if (pid == shell->my_pro->pid[shell->my_pro->nbr_process - 1])
+				shell->status = WEXITSTATUS(status);
 		if (i != shell->my_pro->nbr_process - 1)
 			kill(shell->my_pro->pid[i + 1], SIGCONT);
 	}
-	printf("status --> %d\n", g_status);
+//	printf("status --> %d\n", shell->status);
 	//unlink("here_doc.txt");
 	//printf("Process OK\n");
 }
@@ -94,6 +104,7 @@ void create_processes(t_shell *shell)
 			kill(shell->my_pro->pid[id], SIGSTOP);
 		else
 		{	
+			g_mother = 0;	
 			shell->my_pro->child[id].id_child = id;
 			child_process(&shell->my_pro->child[id], shell);
 		}

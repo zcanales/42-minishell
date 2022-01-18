@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 20:15:33 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:45:27 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,9 +202,9 @@ void    check_builtins_mother(t_shell **shell, int id)
 {
 	char **new_vars;
 
-    if (!ft_strncmp((*shell)->my_pro->child[id].command_split[0], "export", ft_strlen("export")) && !(*shell)->my_pro->child[id].command_split[0][6])
+    if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "export"))
 		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 1);
-	else  if (!ft_strncmp((*shell)->my_pro->child[id].command_split[0], "unset", ft_strlen("unset")) && !(*shell)->my_pro->child[id].command_split[0][5])
+	else  if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "unset"))
 		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 0);
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "cd"))
 	{

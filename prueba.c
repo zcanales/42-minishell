@@ -67,9 +67,10 @@ int main()
 	char *s2 = "\0";
 	char *s3 = "quetal";
 	
+	printf("s3 = %s\n", s1);
 //	printf("s3 = %s\n", strjoin(s1, s2));
-	printf("s4 = %s\n", ft_strjoin(s2, s3));
-	printf("s5 = %s\n", ft_strjoin(ft_strjoin(s1, s2), s3));
+//	printf("s4 = %s\n", ft_strjoin(s2, s3));
+//	printf("s5 = %s\n", ft_strjoin(ft_strjoin(s1, s2), s3));
 
 	return (0);
 
