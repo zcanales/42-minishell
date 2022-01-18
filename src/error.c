@@ -6,14 +6,14 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:05 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:37:40 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 //Líneaa vacía
-void	check_error_pipe(char **orders)
+int	check_error_pipe(char **orders)
 {
 	int	i;
 	int	j;
@@ -26,15 +26,16 @@ void	check_error_pipe(char **orders)
 			continue ;
 		if (orders[j][i] == '\0')
 		{
-			printf("syntax error near unexpected token '|'\n");
-			exit(1);
+			write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+			return (1);
 		}
 	}
+	return (0);
 }
 
 //El primer caráccter no puede ser un pipe
 //Después de un pipe se acaba a línea
-static void	pipes_check(char *line)
+static int	pipes_check(char *line)
 {
 	int	i;
 	
@@ -43,37 +44,39 @@ static void	pipes_check(char *line)
 		i++;
 	if (line[i] == '|')
 	{
-		printf("syntax error near unexpected token '|'\n");
-		exit(1);
+		write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+		return (1);
 	}
 	i = -1;
 	while(line[++i])
 	{
-		if(line[i] == '|' && line[i + 1] == '\0')
+		if (line[i] == '|' && line[i + 1] == '\0')
 		{
-			printf("syntax error near unexpected token '|'\n");
-			exit(1);
+			write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+			return (1);
 		}
 	}
+	return (0);
 }
 
 
-static void	three_brackets_check(char *line, char c, int *i)
+static int	three_brackets_check(char *line, char c, int *i)
 {
 	if (line[*i + 1] && line[*i + 1] == c)
 	{
 		if (line[*i + 2] && line[*i + 2] == c)
 		{
-			printf("syntax error near unexpected token 'newline'\n");
-			exit(1);
+			write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+			return (1);
 		}
 		*i += 1;
 	}
 	*i += 1;
+	return (0);
 }
 //Comprueba que no haya 3 piquitos seguidos(three_brackets) 
 //Después mira que después de un piquito no se acabe la linea ni haya otro piquitos entre espacios.
-static void	brackets_check(char *line, char c)
+static int 	brackets_check(char *line, char c)
 {
 	int	i;
 	
@@ -82,19 +85,21 @@ static void	brackets_check(char *line, char c)
 	{
 		if (line[i] == c)
 		{
-			three_brackets_check(line, c, &i);
+			if (three_brackets_check(line, c, &i))
+				return (1);
 			while (line[i] && line[i] == ' ' )
 				i++;
 			if (line[i] == '\0' || line[i] == '<' || line[i] == '>')
 			{
-				printf("syntax error near unexpected token 'newline'\n");
-				exit(1);
+				write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+				return (1);
 			}
 		}
 	}
+	return (0);
 }
 
-static void open_quote_check(char *line)
+static int open_quote_check(char *line)
 {
 	int i;
 
@@ -104,18 +109,24 @@ static void open_quote_check(char *line)
 		check_quotes(line, &i);
 		if (line[i] == '\0')
 		{
-			printf("Syntax error: Open quotes\n");
-			exit(1);
+			write(2,"Pink peanuts: Syntax error near unexpected token '|'\n", 53);
+			return (1);
 		}
 	}
+	return (0);
 }
 
-void	check_error(char *line)
+int	check_error(char *line)
 {
-	pipes_check(line);
-	brackets_check(line, '<');
-	brackets_check(line, '>');
-	open_quote_check(line);
+	if	(pipes_check(line))
+		return (1);
+	if (brackets_check(line, '<'))
+		return (1);
+	if (brackets_check(line, '>'))
+		return (1);
+	if (open_quote_check(line))
+		return (1);
+	return (0);
 }
 
 

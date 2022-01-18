@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 17:39:27 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 20:06:53 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	get_real_vars(t_shell *shell, char **command_split, int nbr_command_split, 
 
 	shell->my_env->var_real = (char **)ft_calloc(sizeof(char *), nbr_command_split);
 	if (!shell->my_env->var_real)
-		exit(1);
+		status_error(strerror(errno), errno);
 	if (replace == 1)//Busca un '=' Si eres EXPORT
 		  find_equal_char(command_split, shell);
 	else //copia tal cual todas menos la primera
@@ -89,6 +89,8 @@ void get_new_paths(char **env, t_shell *shell)
 	{
 		free_double(shell->my_env->paths, 2);
 		shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 1);
+		if (!shell->my_env->paths)
+			status_error(strerror(errno), errno);
 	}
 }
 //////////////////CD///////////////////////////
@@ -138,7 +140,12 @@ char **cd_builtin(char **env, char *command_split, char **new_vars)
        		 if (!ft_strncmp(env[a], "HOME=", ft_strlen("HOME=")))
 			 {
 				if (chdir(&env[a][5]) != 0)
-					printf("%s\n", strerror(errno));
+				{
+					ft_putstr_fd("Pink peanuts:", 2);
+					ft_putstr_fd(strerror(errno), 2);
+					ft_putstr_fd("\n", 2);
+					return (NULL);
+				}
 			 }
         }
     }
@@ -147,11 +154,16 @@ char **cd_builtin(char **env, char *command_split, char **new_vars)
 		command_split = special_paths(env, command_split);
 		if (command_split[0] == '-')
 		{
-			printf("cd: OLDPWD not set\n");
+			ft_putstr_fd("Pink peanuts: OLDPWD not set\n", 2);
 			return (NULL);
 		}
 		if (chdir(command_split) != 0)
-			printf("%s: %s\n", command_split, strerror(errno));
+		{
+			ft_putstr_fd("Pink peanuts:", 2);
+			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd("\n", 2);
+			return (NULL);
+		}
 	}
 	new_vars[1] = ft_strjoin("PWD=", ft_strdup(getcwd(path,  1024)));
 	new_vars[2] = NULL;
@@ -179,16 +191,23 @@ char **cd_builtin(char **env, char *command_split, char **new_vars)
 	1.3. line
 */
 
-void	exit_builtin(char *command_split, int nbr_command)
+void	exit_builtin(char **command_split, int nbr_command)
 {
+	int i;
+
+	i = -1;
 	printf("exit\n");
 	if (nbr_command > 2)
 	{
-		status_error("Pink: exit: too many arguments\n", 127);
-//		perror("Pink: exit: too many arguments\n");
+		while (command_split[0][++i])
+		{
+			if (!ft_isdigit(command_split[0][i]))
+				status_error("Numeric argument required\n", 127);
+		}
+		ft_putstr_fd("Pink peanuts: too many arguments\n", 2);
 	}
 	else
-		exit(ft_atoi(command_split));
+		exit(ft_atoi(command_split[0]));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////77
@@ -213,12 +232,12 @@ void    check_builtins_mother(t_shell **shell, int id)
 	{
 		new_vars = (char **)ft_calloc(sizeof(char *), 3);
 		if (!new_vars)
-			exit(1);
+			status_error(strerror(errno), errno);
 		new_vars = cd_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].command_split[1], new_vars);
 		if (!new_vars)
 			return ;
 		change_enviroment(shell,new_vars, 3, 1);
 	}
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
-		exit_builtin((*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command);
+		exit_builtin(&(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command);
 }

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 17:44:56 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:51:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 void	free_and_init(t_shell *shell)
 {
-	free_double(shell->my_pro->orders, 2);
+//	free_double(shell->my_pro->orders, 2);
 	//free_double(shell->my_pro->infile_t);
 	free(shell->line);
 	shell->line = NULL;

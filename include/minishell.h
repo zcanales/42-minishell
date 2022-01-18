@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:25 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:29:43 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void    attributes(t_shell *shell);
 
 /*PROCESSES*/
 int input(t_shell *shell);
-void alloc_processes(t_shell *shell);
+int alloc_processes(t_shell *shell);
 void create_processes(t_shell *shell);
 void    child_process(t_ch *child, t_shell *shell);
 void    mother_process(t_shell *shell);
@@ -146,8 +146,8 @@ char    **ft_split_2(char const *s, char c, int *nbr_array);
 void here_doc(t_pro *pro, int index, int id);
 
 /*ERRORS */
-void    check_error( char *line);
-void    check_error_pipe(char **orders);
+int		 check_error( char *line);
+int    check_error_pipe(char **orders);
 void    status_error(char *str, int err);
 
 //////LIBERAR MEMORIA: ////

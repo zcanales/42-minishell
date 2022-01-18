@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:08 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:49:42 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,7 @@ void create_lists(t_shell *shell)
    	while (shell->my_env->var_real[++i])
 	{
 		if (shell->my_env->var_real[i][0] != '=' && (ft_isalpha(shell->my_env->var_real[i][0]) || shell->my_env->var_real[i][0] == '_'))
-		{
-			//printf("Variable alojada: %s \n", &shell->my_env->var_real[i][0]);
         	ft_lstadd_back(&shell->my_env->list_var_real, ft_lstnew(shell->my_env->var_real[i]));
-		}
-		/*else
-			printf("No valido FIN var %s \n", &shell->my_env->var_real[i][0]);*/
 	}
 }
 
@@ -130,7 +125,7 @@ char **convert_list_array(t_shell *shell)
 	shell->my_env->nbr_env = ft_lstsize(shell->my_env->list_env);
 	temp_env= (char **)malloc(sizeof(char *) * (shell->my_env->nbr_env + 1));
 	if (!temp_env)
-		exit(1);
+		status_error(strerror(errno), errno);
 	while (shell->my_env->list_env)
 	{
 		temp_env[++i] = ft_strdup((char *)shell->my_env->list_env->content);

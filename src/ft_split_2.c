@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:09 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 18:46:56 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,24 +62,17 @@ void	ft_num_arrays(char *s, char c, int *nbr_array)
 	
 	*nbr_array = 1;
 	i = -1;
-//	printf("split --> %s y el char = %d\n", &s[i], c);
 	while (s[++i])
 	{
-//		printf("split --> %s y el char = %d\n", &s[i], c);
 		check_quotes(s, &i);
 		if (s[i] == c) 
 		{
 			if (s[i + 1] && s[i + 1] == '|') 
-			{				//ERROR: EN CASO DE 2 || SEGUIDAS
-				printf("Error: 2 pipes not allowed\n");
-				exit(1);
-			}
+				status_error("Pink peanuts: 2 pipes not allowed\n", 1);
 			if (s[i + 1] && s[i + 1] == c && c != 32) //si es dos piquitos solo cuenta 1
 				i++;
 			*nbr_array +=1;
 		}
-//		if (!s[i])
-//			break ;
 	}
 }
 
@@ -94,9 +87,8 @@ char	**ft_split_2(char const *s, char c, int *nbr_array)
 	ft_num_arrays ((char *)s, c, nbr_array);
 	p = (char **)malloc((*nbr_array + 1) * sizeof(char *));
 	if (!p)
-		return (0);
+		status_error(strerror(errno), errno);
 	p = ft_fill(p, (char *)s, c, nbr_array);
-//	p[*nbr_array] = NULL;
 	if (c != '|' && c != 32) 
 		*nbr_array = *nbr_array - 1;
 	return (p);

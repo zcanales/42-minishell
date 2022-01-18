@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 12:45:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 19:08:49 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,12 @@ int	check_quotes(char *s, int *index)
 	if (s[i] == 34)
 	{
 		while (s[++i] && s[i] != 34)
-		{
-			/*if (s[i] == '=')
-				equal = 1;*/
 			continue;
-		}
 	}
 	else if (s[i] == 39)
 	{
 		while (s[++i] && s[i] != 39)
-		{
-			/*if (s[i] == '=')
-				equal = 1;*/
 			continue;
-		}
 	}
 	*index = i;
 	return (equal);
@@ -85,7 +77,7 @@ char *expand_dollar(t_shell *shell, char *str, int *i)
 	}
 	expanded = (char *)malloc(sizeof(char) * 1);
 	if (!expanded)
-		exit(1);
+		status_error(strerror(errno), errno);
 	expanded[0] = '\0';
 	return (expanded);
 }
@@ -100,7 +92,7 @@ int	replace_dollar(char **str, int start, int len, char *replace)
 	total_len = ft_strlen(*str) - len + ft_strlen(replace);
 	temp = (char *)ft_calloc(sizeof(char), total_len + 1);
 	if (!temp)
-		exit(1);
+		status_error(strerror(errno), errno);
 	ft_strlcpy(temp, *str, start + 1);
 	ft_strlcat(temp, replace, ft_strlen(replace) + ft_strlen(temp) + 1);
 	ft_strlcat(temp, *str + start + len, total_len + 1);
@@ -147,8 +139,8 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 	a = -1;
     new_array = (char **)ft_calloc(sizeof(char *), nbr_array + 1);   
   	if (!new_array)
-        exit(1);
-	while (array[++a]) 
+		status_error(strerror(errno), errno);
+	while (check && array[++a]) 
 	{
 		i = 0;
 		while (array[a][i])
@@ -173,6 +165,8 @@ char **fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int check)
 			if (array[a][i] == '$' && (array[a][i + 1] == '\0' || array[a][i + 1] == ' '))
 					i += 1;
 			new_array[a] = ft_substr_strjoin(array[a], new_array[a], start, i);
+			if (check == 1)
+				check = 0;
 		}
 	}
 	new_array[nbr_array] = NULL;

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:01 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 19:07:02 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order)
 	free_double(file, 2);
 	(*file_t) = (t_piquito *)ft_calloc(sizeof(t_piquito), (*nbr_file + 1));
 	if (!(*file_t))
-		exit(1);
+		status_error(strerror(errno), errno);
 
 }
 
@@ -71,7 +71,6 @@ char	*chop_command(t_ch *ch, int *i, char *order)
 
 	start = *i;
 	real_temp = NULL;
-	(void)ch;
 	while (order[*i] && order[*i] != '<' && order[*i] != '>')
 	{
 		check_quotes(order, i);
@@ -116,7 +115,7 @@ void	get_child_info(t_shell *shell)
 	/*ARRAY DE HIJOS (T_CHILD)*/
     shell->my_pro->child = (t_ch *)ft_calloc(sizeof(t_ch), shell->my_pro->nbr_process);   
   	if (!shell->my_pro->child)
-        exit(1);
+		status_error(strerror(errno), errno);
 
     while (++i < shell->my_pro->nbr_process)
 	{
@@ -130,16 +129,11 @@ void	get_child_info(t_shell *shell)
 
 	  	/*SPLIT:COMMAND_GROUP --> SPLIT_COMANDO*/ // comando churro en comando array
 		shell->my_pro->child[i].command_split = ft_split_2(shell->my_pro->child[i].command_group, ' ', &shell->my_pro->child[i].nbr_command); 
-		/*a = -1;
-		while (++a < shell->my_pro->child[i].nbr_command)
-		{
-			printf("commna-- > %s\n", shell->my_pro->child[i].command_split[a]);
-		}*/
 		
 	  	/*CLEAN: COMMAND_SPLIT --> COMMNAD_CLEAN */  //Interpretat "" AND $ 
 
-		shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
-
+		if (shell->my_pro->child[i].command_split)
+			shell->my_pro->child[i].command_split = fill_quote_dollar(shell->my_pro->child[i].command_split, shell, shell->my_pro->child[i].nbr_command, 2);
 
 	  	/*CLEAN: INFILE --> INFILE_CLEAN */  //Interpretat "" AND $ 
 		a= -1;

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 17:45:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 19:06:02 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,16 @@ void re_in_out(t_pro *pro, int in_out, int index, int id)
 	{
 		pro->fd[id][0] = open(pro->child[id].infile_t[index].file_name, O_RDONLY);
     	if (pro->fd[id][0]< 0)
-		{
 			status_error(strerror(errno), errno);
-        //	exit(1);
-		}//no such or deirectory
 	}
 	if (in_out == 1) //OUTFILE
 	{
-		if(pro->child[id].outfile_t[index].type == 1)
+		if (pro->child[id].outfile_t[index].type == 1)
 			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_TRUNC | O_CREAT, 0644);
-		if(pro->child[id].outfile_t[index].type == 2)
+		if (pro->child[id].outfile_t[index].type == 2)
 			pro->fd[id + 1][1] = open(pro->child[id].outfile_t[index].file_name, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (pro->fd[id + 1][1] < 0)
-            exit(1);
+			status_error(strerror(errno), errno);
 	}
 }
 
@@ -114,18 +111,15 @@ void exe_command(t_shell *shell, int id)
     char    *temp_access;
 
     i = -1;
-	if (!shell->my_pro->child[id].command_split[0])
-		exit(0);
     while (shell->my_env->paths[++i])
     {
         temp_access = ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_split[0]);
         if (!access(temp_access, X_OK))
         {
             if ((execve(ft_strjoin(shell->my_env->paths[i], shell->my_pro->child[id].command_split[0]), shell->my_pro->child[id].command_split, shell->my_env->env)) < 0)
-                printf("%s", strerror(errno));//funcion errores
+				status_error(strerror(errno), errno);
         }
         free(temp_access);
     }
-	printf("Pink: %s comand not found\n", shell->my_pro->child[id].command_split[0]);
-    exit(1);
+	status_error("Command not found", 1);
 }
