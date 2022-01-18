@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 13:51:34 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:44:56 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <signal.h>
 #include "../include/minishell.h"
 
-//No reconoce rl_replace_line(), rl_clear_history();// -> Comentadas
 
 void	free_and_init(t_shell *shell)
 {
@@ -44,7 +43,7 @@ char    *get_line(t_shell *shell)
 
 void    sig_handler(int signum)
 {
-/*    if (signum == SIGINT && g_mother == 1)
+   if (signum == SIGINT && g_mother == 1)
     {
         printf("\n");
 		rl_on_new_line(); //Para que aparezce Minishell otra vez prompt
@@ -55,14 +54,14 @@ void    sig_handler(int signum)
 	{
         printf("\n");
 		exit(0);
-	}*/
-    if (signum == SIGINT )
+	}
+    /*if (signum == SIGINT)
     {
         printf("\n");
 		rl_on_new_line(); //Para que aparezce Minishell otra vez prompt
 		rl_replace_line("", 0); // no aparece en el historial
 		rl_redisplay(); //Aparece otra vez
-	}
+	}*/
 	
 }
 
@@ -71,6 +70,7 @@ int create_terminal(t_shell *shell)
 	g_mother = 1;
 	shell->line = NULL;
 	attributes(shell);
+//	rl_catch_signals = 0;
 	signal(SIGINT, sig_handler);
 	while (1)
 	{
@@ -84,6 +84,7 @@ int create_terminal(t_shell *shell)
 		{
 			g_mother = 2;
 			input(shell);
+			tcsetattr(0,TCSANOW, &shell->changed);
 			g_mother = 1;
 			free_and_init(shell);
 		}

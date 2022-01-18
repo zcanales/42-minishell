@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 13:51:36 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:39:19 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 #include "../include/minishell.h"
 #include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 
 ///////////////// -  "./" -  //////////////////
@@ -46,15 +48,18 @@ char *get_exe_path(t_shell *shell, char *command_split)
 
 void	child_process(t_ch *child, t_shell *shell)
 {
+	
 	/*HACER LAS REDIRECIONES */
+	tcsetattr(0,TCSANOW, &shell->child);
 	is_redirected(shell->my_pro, child->id_child);
 	re_pipe(shell, child->id_child);	
+	tcsetattr(0,TCSANOW, &shell->old);
 	
 	/*DESBLOQUEAR SIGUIENTE HIJA */
 	if (child->id_child != shell->my_pro->nbr_process - 1)
 		kill(shell->my_pro->pid[child->id_child], SIGCONT);
-
-	 /*BUILTINGS*/
+	
+   	/*BUILTINGS*/
 	if (!child->command_split)
 		exit(0);
      check_builtins_child(&shell, child->id_child);
@@ -105,6 +110,9 @@ void create_processes(t_shell *shell)
 		else
 		{	
 			g_mother = 0;	
+		//	tcsetattr(0,TCSANOW, &shell->child);
+			tcsetattr(0,TCSANOW, &shell->old);
+	//	rl_catch_signals = 0;
 			shell->my_pro->child[id].id_child = id;
 			child_process(&shell->my_pro->child[id], shell);
 		}

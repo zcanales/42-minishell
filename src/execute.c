@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 12:45:33 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:45:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ void re_in_out(t_pro *pro, int in_out, int index, int id)
 	{
 		pro->fd[id][0] = open(pro->child[id].infile_t[index].file_name, O_RDONLY);
     	if (pro->fd[id][0]< 0)
-        	exit(1);//no such or deirectory
+		{
+			status_error(strerror(errno), errno);
+        //	exit(1);
+		}//no such or deirectory
 	}
 	if (in_out == 1) //OUTFILE
 	{

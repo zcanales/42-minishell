@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/24 10:24:00 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 13:51:32 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:45:20 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,17 @@
 #include <sys/ioctl.h>
 #include "../include/minishell.h"
 
-void	attributes()
+void	attributes(t_shell *shell)
 {
-    struct termios old;
-    struct termios changed;
-
-	 if (tcgetattr(0, &old)==-1) 
-	 {
-    perror ("ioctl/TCGETA old:");
-    return ;
-	 }
-
-	 if (tcgetattr(0, &changed)==-1)
-	 {
-  	  perror ("ioctl/TCGETA changed:");
-   	 return ;
-	 }
-
-	  changed.c_lflag=changed.c_lflag & ~ICANON; // & ~ICANON & ECHO; // ~ICANON | ECHO;
-	  changed.c_lflag=changed.c_lflag | ECHO; // & ~ICANON & ECHO; // ~ICANON | ECHO;
-	   changed.c_cc[VQUIT] = 0;
-   	 if (tcsetattr(0,TCSANOW, &changed)==-1) 
-    perror ("ioctl/TCSETA changed:");
-
-//	tcsetattr(0,TCSANOW, &old);
+	if (tcgetattr(0, &shell->old) == -1) 
+		status_error(strerror(errno));
+	if (tcgetattr(0, &shell->changed) == -1)
+		status_error(strerror(errno));
+	if (tcgetattr(0, &shell->child) == -1)
+		status_error(strerror(errno));
+	shell->changed.c_lflag = shell->changed.c_lflag &  ~ICANON & ECHO; // ~ICANON | ECHO;
+	shell->changed.c_cc[VQUIT] = 0;
+	shell->child.c_lflag = shell->child.c_lflag & ECHO;
+	if (tcsetattr(0,TCSANOW, &shell->changed) == -1)
+		status_error(strerror(errno));
 }

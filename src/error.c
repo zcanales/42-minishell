@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/17 10:24:16 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:45:05 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,12 @@ void	check_error(char *line)
 	brackets_check(line, '<');
 	brackets_check(line, '>');
 	open_quote_check(line);
+}
+
+
+void	status_error(char *str, int err)
+{
+	printf("Pink peanuts: %s\n", str);
+	exit(err);
+
 }

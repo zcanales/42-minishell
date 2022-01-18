@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 13:51:30 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:45:25 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct	s_shell
 {
 	struct termios old;
 	struct termios changed;
+	struct termios child;
 	char	*line;
 	int		status;
 	t_env	*my_env;
@@ -87,7 +88,7 @@ void get_environment(t_env *my_env, char **env);
 
 /* TERMINAL	*/
 int		create_terminal(t_shell *shell);
-void    attributes();
+void    attributes(t_shell *shell);
 
 /*PROCESSES*/
 int input(t_shell *shell);
@@ -147,6 +148,7 @@ void here_doc(t_pro *pro, int index, int id);
 /*ERRORS */
 void    check_error( char *line);
 void    check_error_pipe(char **orders);
+void    status_error(char *str, int err);
 
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)

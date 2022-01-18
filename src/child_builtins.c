@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 12:45:37 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/18 17:44:59 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ void	echo_builtin(char **command_split)
 void env_builtin(char **env, int nbr_command, char **command_split)
 {
 	int i;
-		
+	(void)command_split;
 	if (nbr_command > 1)
-		printf("Pink: : env %s No such file or directory\n", command_split[1]);
+		status_error("Pink: env %s No such file or directory\n", 127);
+	//	printf("Pink: : env %s No such file or directory\n", command_split[1]);
 	else
 	{
 		i = -1;
@@ -78,7 +79,10 @@ void	check_builtins_child(t_shell **shell, int id)
 		echo_builtin((*shell)->my_pro->child[id].command_split); 
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
 	{
+		//si es child->id > 1 ->>> Command not found
+		//si es child->id 1  && nbr_process > 1 ->>> no hace nada, hijo muere
+		//si es child->id 1  && nbr_process = 1 ->>> exit programa(madre)
 		printf("Soy un hijo me voy\n");
-		exit(10);
+		exit(0);
 	}
 }
