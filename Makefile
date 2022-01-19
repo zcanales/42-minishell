@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/19 11:13:00 by zcanales         ###   ########.fr        #
+#    Updated: 2022/01/19 13:45:33 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -26,6 +26,7 @@ SRCS =	src/main.c\
 		src/export_unset.c\
 		src/quote_dollar.c\
 		src/error.c\
+		src/error_2.c\
 
 
 OBJS = $(SRCS:.c=.o)

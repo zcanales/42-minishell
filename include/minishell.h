@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 11:40:02 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 13:52:34 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,7 @@ void    child_process(t_ch *child, t_shell *shell);
 void    mother_process(t_shell *shell);
 
 /*CHILD_INFO*/
-void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order);
-void    chop_files(t_ch *ch, char c, char no_c, int *i, char *order);
+void    chop_files(t_ch *ch, char c, int *i, char *order);
 char	*chop_command(t_ch *ch, int *i, char *order);
 void    classify_order(t_ch *ch, char *order);
 void    get_child_info(t_shell *shell);
@@ -109,6 +108,7 @@ void    get_child_info(t_shell *shell);
 /*CLEAN_COMMAND*/
 void clean_commands(t_shell *shell, t_ch *child);
 void count_nbr_commands(t_ch *child);
+void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order);
 
 /*EXECUTE*/
 void close_pipes(t_shell *shell);
@@ -155,6 +155,10 @@ void here_doc(t_pro *pro, int index, int id);
 int		 check_error( char *line);
 int    check_error_pipe(char **orders);
 void    status_error(char *str, int err);
+
+/*ERRORS */
+int check_error_pipe(char **orders);
+int pipes_check(char *line);
 
 /*READLINE*/
 void rl_replace_line(const char *str, int i);

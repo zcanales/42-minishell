@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 11:04:43 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 11:40:10 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 13:37:46 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,22 @@ void clean_commands(t_shell *shell, t_ch *child)
 		child->outfile_t[a].file_name
 			= convert_array_to_string(child->outfile_t[a].file_name_clean);
 	}
+}
+
+void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order) 
+{
+	int i;
+	char **file;
+  
+   	file = ft_split_2(order, c, nbr_file);
+	i = -1;
+	free_double(file, 2);
+	(*file_t) = (t_piquito *)ft_calloc(sizeof(t_piquito), (*nbr_file + 1));
+	if (!(*file_t))
+		status_error(strerror(errno), errno);
+	i = -1;
+	while (++i < *nbr_file)
+		(*file_t)[i].type = 1;
 }
 
 

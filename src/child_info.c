@@ -6,46 +6,37 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 11:40:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 13:38:28 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//GET_CHILD_INFO -> Madre hace todas las siguientes funciones para pasar a ada hijo su t_ch (array de order y infiles y outfiles)
-
-//COUNT_PIQUITOS -> Numero de infiles y oufiles para hacer malloc de cada t_piquito
-//CHOP_ORDER + CHOP_FILE_INFO -> Substrae del order los infiles
-//GET_REAL_COMMAND -> Se queda con los comandos LIMPIOS en un array. 
-
 #include "../include/minishell.h"
 
-void    count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order) 
+static char	pre_chop_files(int *type, char c, int *i, char *order)
 {
-	int i;
-	char **file;
-  
-   	file = ft_split_2(order, c, nbr_file);
-	i = -1;
-	free_double(file, 2);
-	(*file_t) = (t_piquito *)ft_calloc(sizeof(t_piquito), (*nbr_file + 1));
-	if (!(*file_t))
-		status_error(strerror(errno), errno);
-	i = -1;
-	while (++i < *nbr_file)
-		(*file_t)[i].type = 1;
+	char	no_c;
+
+	if (c == '<')
+		no_c = '>';
+	else
+		no_c = '<';
+	if  (order[++*i] && order[*i] ==  c)
+	{
+		*type = 2;
+		*i += 1;
+	}
+	return (no_c);	
 }
 
 
-void	chop_files(t_ch *ch, char c, char no_c, int *i, char *order) //sobra 1 
+void	chop_files(t_ch *ch, char c, int *i, char *order)
 {
 	int type;
 	int start;
+	char	no_c;
 
-	start = 0;
-	if  (order[++*i] && order[*i] ==  c)
-	{
-		type = 2;
-		*i += 1;
-	}
+	type = 1;
+	no_c= pre_chop_files(&type, c, i, order);
 	while (order[*i] && order[*i] == 32)
 		*i += 1;
 	start = *i;
@@ -100,9 +91,9 @@ void	classify_order(t_ch *ch, char *order)
 		while (order[i] && order[i] == 32)
 			i++;
         if (order[i] && order[i] ==  '<')// INFILES
-			chop_files(ch, '<', '>', &i, order);
+			chop_files(ch, '<', &i, order);
 		else if (order[i] && order[i] == '>') //OUTFILES
-			chop_files(ch, '>', '<', &i, order);
+			chop_files(ch, '>', &i, order);
         else //COMMAND
 			ch->command_group = chop_command(ch, &i, order);
     }
