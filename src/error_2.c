@@ -6,10 +6,9 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 13:47:07 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:42:41 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/minishell.h"
 
@@ -17,7 +16,7 @@ int	check_error_pipe(char **orders)
 {
 	int	i;
 	int	j;
-	
+
 	j = -1;
 	while (orders[++j])
 	{
@@ -37,7 +36,7 @@ int	check_error_pipe(char **orders)
 int	pipes_check(char *line)
 {
 	int	i;
-	
+
 	i = 0;
 	while (line[i] && line[i] == ' ')
 		i++;
@@ -48,7 +47,7 @@ int	pipes_check(char *line)
 		return (1);
 	}
 	i = -1;
-	while(line[++i])
+	while (line[++i])
 	{
 		if (line[i] == '|' && line[i + 1] == '\0')
 		{

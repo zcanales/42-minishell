@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 13:47:09 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:42:43 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ static int	three_brackets_check(char *line, char c, int *i)
 	return (0);
 }
 
-static int 	brackets_check(char *line, char c)
+static int	brackets_check(char *line, char c)
 {
 	int	i;
-	
+
 	i = -1;
 	while (line[++i])
 	{
@@ -52,9 +52,9 @@ static int 	brackets_check(char *line, char c)
 	return (0);
 }
 
-static int open_quote_check(char *line)
+static int	open_quote_check(char *line)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (line[++i])
@@ -72,7 +72,7 @@ static int open_quote_check(char *line)
 
 int	check_error(char *line)
 {
-	if	(pipes_check(line))
+	if (pipes_check(line))
 		return (1);
 	if (brackets_check(line, '<'))
 		return (1);
@@ -83,10 +83,10 @@ int	check_error(char *line)
 	return (0);
 }
 
-
 void	status_error(char *str, int err)
 {
-	printf("Pink peanuts: %s\n", str);
+	ft_putstr_fd("Pink peanuts: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
 	exit(err);
-
 }

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 12:23:44 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:42:38 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void	free_double(char **s, int check)
 	while (s[++i])
 		free(s[i]);
 	if (check == 2)
+	{
 		free(s);
+		s = NULL;
+	}
 }
 
 //FREELIST///
@@ -66,4 +69,21 @@ char	*convert_array_to_string(char **array)
 	string = ft_strdup(array[0]);
 	free_double(array, 2);
 	return (string);
+}
+
+/*LEN OF 2 STRINGS*/
+
+int	ft_strcmp_len(char *env, char *var)
+{
+	int	len_1;
+	int	len_2;
+
+	len_1 = ft_strlen((char *)env)
+		- ft_strlen(ft_strchr((char *)env, '='));
+	len_2 = ft_strlen((char *)var)
+		- ft_strlen(ft_strchr((char *)var, '='));
+	if (len_1 == len_2 && !ft_strncmp((char *)var,
+			(char *)env, len_1))
+		return (1);
+	return (0);
 }

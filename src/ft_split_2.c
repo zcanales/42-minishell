@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 18:46:56 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:44:39 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	**ft_freepointer(char **p, int *num_arrays)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < (*num_arrays + 1))
@@ -52,26 +52,25 @@ char	**ft_fill(char **p, char *s, char c, int *num_arrays)
 		if (s[i] == c)
 			i++;
 	}
-	p[a] = NULL;
 	return (p);
 }
 
 void	ft_num_arrays(char *s, char c, int *nbr_array)
 {
 	int	i;
-	
+
 	*nbr_array = 1;
 	i = -1;
 	while (s[++i])
 	{
 		check_quotes(s, &i);
-		if (s[i] == c) 
+		if (s[i] == c)
 		{
-			if (s[i + 1] && s[i + 1] == '|') 
+			if (s[i + 1] && s[i + 1] == '|')
 				status_error("Pink peanuts: 2 pipes not allowed\n", 1);
-			if (s[i + 1] && s[i + 1] == c && c != 32) //si es dos piquitos solo cuenta 1
+			if (s[i + 1] && s[i + 1] == c && c != 32)
 				i++;
-			*nbr_array +=1;
+			*nbr_array += 1;
 		}
 	}
 }
@@ -85,11 +84,11 @@ char	**ft_split_2(char const *s, char c, int *nbr_array)
 	if (!s)
 		return (0);
 	ft_num_arrays ((char *)s, c, nbr_array);
-	p = (char **)malloc((*nbr_array + 1) * sizeof(char *));
+	p = (char **)ft_calloc(sizeof(char *), (*nbr_array + 1));
 	if (!p)
 		status_error(strerror(errno), errno);
 	p = ft_fill(p, (char *)s, c, nbr_array);
-	if (c != '|' && c != 32) 
+	if (c != '|' && c != 32)
 		*nbr_array = *nbr_array - 1;
 	return (p);
 }

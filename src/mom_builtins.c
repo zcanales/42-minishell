@@ -6,18 +6,12 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 13:02:55 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:01:09 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//SORT_BUILTINGS- export - unset - cd - pwd - echo
-//REALLOC_ENV
-//ALLOC_NEW_VARS
-
 #include "../include/minishell.h"
-#include <string.h>
 
-////////////////////VARS//////////////////////
 static void	find_equal_char(char **s, t_shell *shell)
 {
 	int	i;
@@ -59,118 +53,6 @@ void	get_real_vars(t_shell *shell, char **command_split,
 	}
 }
 
-////////////////////////PATHS////////////////////
-void	get_new_paths(char **env, t_shell *shell)
-{
-	int		a;
-	char	*temp;
-
-	a = -1;
-	while (env[++a])
-	{
-		if (!ft_strncmp(env[a], "PATH=", ft_strlen("PATH=")))
-		{
-			free_double(shell->my_env->paths, 2);
-			shell->my_env->paths = ft_split(&env[a][ft_strlen("PATH=" - 1)],
-					':');
-			break ;
-		}
-	}
-	if (env[a] != NULL)
-	{
-		a = -1;
-		while (shell->my_env->paths[++a])
-		{
-			temp = ft_strjoin(shell->my_env->paths[a], "/");
-			free(shell->my_env->paths[a]);
-			shell->my_env->paths[a] = temp;
-		}
-	}
-	else
-	{
-		free_double(shell->my_env->paths, 2);
-		shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 1);
-		if (!shell->my_env->paths)
-			status_error(strerror(errno), errno);
-	}
-}
-
-//////////////////CD///////////////////////////
-char	*special_paths(char **env, char *command_split)
-{
-	int		a;
-	char	*temp;
-	char	*find;
-
-	if (ft_strcmp(command_split, "-"))
-		find = "OLD_PWD=";
-	else if (command_split[0] == '~')
-		find = "HOME=";
-	else
-		return (command_split);
-	a = -1;
-	while (env[++a])
-	{
-		if (!ft_strncmp(env[a], find, ft_strlen(find)))
-		{
-			if (command_split[0] == '~')
-				temp = ft_strdup(&command_split[1]);
-			else
-				temp = (char *)ft_calloc(1, 1);
-			free(command_split);
-			command_split = ft_strjoin(ft_strdup(&env[a][ft_strlen(find)]),
-					temp);
-			free(temp);
-			break ;
-		}
-	}
-	return (command_split);
-}
-
-char	**cd_builtin(char **env, char *command_split, char **new_vars)
-{
-	int		a;
-	char	path[1024];
-
-	new_vars[0] = ft_strjoin("OLD_PWD=", ft_strdup(getcwd(path, 1024)));
-	if (!command_split)
-	{
-		a = -1;
-		while (env[++a])
-		{
-			if (!ft_strncmp(env[a], "HOME=", ft_strlen("HOME=")))
-			{
-				if (chdir(&env[a][5]) != 0)
-				{
-					ft_putstr_fd("Pink peanuts:", 2);
-					ft_putstr_fd(strerror(errno), 2);
-					ft_putstr_fd("\n", 2);
-					return (NULL);
-				}
-			}
-		}
-	}
-	else
-	{
-		command_split = special_paths(env, command_split);
-		if (command_split[0] == '-')
-		{
-			ft_putstr_fd("Pink peanuts: OLDPWD not set\n", 2);
-			return (NULL);
-		}
-		if (chdir(command_split) != 0)
-		{
-			ft_putstr_fd("Pink peanuts:", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-			return (NULL);
-		}
-	}
-	new_vars[1] = ft_strjoin("PWD=", ft_strdup(getcwd(path, 1024)));
-	new_vars[2] = NULL;
-	return (new_vars);
-}
-
 void	exit_builtin(char **command_split, int nbr_command)
 {
 	int	i;
@@ -192,7 +74,6 @@ void	exit_builtin(char **command_split, int nbr_command)
 		exit(0);
 }
 
-//////////////////////////////////////////////
 void	change_enviroment(t_shell **shell, char **var,
 		int nbr_command, int replace)
 {

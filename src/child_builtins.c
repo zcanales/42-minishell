@@ -6,24 +6,23 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 11:01:20 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:01:16 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-
 void	pwd_builtin(void )
 {
-    char   path[1024];
-    
+	char	path[1024];
+
 	printf("%s\n", getcwd(path, 1024));
-	exit(0) ;
+	exit(0);
 }
 
 void	echo_builtin(char **command_split)
 {
-	int i;
+	int	i;
 
 	if (ft_strcmp(command_split[1], "-n"))
 		i = 1;
@@ -35,7 +34,7 @@ void	echo_builtin(char **command_split)
 			printf("\n");
 		exit(0);
 	}
-	while(command_split[++i])
+	while (command_split[++i])
 	{
 		printf("%s", command_split[i]);
 		if (command_split[i + 1])
@@ -43,15 +42,14 @@ void	echo_builtin(char **command_split)
 		else if (!ft_strcmp(command_split[1], "-n") && !command_split[i + 1])
 			printf("\n");
 	}
-	exit (0);
+	exit(0);
 }
 
-void env_builtin(char **env, int nbr_command, int check)
+void	env_bu(char **env, int nbr_command, int check)
 {
-	int i;
-	
-	printf("nbr= %d\n", nbr_command);
-	if (nbr_command > 1 &&  check == 0)
+	int	i;
+
+	if (nbr_command > 1 && check == 0)
 		status_error("Pink: env %s No such file or directory\n", 127);
 	else
 	{
@@ -60,7 +58,7 @@ void env_builtin(char **env, int nbr_command, int check)
 		{
 			if (check == 1)
 				printf("declare -x");
-			printf("%s\n",env[i]);
+			printf("%s\n", env[i]);
 		}
 	}
 	exit(0);
@@ -68,7 +66,7 @@ void env_builtin(char **env, int nbr_command, int check)
 
 void	exit_builtin_child(char **command_split, int nbr_command)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (nbr_command > 2)
@@ -88,33 +86,31 @@ void	exit_builtin_child(char **command_split, int nbr_command)
 	}
 }
 
-void	check_builtins_child(t_shell **shell, int id)
+void	check_builtins_child(t_shell **sh, int id)
 {
-	if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "export"))
+	if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "export"))
 	{
-		if ((*shell)->my_pro->child[id].nbr_command == 1)
-			env_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].nbr_command, 1); 
+		if ((*sh)->my_pro->child[id].nbr_command == 1)
+			env_bu((*sh)->my_env->env, (*sh)->my_pro->child[id].nbr_command, 1);
 		else
 			exit(0);
 	}
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "env"))
-		env_builtin((*shell)->my_env->env, (*shell)->my_pro->child[id].nbr_command, 0); 
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "unset"))
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "env"))
+		env_bu((*sh)->my_env->env, (*sh)->my_pro->child[id].nbr_command, 0);
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "unset"))
 		exit(0);
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "cd"))
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "cd"))
 		exit(0);
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "pwd"))
-		pwd_builtin(); 
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "echo"))
-		echo_builtin((*shell)->my_pro->child[id].command_split); 
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "pwd"))
+		pwd_builtin();
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "echo"))
+		echo_builtin((*sh)->my_pro->child[id].command_split);
+	else if (ft_strcmp((*sh)->my_pro->child[id].command_split[0], "exit"))
 	{
-		if ((*shell)->my_pro->nbr_process > 1)
-			exit_builtin_child(&(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command);
-		else 
+		if ((*sh)->my_pro->nbr_process > 1)
+			exit_builtin_child(&(*sh)->my_pro->child[id].command_split[1],
+				(*sh)->my_pro->child[id].nbr_command);
+		else
 			exit (1);
-		//si es child->id > 1 ->>> Command not found
-		//si es child->id 1  && nbr_process > 1 ->>> no hace nada, hijo muere
-		//si es child->id 1  && nbr_process = 1 ->>> exit programa(madre)
 	}
 }

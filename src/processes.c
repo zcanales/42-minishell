@@ -6,29 +6,12 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 12:36:05 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:42:39 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <signal.h>
-
-///////////////// -  "./" -  //////////////////
-char	*get_exe_path(t_shell *shell, char *command_split)
-{
-	char	*new_command;
-
-	free_double(shell->my_env->paths, 2);
-	shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 2);
-	if (!shell->my_env->paths)
-		status_error(strerror(errno), errno);
-	shell->my_env->paths[0] = ft_substr(command_split, 0,
-			ft_strlen(command_split)
-			- ft_strlen(ft_strrchr(command_split, '/')) + 1);
-	new_command = ft_strdup(ft_strrchr(command_split, '/') + 1);
-	free (command_split);
-	return (new_command);
-}
 
 //	CHILD PROCESS //
 void	child_process(t_ch *child, t_shell *shell)
@@ -40,7 +23,7 @@ void	child_process(t_ch *child, t_shell *shell)
 	if (child->id_child != shell->my_pro->nbr_process - 1)
 		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 	if (!child->command_split)
-		status_error(strerror(errno), errno);
+		exit(0);
 	check_builtins_child(&shell, child->id_child);
 	if (child->command_split[0] && (child->command_split[0][0] == '.'
 		|| child->command_split[0][0] == '/'))
@@ -105,8 +88,6 @@ int	alloc_processes(t_shell *shell)
 		return (1);
 	npipes = (shell->my_pro->nbr_process + 1);
 	shell->my_pro->fd = (int **)malloc(npipes * sizeof(int *));
-	if (!shell->my_pro->fd)
-		status_error(strerror(errno), errno);
 	while (++i < npipes)
 	{
 		shell->my_pro->fd[i] = (int *)malloc(2 * sizeof(int));
