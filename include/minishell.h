@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 09:57:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 11:40:02 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ void    chop_files(t_ch *ch, char c, char no_c, int *i, char *order);
 char	*chop_command(t_ch *ch, int *i, char *order);
 void    classify_order(t_ch *ch, char *order);
 void    get_child_info(t_shell *shell);
+
+/*CLEAN_COMMAND*/
+void clean_commands(t_shell *shell, t_ch *child);
+void count_nbr_commands(t_ch *child);
 
 /*EXECUTE*/
 void close_pipes(t_shell *shell);
