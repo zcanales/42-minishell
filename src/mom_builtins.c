@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 20:06:53 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 10:50:40 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,12 +202,14 @@ void	exit_builtin(char **command_split, int nbr_command)
 		while (command_split[0][++i])
 		{
 			if (!ft_isdigit(command_split[0][i]))
-				status_error("Numeric argument required\n", 127);
+				status_error("Numeric argument required", 127);
 		}
 		ft_putstr_fd("Pink peanuts: too many arguments\n", 2);
 	}
-	else
+	else if (nbr_command == 2)
 		exit(ft_atoi(command_split[0]));
+	else 
+		exit(0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////77
@@ -224,7 +226,7 @@ void    check_builtins_mother(t_shell **shell, int id)
 {
 	char **new_vars;
 
-    if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "export"))
+    if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "export") && (*shell)->my_pro->child[id].nbr_command > 1)
 		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 1);
 	else  if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "unset"))
 		change_enviroment(shell, &(*shell)->my_pro->child[id].command_split[1], (*shell)->my_pro->child[id].nbr_command, 0);

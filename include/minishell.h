@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 18:29:43 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 09:57:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 int		g_mother;
 
@@ -150,6 +152,9 @@ int		 check_error( char *line);
 int    check_error_pipe(char **orders);
 void    status_error(char *str, int err);
 
+/*READLINE*/
+void rl_replace_line(const char *str, int i);
+void rl_clear_history(void );
 //////LIBERAR MEMORIA: ////
 /*shell->my_env->paths[i];(bucle)
 shell->my_pro->pid;

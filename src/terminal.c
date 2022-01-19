@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/18 18:51:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 10:52:00 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,26 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/ioctl.h>
 # include <signal.h>
 #include "../include/minishell.h"
 
+
+void	attributes(t_shell *shell)
+{
+	if (tcgetattr(0, &shell->old) == -1) 
+		status_error(strerror(errno), errno);
+	if (tcgetattr(0, &shell->changed) == -1)
+		status_error(strerror(errno), errno);
+	if (tcgetattr(0, &shell->child) == -1)
+		status_error(strerror(errno), errno);
+	shell->changed.c_lflag = shell->changed.c_lflag &  ~ICANON & ECHO; // ~ICANON | ECHO;
+	shell->changed.c_cc[VQUIT] = 0;
+	shell->child.c_lflag = shell->child.c_lflag & ECHO;
+	if (tcsetattr(0,TCSANOW, &shell->changed) == -1)
+		status_error(strerror(errno), errno);
+}
 
 void	free_and_init(t_shell *shell)
 {

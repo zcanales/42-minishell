@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 19:07:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 10:50:44 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 
 #include "../include/minishell.h"
 #include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 
 
 ///////////////// -  "./" -  //////////////////

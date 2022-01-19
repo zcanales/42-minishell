@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/18 19:07:02 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/19 10:50:42 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,10 @@ void	get_child_info(t_shell *shell)
 	  	/*SPLIT:COMMAND_GROUP --> SPLIT_COMANDO*/ // comando churro en comando array
 		shell->my_pro->child[i].command_split = ft_split_2(shell->my_pro->child[i].command_group, ' ', &shell->my_pro->child[i].nbr_command); 
 		
+		shell->my_pro->child[i].nbr_command = 0;
+		a = -1;
+		while (shell->my_pro->child[i].command_split[++a])
+			shell->my_pro->child[i].nbr_command++;
 	  	/*CLEAN: COMMAND_SPLIT --> COMMNAD_CLEAN */  //Interpretat "" AND $ 
 
 		if (shell->my_pro->child[i].command_split)
