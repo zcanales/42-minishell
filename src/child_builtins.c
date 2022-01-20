@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 21:01:16 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:46:10 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	env_bu(char **env, int nbr_command, int check)
 	int	i;
 
 	if (nbr_command > 1 && check == 0)
-		status_error("Pink: env %s No such file or directory\n", 127);
+		status_error("No such file or directory", 127);
 	else
 	{
 		i = -1;

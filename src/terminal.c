@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 19:36:35 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 17:31:30 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,42 @@ void	attributes(t_shell *shell)
 
 void	free_and_init(t_shell *shell)
 {
-	free(shell->line);
-	shell->line = NULL;
+	int	a;
+	int	i;
+
+	a = -1;
+	while (shell->my_pro->nbr_process > ++a)
+	{
+		free(shell->my_pro->fd[a]);
+		i = -1;
+		while (shell->my_pro->child->nbr_infile > ++i)
+			free(shell->my_pro->child[a].infile_t[i].file_name);
+		i = -1;
+		while (shell->my_pro->child->nbr_outfile > ++i)
+			free(shell->my_pro->child[a].outfile_t[i].file_name);
+		free(shell->my_pro->child[a].outfile_t);
+		free(shell->my_pro->child[a].infile_t);
+		free(shell->my_pro->child[a].command_group);
+		free_double(shell->my_pro->child[a].command_split, 2);
+	}
+	free(shell->my_pro->pid);
+	free(shell->my_pro->fd[a]);
+	free(shell->my_pro->fd);
+	free(shell->my_pro->child);
+	free_double(shell->my_pro->orders, 2);
 	ft_memset(shell->my_pro, 0, sizeof(t_pro));
-	ft_memset(shell->my_pro->child, 0, sizeof(t_ch));
 }
 
+//PROMPT COMPLETO//
+//	shell->line = readline("\033[0;35m\033[1mPink 🥜 > \033[0m");
 char	*get_line(t_shell *shell)
 {
 	if (shell->line && shell->line[0] != '\0')
-		free_and_init(shell);
-	shell->line = readline("\033[0;35m\033[1mPink 🥜 > \033[0m");
+	{
+		free(shell->line);
+		shell->line = NULL;
+	}
+	shell->line = readline("Pink Peanuts > ");
 	if (shell->line && shell->line[0] != '\0')
 		add_history(shell->line);
 	if (shell->line && !ft_strncmp(shell->line, "history -c",
@@ -84,15 +109,16 @@ int	create_terminal(t_shell *shell)
 		if (!shell->line)
 		{
 			printf("exit\n");
-			break ;
+			exit(0);
 		}
 		else if (shell->line[0] != '\0')
 		{
 			g_mother = 2;
 			input(shell);
+			free(shell->line);
+			shell->line = NULL;
 			tcsetattr(0, TCSANOW, &shell->changed);
 			g_mother = 1;
-			free_and_init(shell);
 		}
 	}
 	return (0);

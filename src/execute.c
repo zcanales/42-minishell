@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:41 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 17:23:11 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,10 @@ void	exe_command(t_shell *shell, int id)
 				shell->my_pro->child[id].command_split[0]);
 		if (!access(temp_access, X_OK))
 		{
-			if ((execve(ft_strjoin(shell->my_env->paths[i],
-							shell->my_pro->child[id].command_split[0]),
-						shell->my_pro->child[id].command_split,
-						shell->my_env->env)) < 0)
-				status_error(strerror(errno), errno);
+			execve(ft_strjoin(shell->my_env->paths[i],
+					shell->my_pro->child[id].command_split[0]),
+				shell->my_pro->child[id].command_split,
+				shell->my_env->env);
 		}
 		free(temp_access);
 	}

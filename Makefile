@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/19 20:42:54 by eperaita         ###   ########.fr        #
+#    Updated: 2022/01/20 17:30:05 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -33,7 +33,6 @@ SRCS =	src/main.c\
 
 
 OBJS = $(SRCS:.c=.o)
-OBJ_DIR = obj
 
 MAKE = make
 PINK = \033[0;35m \033[1m
@@ -44,32 +43,30 @@ INCLUDE = include/minishell.h
 LIB_A = Libft/libft.a
 
 CC = gcc
-PWD_RL =	/System/Volumes/Data/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/
-RLFLAGS =	-I/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/include\
+RLFLAGS =	-I ~/.brew/opt/readline/include\
 			-lreadline\
-			-L/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/lib\
+			-L ~/.brew/opt/readline/lib\
+#RLFLAGS =	-I/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/include\
+			-lreadline\
+			-L/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/lib\#
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address#
 
 all: $(NAME) 
 
 $(NAME): $(OBJS) $(LIB_A) 
 	@$(CC) $(CFLAGS) $(RLFLAGS) $^ $(LIB_A) -I$(INCLUDE) -o $(NAME)
-	@mv $(OBJS) $(OBJ_DIR)
 	@echo "🥜$(PINK)$(NAME) was created 🥜$(RESET)"
-
-$(OBJ_DIR):
-	@mkdir $@
 
 $(LIB_A) : Libft/*.c Libft/*.h
 	@make -C Libft/ bonus
 
-%.o: %.c $(OBJ_DIR) $(INCLUDE) $(LIB_A)
+%.o: %.c  $(INCLUDE) $(LIB_A) $(SRCS)
 	@$(CC) -I$(INCLUDE) -c $< -o $@
 
-clean :
-	@rm -rf obj/
+clean : 
 	@make -C Libft/ clean
+	@rm -f $(OBJS)
 	@echo "🐘$(RED)object files were deleted$(RESET)"
 
 fclean : clean

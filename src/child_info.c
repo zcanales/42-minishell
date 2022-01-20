@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:44 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:51:53 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ char	*chop_command(t_ch *ch, int *i, char *order)
 	if (!ch->command_group)
 		real_temp = ft_strdup(temp);
 	else
+	{
 		real_temp = ft_strjoin(ch->command_group, temp);
+		free(ch->command_group);
+	}
 	free(temp);
 	return (real_temp);
 }
@@ -108,9 +111,9 @@ void	get_child_info(t_shell *shell)
 		status_error(strerror(errno), errno);
 	while (++i < shell->my_pro->nbr_process)
 	{
-		count_piquitos(&shell->my_pro->child[i].nbr_infile, '<',
+		count_peaks(&shell->my_pro->child[i].nbr_infile, '<',
 			&shell->my_pro->child[i].infile_t, shell->my_pro->orders[i]);
-		count_piquitos(&shell->my_pro->child[i].nbr_outfile, '>',
+		count_peaks(&shell->my_pro->child[i].nbr_outfile, '>',
 			&shell->my_pro->child[i].outfile_t, shell->my_pro->orders[i]);
 		classify_order(&shell->my_pro->child[i], shell->my_pro->orders[i]);
 		shell->my_pro->child[i].command_split

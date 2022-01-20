@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:42:33 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_piquito
 	int		type;
 	char	*file_name;
 	char	**file_name_clean;
-}	t_piquito;
+}	t_peak;
 
 typedef struct s_ch
 {
@@ -39,8 +39,8 @@ typedef struct s_ch
 	char		**command_split;
 	int			nbr_infile;
 	int			nbr_outfile;
-	t_piquito	*infile_t;
-	t_piquito	*outfile_t;
+	t_peak		*infile_t;
+	t_peak		*outfile_t;
 	int			index_in;
 	int			index_out;
 }	t_ch;
@@ -83,6 +83,7 @@ void	get_environment(t_env *my_env, char **env);
 /* TERMINAL	*/
 int		create_terminal(t_shell *shell);
 void	attributes(t_shell *shell);
+void	free_and_init(t_shell *shell);
 
 /*PROCESSES*/
 int		input(t_shell *shell);
@@ -100,7 +101,7 @@ void	get_child_info(t_shell *shell);
 /*CLEAN_COMMAND*/
 void	clean_commands(t_shell *shell, t_ch *child);
 void	count_nbr_commands(t_ch *child);
-void	count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order);
+void	count_peaks(int *nbr_file, char c, t_peak **file_t, char *order);
 
 /*EXECUTE*/
 void	close_pipes(t_shell *shell);
@@ -141,7 +142,7 @@ void	create_lists(t_shell *shell);
 int		replace_first(t_list **head_env, t_list *temp_var, int replace);
 int		replace_repeated(t_list **head_env, t_list *temp_var, int replace);
 void	replace_env(t_shell *shell, int replace);
-char	**convert_list_array(t_shell *shell);
+char	**convert_list_array(t_shell **shell);
 
 /*  CHILD_BUILTINS    */
 void	check_builtins_child(t_shell **shell, int id);

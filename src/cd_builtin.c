@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 17:12:52 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 18:56:22 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:42:36 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,22 @@ static int	cd_builtin_error(char *command_split, int err)
 	return (0);
 }
 
+static char	**get_new_vars(char **new_vars, char *str_path)
+{
+	new_vars[1] = ft_strjoin("PWD=", str_path);
+	new_vars[2] = NULL;
+	free(str_path);
+	return (new_vars);
+}
+
 char	**cd_builtin(char **env, char *command_split, char **new_vars)
 {
 	int		a;
 	char	path[1024];
+	char	*str_path;
 
-	new_vars[0] = ft_strjoin("OLD_PWD=", ft_strdup(getcwd(path, 1024)));
+	str_path = ft_strdup(getcwd(path, 1024));
+	new_vars[0] = ft_strjoin("OLD_PWD=", str_path);
 	if (!command_split)
 	{
 		a = -1;
@@ -88,7 +98,5 @@ char	**cd_builtin(char **env, char *command_split, char **new_vars)
 		if (cd_builtin_error(command_split, errno))
 			return (NULL);
 	}
-	new_vars[1] = ft_strjoin("PWD=", ft_strdup(getcwd(path, 1024)));
-	new_vars[2] = NULL;
-	return (new_vars);
+	return (get_new_vars(new_vars, str_path));
 }

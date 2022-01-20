@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 13:08:56 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:29:09 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ void	init(t_shell **shell, char **env)
 	(*shell)->my_env = (t_env *)ft_calloc(sizeof(t_env), 1);
 	(*shell)->my_pro = (t_pro *)ft_calloc(sizeof(t_pro), 1);
 	if (!(*shell)->my_env || !(*shell)->my_pro)
-		status_error(strerror(errno), errno);
-	(*shell)->my_pro->child = (t_ch *)ft_calloc(sizeof(t_ch), 1);
-	if (!(*shell)->my_pro->child)
 		status_error(strerror(errno), errno);
 	get_environment((*shell)->my_env, env);
 }

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:39 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 17:31:31 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,11 @@ int	input(t_shell *shell)
 	if (check_error(shell->line))
 		return (1);
 	if (alloc_processes(shell))
+	{
+		free_double(shell->my_pro->orders, 2);
 		return (1);
+	}
 	create_processes(shell);
+	free_and_init(shell);
 	return (0);
 }

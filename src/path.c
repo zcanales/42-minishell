@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 16:26:20 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 17:19:01 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:47:48 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ char	*get_exe_path(t_shell *shell, char *command_split)
 	shell->my_env->paths[0] = ft_substr(command_split, 0,
 			ft_strlen(command_split)
 			- ft_strlen(ft_strrchr(command_split, '/')) + 1);
-	new_command = ft_strdup(ft_strrchr(command_split, '/') + 1);
+	if (ft_strrchr(command_split, '/'))
+		new_command = ft_strdup(ft_strrchr(command_split, '/') + 1);
+	else
+		status_error("Command not found", 127);
 	free (command_split);
 	return (new_command);
 }

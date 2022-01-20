@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:38 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:04:03 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	ft_freelist(t_list **head)
 	t_list	*temp;
 
 	if (!*head)
+	{
 		return ;
+	}
 	while (*head)
 	{
 		temp = *head;

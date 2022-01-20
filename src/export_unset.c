@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 19:18:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:42:30 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,26 +99,29 @@ void	replace_env(t_shell *shell, int replace)
 				ft_lstnew((char *)temp_var->content));
 		temp_var = temp_var->next;
 	}
-	ft_freelist(&shell->my_env->list_var_real);
 }
 
-char	**convert_list_array(t_shell *shell)
+char	**convert_list_array(t_shell **shell)
 {
 	char	**temp_env;
+	t_list	*temp;
 	int		i;
 
 	i = -1;
-	shell->my_env->nbr_env = ft_lstsize(shell->my_env->list_env);
-	temp_env = (char **)malloc(sizeof(char *) * (shell->my_env->nbr_env + 1));
+	temp = (*shell)->my_env->list_env;
+	(*shell)->my_env->nbr_env = ft_lstsize(temp);
+	temp_env = (char **)malloc(sizeof(char *)
+			* ((*shell)->my_env->nbr_env + 1));
 	if (!temp_env)
 		status_error(strerror(errno), errno);
-	while (shell->my_env->list_env)
+	while (temp)
 	{
-		temp_env[++i] = ft_strdup((char *)shell->my_env->list_env->content);
-		shell->my_env->list_env = shell->my_env->list_env->next;
+		temp_env[++i] = ft_strdup((char *)temp->content);
+		temp = temp->next;
 	}
-	temp_env[shell->my_env->nbr_env] = NULL;
-	free_double(shell->my_env->env, 2);
-	shell->my_env->env = NULL;
+	temp_env[(*shell)->my_env->nbr_env] = NULL;
+	ft_freelist(&(*shell)->my_env->list_env);
+	free_double((*shell)->my_env->env, 2);
+	(*shell)->my_env->env = NULL;
 	return (temp_env);
 }

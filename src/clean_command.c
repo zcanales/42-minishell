@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 11:04:43 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:40 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:51:55 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	clean_commands(t_shell *shell, t_ch *child)
 	}
 }
 
-void	count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order)
+void	count_peaks(int *nbr_file, char c, t_peak **file_t, char *order)
 {
 	int		i;
 	char	**file;
@@ -59,7 +59,7 @@ void	count_piquitos(int *nbr_file, char c, t_piquito **file_t, char *order)
 	file = ft_split_2(order, c, nbr_file);
 	i = -1;
 	free_double(file, 2);
-	(*file_t) = (t_piquito *)ft_calloc(sizeof(t_piquito), (*nbr_file + 1));
+	(*file_t) = (t_peak *)ft_calloc(sizeof(t_peak), (*nbr_file + 1));
 	if (!(*file_t))
 		status_error(strerror(errno), errno);
 	i = -1;

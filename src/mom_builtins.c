@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:01:09 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:42:29 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@ static void	find_equal_char(char **s, t_shell *shell)
 	while (s[++a])
 	{
 		i = 0;
-		while (s[a][i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
+		if (s[a][i] && s[a][i] == '=')
+		{	
+			ft_putstr_fd("Pink peanuts: not a valid identifier\n", 2);
+			a++;
+		}
+		else
+		{
+			while (s[a][i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
 			|| s[a][i] == '_' || s[a][i] == 34 || s[a][i] == 39 ||
 				s[a][i] == '$' || ft_isdigit(s[a][i])))
-			i++;
-		if (s[a][i] == '=')
-			shell->my_env->var_real[++shell->my_env->nbr_var]
-				= ft_substr(s[a], 0, ft_strlen(s[a]));
+				i++;
+			if (s[a][i] && s[a][i] == '=')
+				shell->my_env->var_real[++shell->my_env->nbr_var]
+					= ft_substr(s[a], 0, ft_strlen(s[a]));
+		}
 	}
 	shell->my_env->var_real[++shell->my_env->nbr_var] = NULL;
 }
@@ -80,8 +88,9 @@ void	change_enviroment(t_shell **shell, char **var,
 	get_real_vars(*shell, var, nbr_command, replace);
 	create_lists(*shell);
 	replace_env((*shell), replace);
-	(*shell)->my_env->env = convert_list_array(*shell);
+	(*shell)->my_env->env = convert_list_array(shell);
 	get_new_paths((*shell)->my_env->env, *shell);
+	ft_freelist(&(*shell)->my_env->list_var_real);
 }
 
 void	check_builtins_mother(t_shell **shell, int id)
@@ -105,6 +114,7 @@ void	check_builtins_mother(t_shell **shell, int id)
 		if (!new_vars)
 			return ;
 		change_enviroment(shell, new_vars, 3, 1);
+		free_double(new_vars, 2);
 	}
 	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
 		exit_builtin(&(*shell)->my_pro->child[id].command_split[1],
