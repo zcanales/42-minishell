@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/20 18:09:56 by zcanales         ###   ########.fr        #
+#    Updated: 2022/01/21 14:19:42 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -43,9 +43,14 @@ INCLUDE = include/minishell.h
 LIB_A = Libft/libft.a
 
 CC = gcc 
-RLFLAGS =	-I ~/.brew/opt/readline/include\
+#RLFLAGS =	-I ~/.brew/opt/readline/include\
 			-lreadline\
-			-L ~/.brew/opt/readline/lib\
+			-L ~/.brew/opt/readline/lib\#
+
+PWD = /sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline
+RLFLAGS =   -I $(PWD)/include\
+            -lreadline\
+            -L $(PWD)/lib\
 #RLFLAGS =	-I/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/include\
 			-lreadline\
 			-L/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/lib\#
@@ -62,7 +67,8 @@ $(LIB_A) : Libft/*.c Libft/*.h
 	@make -C Libft/ bonus
 
 %.o: %.c  $(INCLUDE) $(LIB_A) $(SRCS)
-	@$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(PWD)/lib -I$(INCLUDE) -c $< -o $@ -I $(PWD)/include
+#	@$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@#
 
 clean : 
 	@make -C Libft/ clean

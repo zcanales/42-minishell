@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/20 12:31:01 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:36 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ void	decode_quotes(t_shell *shell, char **str, int *i, int *start)
 			dollar_var = expand_dollar(shell, *str, i);
 			replace_dollar(str, dollar_pos, *i - dollar_pos, dollar_var);
 			*i = dollar_pos + ft_strlen(dollar_var) - 1;
+			free(dollar_var);
 		}
 		*i += 1;
 	}
-	*start += 1;
+	if (quote != 39)
+		*start += 1;
 }
 
 char	*fill_dollar(t_shell *shell, int *i, char *array)
@@ -64,6 +66,7 @@ char	*fill_dollar(t_shell *shell, int *i, char *array)
 	dollar_var = expand_dollar(shell, array, i);
 	replace_dollar(&array, start, *i - start, dollar_var);
 	*i = ft_strlen(dollar_var) + start - 1;
+	free(dollar_var);
 	if (*i < 0)
 		*i += 1;
 	return (array);
@@ -99,7 +102,9 @@ char	**fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int ch)
 				decode_quotes(shell, &array[a], &i, &start);
 			else if (array[a][i] == '$')
 				array[a] = fill_dollar(shell, &i, array[a]);
+	//		printf("1array -> %s , new_array -> %s, i-> %d, start -> %d\n", array[a], new_array[a], i , start);
 			new_array [a] = fill_new_array(array[a], &i, new_array[a], start);
+	//		printf("array -> %s , new_array -> %s, i-> %d, start -> %d\n", array[a], new_array[a], i , start);
 			if (ch == 1)
 				ch = 0;
 		}

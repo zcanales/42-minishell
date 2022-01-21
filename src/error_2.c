@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:41 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:36:19 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	check_error_pipe(char **orders)
 	}
 	return (0);
 }
-
 int	pipes_check(char *line)
 {
 	int	i;
@@ -57,4 +56,28 @@ int	pipes_check(char *line)
 		}
 	}
 	return (0);
+}
+
+int	check_line_empty(char *line)
+{
+	char *new;
+	
+	new = ft_strtrim(line, " ");
+	if (new[0] == '\0')
+	{
+		ft_free(new);
+		return (1);
+	}
+	ft_free(new);
+	return (0);
+}
+
+void	printf_error(char *s, int err)
+{
+	ft_putstr_fd("Pink peanuts: '", 2);
+	ft_putstr_fd(s, 2);
+	if (err == 1)
+		ft_putstr_fd("' not a valid identifier\n", 2);
+	if (err == 2)
+		ft_putstr_fd("': Command not found\n", 2);
 }

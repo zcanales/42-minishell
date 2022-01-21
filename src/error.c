@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/20 16:42:37 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:09:56 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static int	open_quote_check(char *line)
 
 int	check_error(char *line)
 {
+	if (check_line_empty(line))
+		return (1);
 	if (pipes_check(line))
 		return (1);
 	if (brackets_check(line, '<'))

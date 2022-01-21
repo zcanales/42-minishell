@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 18:11:06 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:10:05 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	here_doc(t_pro *pro, int index, int id)
 	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 		status_error(strerror(errno), errno);
-	g_mother = 0;
 	here_doc_loop(limit, fd);
 	new_filename(pro, index, id);
 	free(limit);

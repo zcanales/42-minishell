@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/20 16:42:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 13:58:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	create_lists(t_shell *shell)
 					|| shell->my_env->var_real[i][0] == '_'))
 			ft_lstadd_back(&shell->my_env->list_var_real,
 				ft_lstnew(shell->my_env->var_real[i]));
+		else
+			printf_error(shell->my_env->var_real[i], 1);
 	}
 }
 

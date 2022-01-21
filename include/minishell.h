@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 18:04:53 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:02:54 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_env
 	char	**env;
 	int		nbr_env;
 	char	**paths;
+	char	*home;
 	char	**var_real;
 	int		nbr_var;
 	t_list	*list_var_real;
@@ -82,8 +83,8 @@ void	get_environment(t_env *my_env, char **env);
 
 /* TERMINAL	*/
 int		create_terminal(t_shell *shell);
-void	attributes(t_shell *shell);
 void	free_and_init(t_shell *shell);
+void	ft_free(void *to_free);
 
 /*PROCESSES*/
 int		input(t_shell *shell);
@@ -133,10 +134,12 @@ void	get_real_vars(t_shell *shell, char **commnad_real,
 void	check_builtins_mother(t_shell **shell, int id);
 
 /*PATH*/
-char	**cd_builtin(char **env, char *command_split, char **new_vars);
 void	get_new_paths(char **env, t_shell *shell);
 char	*get_exe_path(t_shell *shell, char *command_split);
 void	get_find(char **find, char *command);
+
+/*CD_BUILTIN*/
+char	**cd_builtin(char **env, char **command_split, char **new_vars);
 
 /*  EXPORT_UNSET    */
 void	create_lists(t_shell *shell);
@@ -159,9 +162,11 @@ int		check_error( char *line);
 int		check_error_pipe(char **orders);
 void	status_error(char *str, int err);
 
-/*ERRORS */
+/*ERRORS_2 */
 int		check_error_pipe(char **orders);
 int		pipes_check(char *line);
+int		check_line_empty(char *line);
+void	printf_error(char *s, int err);
 
 /*READLINE*/
 void	rl_replace_line(const char *str, int i);

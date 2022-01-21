@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 16:26:20 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 18:11:34 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:37:14 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,3 @@ void	get_new_paths(char **env, t_shell *sh)
 		get_new_path_else(sh);
 }
 
-void	get_find(char **find, char *command)
-{
-	if (ft_strcmp(command, "-"))
-		(*find) = "OLD_PWD=";
-	else if (command[0] == '~')
-		(*find) = "HOME=";
-}

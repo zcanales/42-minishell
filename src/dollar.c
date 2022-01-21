@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 20:05:33 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/19 21:42:43 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:39 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ static char	*expanded_return(t_shell *shell, char *dollar_var)
 				ex = ft_substr(shell->my_env->env[a], ft_strlen(dollar_var) + 1,
 						ft_strlen(shell->my_env->env[a])
 						- ft_strlen(dollar_var) + 1);
+				free(dollar_var);
 				return (ex);
 			}
 		}
 	}
+	free(dollar_var);
 	ex = (char *)malloc(sizeof(char) * 1);
 	if (!ex)
 		status_error(strerror(errno), errno);

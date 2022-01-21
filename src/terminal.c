@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/20 17:31:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,13 @@
 #include <signal.h>
 #include "../include/minishell.h"
 
-void	attributes(t_shell *shell)
+void	ft_free(void *to_free)
 {
-	if (tcgetattr(0, &shell->old) == -1)
-		status_error(strerror(errno), errno);
-	if (tcgetattr(0, &shell->changed) == -1)
-		status_error(strerror(errno), errno);
-	if (tcgetattr(0, &shell->child) == -1)
-		status_error(strerror(errno), errno);
-	shell->changed.c_lflag = shell->changed.c_lflag & ~ICANON & ECHO;
-	shell->changed.c_cc[VQUIT] = 0;
-	shell->child.c_lflag = shell->child.c_lflag & ECHO;
-	if (tcsetattr(0, TCSANOW, &shell->changed) == -1)
-		status_error(strerror(errno), errno);
+	if (to_free)
+	{
+		free(to_free);
+		to_free = NULL;
+	}
 }
 
 void	free_and_init(t_shell *shell)
@@ -43,22 +37,22 @@ void	free_and_init(t_shell *shell)
 	a = -1;
 	while (shell->my_pro->nbr_process > ++a)
 	{
-		free(shell->my_pro->fd[a]);
+		ft_free(shell->my_pro->fd[a]);
 		i = -1;
 		while (shell->my_pro->child->nbr_infile > ++i)
-			free(shell->my_pro->child[a].infile_t[i].file_name);
+			ft_free(shell->my_pro->child[a].infile_t[i].file_name);
 		i = -1;
 		while (shell->my_pro->child->nbr_outfile > ++i)
-			free(shell->my_pro->child[a].outfile_t[i].file_name);
-		free(shell->my_pro->child[a].outfile_t);
-		free(shell->my_pro->child[a].infile_t);
-		free(shell->my_pro->child[a].command_group);
+			ft_free(shell->my_pro->child[a].outfile_t[i].file_name);
+		ft_free(shell->my_pro->child[a].outfile_t);
+		ft_free(shell->my_pro->child[a].infile_t);
+		ft_free(shell->my_pro->child[a].command_group);
 		free_double(shell->my_pro->child[a].command_split, 2);
 	}
-	free(shell->my_pro->pid);
-	free(shell->my_pro->fd[a]);
-	free(shell->my_pro->fd);
-	free(shell->my_pro->child);
+	ft_free(shell->my_pro->pid);
+	ft_free(shell->my_pro->fd[a]);
+	ft_free(shell->my_pro->fd);
+	ft_free(shell->my_pro->child);
 	free_double(shell->my_pro->orders, 2);
 	ft_memset(shell->my_pro, 0, sizeof(t_pro));
 }
@@ -69,7 +63,7 @@ char	*get_line(t_shell *shell)
 {
 	if (shell->line && shell->line[0] != '\0')
 	{
-		free(shell->line);
+		ft_free(shell->line);
 		shell->line = NULL;
 	}
 	shell->line = readline("Pink Peanuts > ");
@@ -90,19 +84,23 @@ void	sig_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	if (g_mother == 0)
+	if (signum == SIGINT && g_mother == 0)
 	{
 		printf("\n");
-		exit(0);
+		rl_on_new_line();
+	//	exit(0);
 	}
+	if (signum == SIGQUIT && g_mother == 0)
+		printf("^Quit : 3\n");
 }
 
 int	create_terminal(t_shell *shell)
 {
 	g_mother = 1;
 	shell->line = NULL;
-	attributes(shell);
+	rl_catch_signals = 0;
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
 		shell->line = get_line(shell);
@@ -113,11 +111,10 @@ int	create_terminal(t_shell *shell)
 		}
 		else if (shell->line[0] != '\0')
 		{
-			g_mother = 2;
 			input(shell);
-			free(shell->line);
+			ft_free(shell->line);
 			shell->line = NULL;
-			tcsetattr(0, TCSANOW, &shell->changed);
+//			tcsetattr(0, TCSANOW, &shell->changed);
 			g_mother = 1;
 		}
 	}

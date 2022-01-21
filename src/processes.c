@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 17:31:31 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@
 //	CHILD PROCESS //
 void	child_process(t_ch *child, t_shell *shell)
 {
-	tcsetattr(0, TCSANOW, &shell->child);
 	is_redirected(shell->my_pro, child->id_child);
 	re_pipe(shell, child->id_child);
-	tcsetattr(0, TCSANOW, &shell->old);
-	if (child->id_child != shell->my_pro->nbr_process - 1)
-		kill(shell->my_pro->pid[child->id_child], SIGCONT);
 	if (!child->command_split)
 		exit(0);
 	check_builtins_child(&shell, child->id_child);
 	if (child->command_split[0] && (child->command_split[0][0] == '.'
 		|| child->command_split[0][0] == '/'))
 		child->command_split[0] = get_exe_path(shell, child->command_split[0]);
+	g_mother = 0;
 	exe_command(shell, child->id_child);
 }
 
@@ -65,7 +62,6 @@ void	create_processes(t_shell *shell)
 		else
 		{	
 			g_mother = 0;
-			tcsetattr(0, TCSANOW, &shell->old);
 			shell->my_pro->child[id].id_child = id;
 			child_process(&shell->my_pro->child[id], shell);
 		}

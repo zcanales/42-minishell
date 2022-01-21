@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 16:42:29 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:32 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,18 @@ static void	find_equal_char(char **s, t_shell *shell)
 	while (s[++a])
 	{
 		i = 0;
-		if (s[a][i] && s[a][i] == '=')
-		{	
-			ft_putstr_fd("Pink peanuts: not a valid identifier\n", 2);
-			a++;
-		}
-		else
+		while (s[a][i] && s[a][i] != '=' )
 		{
-			while (s[a][i] && s[a][i] != '=' && (ft_isalpha(s[a][i])
-			|| s[a][i] == '_' || s[a][i] == 34 || s[a][i] == 39 ||
-				s[a][i] == '$' || ft_isdigit(s[a][i])))
-				i++;
-			if (s[a][i] && s[a][i] == '=')
-				shell->my_env->var_real[++shell->my_env->nbr_var]
-					= ft_substr(s[a], 0, ft_strlen(s[a]));
+			if (!ft_isalnum(s[a][i]) && s[a][i] != '_')
+			{
+				printf_error(s[a], 1);
+				break ;
+			}
+			i++;
 		}
+		if (s[a][i] && s[a][i] == '=') 
+			shell->my_env->var_real[++shell->my_env->nbr_var]
+				= ft_substr(s[a], 0, ft_strlen(s[a]));
 	}
 	shell->my_env->var_real[++shell->my_env->nbr_var] = NULL;
 }
@@ -91,6 +88,7 @@ void	change_enviroment(t_shell **shell, char **var,
 	(*shell)->my_env->env = convert_list_array(shell);
 	get_new_paths((*shell)->my_env->env, *shell);
 	ft_freelist(&(*shell)->my_env->list_var_real);
+	free_double((*shell)->my_env->var_real, 2);
 }
 
 void	check_builtins_mother(t_shell **shell, int id)
@@ -110,7 +108,7 @@ void	check_builtins_mother(t_shell **shell, int id)
 		if (!new_vars)
 			status_error(strerror(errno), errno);
 		new_vars = cd_builtin((*shell)->my_env->env,
-				(*shell)->my_pro->child[id].command_split[1], new_vars);
+				&(*shell)->my_pro->child[id].command_split[1], new_vars);
 		if (!new_vars)
 			return ;
 		change_enviroment(shell, new_vars, 3, 1);

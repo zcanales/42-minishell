@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 16:04:03 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:34 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,15 @@ void	free_double(char **s, int check)
 	int	i;
 
 	i = -1;
+	if (!s)
+		return ;
+//	if (!s[0])
+//		return ;
 	while (s[++i])
-		free(s[i]);
+		ft_free(s[i]);
 	if (check == 2)
 	{
-		free(s);
+		ft_free(s);
 		s = NULL;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/20 15:29:09 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:36:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	get_environment(t_env *my_env, char **env)
 		my_env->paths[i] = temp;
 		i++;
 	}
+	my_env->home = ft_strdup(getenv("HOME"));
+	printf("home --> %s\n", my_env->home);
 }
 
 void	init(t_shell **shell, char **env)

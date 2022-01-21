@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 17:23:11 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 14:19:33 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,6 @@ void	exe_command(t_shell *shell, int id)
 		}
 		free(temp_access);
 	}
-	ft_putstr_fd("Pink peanuts: ", 2);
-	ft_putstr_fd(shell->my_pro->child[id].command_split[0], 2);
-	ft_putstr_fd(": Command not found\n", 2);
+	printf_error(shell->my_pro->child[id].command_split[0], 2);
 	exit(127);
 }
