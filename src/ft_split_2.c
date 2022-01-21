@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:49:32 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/19 15:44:39 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:29:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void	ft_num_arrays(char *s, char c, int *nbr_array)
 		check_quotes(s, &i);
 		if (s[i] == c)
 		{
-			if (s[i + 1] && s[i + 1] == '|')
-				status_error("Pink peanuts: 2 pipes not allowed\n", 1);
 			if (s[i + 1] && s[i + 1] == c && c != 32)
 				i++;
 			*nbr_array += 1;

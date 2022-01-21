@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 14:02:54 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:14 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_piquito
 
 typedef struct s_ch
 {
+	int			mom_builtin;
 	int			id_child;
 	int			nbr_command;
 	char		*command_group;
@@ -68,9 +69,8 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	struct termios	old;
-	struct termios	changed;
-	struct termios	child;
+	int				check;
+	int				status_builtin;
 	char			*line;
 	int				status;
 	t_env			*my_env;
@@ -139,10 +139,10 @@ char	*get_exe_path(t_shell *shell, char *command_split);
 void	get_find(char **find, char *command);
 
 /*CD_BUILTIN*/
-char	**cd_builtin(char **env, char **command_split, char **new_vars);
+char	**cd_builtin(char **env, char **command_split, char **new_vars, t_shell *shell);
 
 /*  EXPORT_UNSET    */
-void	create_lists(t_shell *shell);
+void	create_lists(t_shell *shell, int replace);
 int		replace_first(t_list **head_env, t_list *temp_var, int replace);
 int		replace_repeated(t_list **head_env, t_list *temp_var, int replace);
 void	replace_env(t_shell *shell, int replace);
@@ -163,10 +163,11 @@ int		check_error_pipe(char **orders);
 void	status_error(char *str, int err);
 
 /*ERRORS_2 */
-int		check_error_pipe(char **orders);
-int		pipes_check(char *line);
+int		check_two_pipe(char *line);
+int		check_empty_pipe(char **orders);
+int		check_null_pipe(char *line);
 int		check_line_empty(char *line);
-void	printf_error(char *s, int err);
+void	printf_error(char *s, int err, t_shell *shell);
 
 /*READLINE*/
 void	rl_replace_line(const char *str, int i);

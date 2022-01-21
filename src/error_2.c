@@ -6,13 +6,30 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 12:36:19 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:08 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_error_pipe(char **orders)
+int	check_two_pipe(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[++i])
+	{
+		check_quotes(line, &i);
+		if (line[i] == '|' && line[i + 1] && line[i + 1] == '|')
+		{
+			ft_putstr_fd("Pink peanuts: 2 pipes are not allowed\n", 2);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int	check_empty_pipe(char **orders)
 {
 	int	i;
 	int	j;
@@ -32,7 +49,7 @@ int	check_error_pipe(char **orders)
 	}
 	return (0);
 }
-int	pipes_check(char *line)
+int	check_null_pipe(char *line)
 {
 	int	i;
 
@@ -72,12 +89,23 @@ int	check_line_empty(char *line)
 	return (0);
 }
 
-void	printf_error(char *s, int err)
+void	printf_error(char *s, int err, t_shell *shell)
 {
 	ft_putstr_fd("Pink peanuts: '", 2);
 	ft_putstr_fd(s, 2);
 	if (err == 1)
 		ft_putstr_fd("' not a valid identifier\n", 2);
 	if (err == 2)
+	{
 		ft_putstr_fd("': Command not found\n", 2);
+		err = 1;
+	}
+	if (err == 3)
+	{
+		ft_putstr_fd(": too many arguments\n", 2);
+		err = 1;
+
+	}
+	shell->status_builtin = err;
 }
+

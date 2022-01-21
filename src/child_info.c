@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:35 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:50:58 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,8 @@ void	get_child_info(t_shell *shell)
 				' ', &shell->my_pro->child[i].nbr_command);
 		count_nbr_commands(&shell->my_pro->child[i]);
 		clean_commands(shell, &shell->my_pro->child[i]);
-		if (shell->my_pro->child[i].command_split
-			&& shell->my_pro->nbr_process == 1)
+		shell->status_builtin = 0;
+		if (shell->my_pro->child[i].command_split)
 			check_builtins_mother(&shell, i);
 	}	
 }

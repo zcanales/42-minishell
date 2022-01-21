@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:10 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	mother_process(t_shell *shell)
 		pid = waitpid(-1, &status, 0);
 		if (pid == shell->my_pro->pid[shell->my_pro->nbr_process - 1])
 				shell->status = WEXITSTATUS(status);
+		if (pid == shell->my_pro->pid[shell->my_pro->nbr_process - 1] && shell->my_pro->child[i].mom_builtin)
+			shell->status = shell->status_builtin;
 		if (i != shell->my_pro->nbr_process - 1)
 			kill(shell->my_pro->pid[i + 1], SIGCONT);
 	}
@@ -80,7 +82,7 @@ int	alloc_processes(t_shell *shell)
 	i = -1;
 	shell->my_pro->orders = ft_split_2(shell->line,
 			'|', &shell->my_pro->nbr_process);
-	if (check_error_pipe(shell->my_pro->orders))
+	if (check_empty_pipe(shell->my_pro->orders))
 		return (1);
 	npipes = (shell->my_pro->nbr_process + 1);
 	shell->my_pro->fd = (int **)malloc(npipes * sizeof(int *));
@@ -105,10 +107,16 @@ int	alloc_processes(t_shell *shell)
 int	input(t_shell *shell)
 {
 	unlink("here_doc.txt");
-	if (check_error(shell->line))
+	if (check_null_pipe(shell->line))
 		return (1);
+	if (check_error(shell->line))
+	{
+		shell->status = 258;		
+		return (1);
+	}
 	if (alloc_processes(shell))
 	{
+		shell->status = 258;		
 		free_double(shell->my_pro->orders, 2);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:07 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void	free_and_init(t_shell *shell)
 	int	i;
 
 	a = -1;
-	while (shell->my_pro->nbr_process > ++a)
+	while (++a < shell->my_pro->nbr_process)
 	{
 		ft_free(shell->my_pro->fd[a]);
 		i = -1;
-		while (shell->my_pro->child->nbr_infile > ++i)
+		while (++i < shell->my_pro->child[a].nbr_infile)
 			ft_free(shell->my_pro->child[a].infile_t[i].file_name);
 		i = -1;
-		while (shell->my_pro->child->nbr_outfile > ++i)
+		while (++i < shell->my_pro->child[a].nbr_outfile)
 			ft_free(shell->my_pro->child[a].outfile_t[i].file_name);
 		ft_free(shell->my_pro->child[a].outfile_t);
 		ft_free(shell->my_pro->child[a].infile_t);
@@ -114,7 +114,6 @@ int	create_terminal(t_shell *shell)
 			input(shell);
 			ft_free(shell->line);
 			shell->line = NULL;
-//			tcsetattr(0, TCSANOW, &shell->changed);
 			g_mother = 1;
 		}
 	}

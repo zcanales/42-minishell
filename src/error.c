@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 12:09:56 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:11 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	brackets_check(char *line, char c)
 				return (1);
 			while (line[i] && line[i] == ' ' )
 				i++;
-			if (line[i] == '\0' || line[i] == '<' || line[i] == '>')
+			if (line[i] == '\0' || line[i] == '<' || line[i] == '>' || line[i] == '|')
 			{
 				ft_putstr_fd("Pink peanuts:", 2);
 				ft_putstr_fd("Syntax error near unexpected token 'newline'\n",
@@ -75,13 +75,13 @@ int	check_error(char *line)
 {
 	if (check_line_empty(line))
 		return (1);
-	if (pipes_check(line))
-		return (1);
 	if (brackets_check(line, '<'))
 		return (1);
 	if (brackets_check(line, '>'))
 		return (1);
 	if (open_quote_check(line))
+		return (1);
+	if (check_two_pipe(line))
 		return (1);
 	return (0);
 }

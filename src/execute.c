@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:33 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:09 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,6 @@ void	exe_command(t_shell *shell, int id)
 		}
 		free(temp_access);
 	}
-	printf_error(shell->my_pro->child[id].command_split[0], 2);
+	printf_error(shell->my_pro->child[id].command_split[0], 2, shell);
 	exit(127);
 }

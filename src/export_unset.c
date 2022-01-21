@@ -6,18 +6,34 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 13:58:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 20:51:11 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	create_lists(t_shell *shell)
+int filter_unset(char *var)
+{
+	int a;
+	
+	a = -1;
+	while (var[++a])
+	{
+		if (!ft_isalnum(var[a]) && var[a] != '_')
+		{
+			printf("Pink peanuts: %s not a valid identifier\n", var);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void	create_lists(t_shell *shell, int replace)
 {
 	int	i;
 
 	i = -1;
-	while (shell->my_env->env[++i])
+	while (shell->my_pro->nbr_process == 1 && shell->my_env->env[++i])
 	{
 		ft_lstadd_back(&shell->my_env->list_env,
 			ft_lstnew(shell->my_env->env[i]));
@@ -28,10 +44,16 @@ void	create_lists(t_shell *shell)
 		if (shell->my_env->var_real[i][0] != '='
 				&& (ft_isalpha(shell->my_env->var_real[i][0])
 					|| shell->my_env->var_real[i][0] == '_'))
-			ft_lstadd_back(&shell->my_env->list_var_real,
-				ft_lstnew(shell->my_env->var_real[i]));
+		{
+			if ((replace != 0 || (replace == 0
+					&& !filter_unset(shell->my_env->var_real[i])))
+					&& shell->my_pro->nbr_process == 1)
+				ft_lstadd_back(&shell->my_env->list_var_real,
+					ft_lstnew(shell->my_env->var_real[i]));
+		}
 		else
-			printf_error(shell->my_env->var_real[i], 1);
+			printf_error(shell->my_env->var_real[i], 1, shell);
+
 	}
 }
 
@@ -45,7 +67,7 @@ int	replace_first(t_list **head_env, t_list *temp_var, int replace)
 	if (ft_strcmp_len((char *)temp->content,
 			(char *)temp_var->content))
 	{
-		if (replace == 1)
+		if (replace != 0)
 		{
 			temp = temp->next;
 			(*head_env) = ft_lstnew((char *)temp_var->content);
@@ -72,7 +94,7 @@ int	replace_repeated(t_list **head_env, t_list *temp_var, int replace)
 	{
 		if (ft_strcmp_len((char *)temp_env->content, (char *)temp_var->content))
 		{
-			if (replace == 1)
+			if (replace != 0)
 			{
 				temp_back->next = ft_lstnew((char *)temp_var->content);
 				temp_back->next->next = temp_env->next;
@@ -96,7 +118,7 @@ void	replace_env(t_shell *shell, int replace)
 	while (temp_var)
 	{
 		if (replace_repeated(&shell->my_env->list_env,
-				temp_var, replace) && replace == 1)
+				temp_var, replace) && replace != 0)
 			ft_lstadd_back(&shell->my_env->list_env,
 				ft_lstnew((char *)temp_var->content));
 		temp_var = temp_var->next;

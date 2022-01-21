@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/21 14:19:42 by zcanales         ###   ########.fr        #
+#    Updated: 2022/01/21 20:04:38 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -55,7 +55,7 @@ RLFLAGS =   -I $(PWD)/include\
 			-lreadline\
 			-L/sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline/lib\#
 
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address#
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 all: $(NAME) 
 

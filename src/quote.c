@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:36 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/21 16:28:52 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	decode_quotes(t_shell *shell, char **str, int *i, int *start)
 		}
 		*i += 1;
 	}
-	if (quote != 39)
-		*start += 1;
+	shell->check = 1;
+	*start += 1;
 }
 
 char	*fill_dollar(t_shell *shell, int *i, char *array)
@@ -74,13 +74,28 @@ char	*fill_dollar(t_shell *shell, int *i, char *array)
 
 char	*fill_new_array(char *array, int *i, char *new_array, int start)
 {
+	char	*temp_new_array;
+	int		check;
+
+	check = 1;
+	if (start == *i)
+		check = 0;
 	while (array[*i] && array[*i] != 34
 		&& array[*i] != 39 && array[*i] != '$')
 		*i += 1;
 	if (array[*i] == '$' && (array[*i + 1] == '\0'
 			|| array[*i + 1] == ' '))
 		*i += 1;
-	return (ft_substr_strjoin(array, new_array, start, *i));
+	temp_new_array = ft_substr_strjoin(array, new_array, start, *i);
+	return (temp_new_array);
+}
+
+void	fill_quote_utils(int *ch , t_shell *shell, int *i)
+{
+	if (*ch == 1)
+		*ch = 0;
+	if (shell->check)
+		*i += 1;
 }
 
 char	**fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int ch)
@@ -102,11 +117,9 @@ char	**fill_quote_dollar(char **array, t_shell *shell, int nbr_array, int ch)
 				decode_quotes(shell, &array[a], &i, &start);
 			else if (array[a][i] == '$')
 				array[a] = fill_dollar(shell, &i, array[a]);
-	//		printf("1array -> %s , new_array -> %s, i-> %d, start -> %d\n", array[a], new_array[a], i , start);
 			new_array [a] = fill_new_array(array[a], &i, new_array[a], start);
-	//		printf("array -> %s , new_array -> %s, i-> %d, start -> %d\n", array[a], new_array[a], i , start);
-			if (ch == 1)
-				ch = 0;
+			fill_quote_utils(&ch, shell, &i);
+			shell->check = 0;
 		}
 	}
 	new_array[nbr_array] = NULL;
