@@ -6,12 +6,12 @@
 /*   By: eperaita <eperaita@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/12 18:06:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/17 17:54:47 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/20 17:53:37 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
+
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	c;

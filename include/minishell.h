@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 16:42:33 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 18:04:53 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ void	check_builtins_mother(t_shell **shell, int id);
 char	**cd_builtin(char **env, char *command_split, char **new_vars);
 void	get_new_paths(char **env, t_shell *shell);
 char	*get_exe_path(t_shell *shell, char *command_split);
+void	get_find(char **find, char *command);
 
 /*  EXPORT_UNSET    */
 void	create_lists(t_shell *shell);

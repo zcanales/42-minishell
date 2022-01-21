@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 17:12:52 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 16:42:36 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 18:05:50 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ static char	*special_paths(char **env, char *command)
 	int		a;
 	char	*temp;
 	char	*find;
+	char	*to_join;
 
-	if (ft_strcmp(command, "-"))
-		find = "OLD_PWD=";
-	else if (command[0] == '~')
-		find = "HOME=";
+	get_find(&find, command);
 	a = -1;
 	while (env[++a] && (ft_strcmp(command, "-") || command[0] == '~'))
 	{
@@ -33,8 +31,10 @@ static char	*special_paths(char **env, char *command)
 			else
 				temp = (char *)ft_calloc(1, 1);
 			free(command);
-			command = ft_strjoin(ft_strdup(&env[a][ft_strlen(find)]), temp);
+			to_join = ft_strdup(&env[a][ft_strlen(find)]);
+			command = ft_strjoin(to_join, temp);
 			free(temp);
+			free(to_join);
 			break ;
 		}
 	}

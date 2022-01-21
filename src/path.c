@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 16:26:20 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/20 10:47:48 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 18:11:34 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*get_exe_path(t_shell *shell, char *command_split)
 {
 	char	*new_command;
 
+	new_command = NULL;
 	free_double(shell->my_env->paths, 2);
 	shell->my_env->paths = (char **)ft_calloc(sizeof(char *), 2);
 	if (!shell->my_env->paths)
@@ -68,4 +69,12 @@ void	get_new_paths(char **env, t_shell *sh)
 	}
 	else
 		get_new_path_else(sh);
+}
+
+void	get_find(char **find, char *command)
+{
+	if (ft_strcmp(command, "-"))
+		(*find) = "OLD_PWD=";
+	else if (command[0] == '~')
+		(*find) = "HOME=";
 }

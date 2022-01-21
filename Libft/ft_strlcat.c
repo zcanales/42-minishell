@@ -6,12 +6,12 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 12:02:07 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/10 21:31:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/20 17:54:19 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
+
 size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
 	size_t	i;

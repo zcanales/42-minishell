@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/20 17:30:05 by eperaita         ###   ########.fr        #
+#    Updated: 2022/01/20 18:09:56 by zcanales         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -42,7 +42,7 @@ RESET = \033[0m
 INCLUDE = include/minishell.h
 LIB_A = Libft/libft.a
 
-CC = gcc
+CC = gcc 
 RLFLAGS =	-I ~/.brew/opt/readline/include\
 			-lreadline\
 			-L ~/.brew/opt/readline/lib\
@@ -62,7 +62,7 @@ $(LIB_A) : Libft/*.c Libft/*.h
 	@make -C Libft/ bonus
 
 %.o: %.c  $(INCLUDE) $(LIB_A) $(SRCS)
-	@$(CC) -I$(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
 
 clean : 
 	@make -C Libft/ clean
