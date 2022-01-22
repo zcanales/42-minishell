@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 17:12:52 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 20:50:59 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:10:19 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ static int	cd_builtin_error(char *command_split, int err, t_shell *shell)
 		shell->status_builtin = 1;
 		return (1);
 	}
-	if (!opendir(command_split) || (shell->my_pro->nbr_process == 1 && chdir(command_split) != 0))
+	if (!opendir(command_split) || (shell->my_pro->nbr_process == 1
+			&& chdir(command_split) != 0))
 	{
 		ft_print_return(err, shell);
 		return (1);
@@ -79,7 +80,7 @@ static int	cd_builtin_error(char *command_split, int err, t_shell *shell)
 static char	**get_new_vars(char **new_vars, char *str_path)
 {
 	char	path[1024];
-	
+
 	ft_free(str_path);
 	str_path = ft_strdup(getcwd(path, 1024));
 	new_vars[1] = ft_strjoin("PWD=", str_path);
@@ -88,12 +89,13 @@ static char	**get_new_vars(char **new_vars, char *str_path)
 	return (new_vars);
 }
 
-char	**cd_builtin(char **env, char **command_split, char **new_vars, t_shell *shell)
+char	**cd_builtin(char **env, char **command_split,
+		char **new_vars, t_shell *shell)
 {
 	int		a;
 	char	path[1024];
 	char	*str_path;
-	
+
 	str_path = ft_strdup(getcwd(path, 1024));
 	new_vars[0] = ft_strjoin("OLDPWD=", str_path);
 	if (!command_split[0])

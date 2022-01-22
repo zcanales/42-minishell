@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 20:51:07 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:21:46 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	sig_handler(int signum)
 	{
 		printf("\n");
 		rl_on_new_line();
-	//	exit(0);
 	}
 	if (signum == SIGQUIT && g_mother == 0)
 		printf("^Quit : 3\n");

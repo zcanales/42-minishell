@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 16:26:20 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 12:37:14 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:19:01 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,3 @@ void	get_new_paths(char **env, t_shell *sh)
 	else
 		get_new_path_else(sh);
 }
-

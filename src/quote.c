@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 16:28:52 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:21:04 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*fill_new_array(char *array, int *i, char *new_array, int start)
 	return (temp_new_array);
 }
 
-void	fill_quote_utils(int *ch , t_shell *shell, int *i)
+void	fill_quote_utils(int *ch, t_shell *shell, int *i)
 {
 	if (*ch == 1)
 		*ch = 0;

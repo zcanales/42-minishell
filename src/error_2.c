@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 20:51:08 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:11:40 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	check_empty_pipe(char **orders)
 	}
 	return (0);
 }
+
 int	check_null_pipe(char *line)
 {
 	int	i;
@@ -77,8 +78,8 @@ int	check_null_pipe(char *line)
 
 int	check_line_empty(char *line)
 {
-	char *new;
-	
+	char	*new;
+
 	new = ft_strtrim(line, " ");
 	if (new[0] == '\0')
 	{
@@ -104,8 +105,6 @@ void	printf_error(char *s, int err, t_shell *shell)
 	{
 		ft_putstr_fd(": too many arguments\n", 2);
 		err = 1;
-
 	}
 	shell->status_builtin = err;
 }
-

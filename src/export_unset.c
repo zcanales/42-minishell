@@ -6,16 +6,16 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 20:51:11 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/22 18:15:30 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int filter_unset(char *var)
+int	filter_unset(char *var)
 {
-	int a;
-	
+	int	a;
+
 	a = -1;
 	while (var[++a])
 	{
@@ -46,14 +46,13 @@ void	create_lists(t_shell *shell, int replace)
 					|| shell->my_env->var_real[i][0] == '_'))
 		{
 			if ((replace != 0 || (replace == 0
-					&& !filter_unset(shell->my_env->var_real[i])))
-					&& shell->my_pro->nbr_process == 1)
+						&& !filter_unset(shell->my_env->var_real[i])))
+				&& shell->my_pro->nbr_process == 1)
 				ft_lstadd_back(&shell->my_env->list_var_real,
 					ft_lstnew(shell->my_env->var_real[i]));
 		}
 		else
 			printf_error(shell->my_env->var_real[i], 1, shell);
-
 	}
 }
 
