@@ -6,11 +6,17 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/22 18:21:04 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:01:59 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//FILL_QUOTE_DOLLAR -> Checks the string: decodes quotes and fills $VARS
+	//FILL_QUOTE_UTILS
+	//FILL_NEW_ARRAY
+	//DECODE_QUOTES
+	//CHECK_QUOTES
 
 int	check_quotes(char *s, int *index)
 {
@@ -55,21 +61,6 @@ void	decode_quotes(t_shell *shell, char **str, int *i, int *start)
 	}
 	shell->check = 1;
 	*start += 1;
-}
-
-char	*fill_dollar(t_shell *shell, int *i, char *array)
-{
-	int		start;
-	char	*dollar_var;
-
-	start = *i;
-	dollar_var = expand_dollar(shell, array, i);
-	replace_dollar(&array, start, *i - start, dollar_var);
-	*i = ft_strlen(dollar_var) + start - 1;
-	free(dollar_var);
-	if (*i < 0)
-		*i += 1;
-	return (array);
 }
 
 char	*fill_new_array(char *array, int *i, char *new_array, int start)

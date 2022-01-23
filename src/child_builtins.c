@@ -6,11 +6,17 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 17:29:26 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 18:51:48 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//CHECK_BUILTINS_CHILD -> Filter bultins. If it si a mom builtin (exit)
+	//EXIT_BUILTIN__CHILD -> Exit the program and filter exit args
+	//ENV_BU -> Env to te STDIN, if has check(), prints declare -x + env[i]
+	//ECHO_BUILTIN -> Print args, if has -n without \n
+	//PWD_BUILTIN -> Prints $PWD
 
 void	pwd_builtin(void )
 {

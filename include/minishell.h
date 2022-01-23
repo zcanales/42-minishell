@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 20:51:14 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:14:52 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	get_child_info(t_shell *shell);
 void	clean_commands(t_shell *shell, t_ch *child);
 void	count_nbr_commands(t_ch *child);
 void	count_peaks(int *nbr_file, char c, t_peak **file_t, char *order);
+int		filter_unset(char *var);
 
 /*EXECUTE*/
 void	close_pipes(t_shell *shell);
@@ -127,6 +128,7 @@ char	**fill_quote_dollar(char **array, t_shell *shell,
 /*	DOLLAR	*/
 char	*expand_dollar(t_shell *shell, char *str, int *i);
 int		replace_dollar(char **str, int start, int len, char *replace);
+char	*fill_dollar(t_shell *shell, int *i, char *array);
 
 /*  MOM_BUILTINS    */
 void	get_real_vars(t_shell *shell, char **commnad_real,
@@ -137,9 +139,11 @@ void	check_builtins_mother(t_shell **shell, int id);
 void	get_new_paths(char **env, t_shell *shell);
 char	*get_exe_path(t_shell *shell, char *command_split);
 void	get_find(char **find, char *command);
+char	*special_paths(char **env, char **command);
 
 /*CD_BUILTIN*/
-char	**cd_builtin(char **env, char **command_split, char **new_vars, t_shell *shell);
+char	**cd_builtin(char **env, char **command_split,
+			char **new_vars, t_shell *shell);
 
 /*  EXPORT_UNSET    */
 void	create_lists(t_shell *shell, int replace);

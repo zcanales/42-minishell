@@ -6,50 +6,19 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 17:12:52 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/22 18:10:19 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 18:39:11 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <dirent.h>
-//////////////////CD///////////////////////////
-static char	*special_paths(char **env, char **command)
-{
-	int		a;
-	char	*temp;
-	char	*find;
-	char	*to_join;
 
-	if (ft_strcmp(command[0], "-"))
-		find = "OLDPWD=";
-	else if (command[0][0] == '~')
-		find = "HOME=";
-	a = -1;
-	while (env[++a] && (ft_strcmp(command[0], "-") || command[0][0] == '~'))
-	{
-		if (!ft_strncmp(env[a], find, ft_strlen(find)))
-		{
-			if (command[0][0] == '~')
-				temp = ft_strdup(&command[0][1]);
-			else
-				temp = (char *)ft_calloc(1, 1);
-			to_join = ft_strdup(&env[a][ft_strlen(find)]);
-			ft_free(*command);
-			command[0] = ft_strjoin(to_join, temp);
-			ft_free(temp);
-			ft_free(to_join);
-			return (command[0]);
-		}
-	}
-	if (command[0][0] == '~')
-	{
-		temp = ft_strdup(&command[0][1]);
-		ft_free(*command);
-		to_join = ft_strdup(getenv("HOME"));
-		command[0] = ft_strjoin(to_join, temp);
-	}
-	return (command[0]);
-}
+//CD_BUILTING -> Gets the current path and goes to $HOME (if has no arg)
+//or to GET_NEW_VARS with the correct path as an arg. 
+	//RETURN_ERROR -> Has not found HOME (FT_PRINT_RETURN)
+	//GET_NEW_VARS -> Sets new PWD and sends new_vars to MOM_BUILTINGS 
+	//CD_BUILTIN_ERROR -> Can't opendir or OLD_PWD not set (FT_PRINT_RETURN)
+//FT_PRINT_RETURN -> Prints error and return (no exit) 
 
 static char	**ft_print_return(int err, t_shell *shell)
 {
@@ -89,6 +58,15 @@ static char	**get_new_vars(char **new_vars, char *str_path)
 	return (new_vars);
 }
 
+static char	**return_error(t_shell *shell, char **env, int a)
+{
+	if (!opendir(&env[a][5]))
+		return (ft_print_return(errno, shell));
+	if (shell->my_pro->nbr_process == 1 && chdir(&env[a][5]) != 0)
+		return (ft_print_return(errno, shell));
+	return (NULL);
+}
+
 char	**cd_builtin(char **env, char **command_split,
 		char **new_vars, t_shell *shell)
 {
@@ -104,12 +82,7 @@ char	**cd_builtin(char **env, char **command_split,
 		while (env[++a])
 		{
 			if (!ft_strncmp(env[a], "HOME=", ft_strlen("HOME=")))
-			{
-				if (!opendir(&env[a][5]))
-					return (ft_print_return(errno, shell));
-				if (shell->my_pro->nbr_process == 1 && chdir(&env[a][5]) != 0)
-					return (ft_print_return(errno, shell));
-			}
+				return (return_error(shell, env, a));
 		}
 	}
 	else

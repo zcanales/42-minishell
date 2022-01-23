@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 14:10:05 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:40:43 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <signal.h>
+
+//HERE_DOC -> Opens the STDIN and saves all in here_doc.txt
+	//HERE_DOC_LOOP -> Reading from STDIN
+	//NEW_FILENAME -> Sends filename as arg to child
 
 static void	new_filename(t_pro *pro, int index, int id)
 {

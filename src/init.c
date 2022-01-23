@@ -6,11 +6,14 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 13:48:17 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 19:36:34 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:02:49 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//INIT -> Sets shell struct (initialize data)
+	//GET_ENV -> Copies the **env to my_env
 
 void	get_environment(t_env *my_env, char **env)
 {

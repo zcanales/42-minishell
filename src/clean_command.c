@@ -6,12 +6,37 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 11:04:43 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/21 14:19:34 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:15:55 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+//FILTER_UNSET -> Builtin unset. If the name of the var is invalid error
+//child_info.c -- get_child_info()
+	//*COUNT_PEAKS -> Counts brackets or doubles to malloc array of in/outfiles
+	//*CLEAN_COMMANDS ->Dollar and quotes of in/outfiles and command
+		//(quote.c / dollar.c)
+	//*COUNT_NBR_COMMANDS -> Counts command and args to malloc the array
+
+//////////UNSET////////////
+int	filter_unset(char *var)
+{
+	int	a;
+
+	a = -1;
+	while (var[++a])
+	{
+		if (!ft_isalnum(var[a]) && var[a] != '_')
+		{
+			printf("Pink peanuts: %s not a valid identifier\n", var);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+/////////CLEAN COMMANDS//////////
 void	count_nbr_commands(t_ch *child)
 {
 	int	a;

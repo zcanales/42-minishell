@@ -6,11 +6,34 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 20:05:33 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 16:28:53 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:19:51 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//REPLACE_DOLLAR
+//EXPAND_DOLLAR
+//EXPANDED_RETURN
+//FILL_DOLLAR
+////All functions together find the $VAR, replace it in the string,
+//and returns with the expanded variable and the pointer actualizated
+//Case of $? -> gets the last status
+
+char	*fill_dollar(t_shell *shell, int *i, char *array)
+{
+	int		start;
+	char	*dollar_var;
+
+	start = *i;
+	dollar_var = expand_dollar(shell, array, i);
+	replace_dollar(&array, start, *i - start, dollar_var);
+	*i = ft_strlen(dollar_var) + start - 1;
+	free(dollar_var);
+	if (*i < 0)
+		*i += 1;
+	return (array);
+}
 
 static char	*expanded_return(t_shell *shell, char *dollar_var)
 {

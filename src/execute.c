@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 20:51:09 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:35:14 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 #include <fcntl.h>
 #include <signal.h>
 
-//CLOSE PIPES//
+//CLOSE PIPES -> Closing all pipes, after duplicating fd
+//IS_REDIRECTED -> if it has in/out open the file in the fd
+	//here_doc.c
+	//RE_IN_OUT ->
+//RE_PIPE -> changes the STDIN and STDOUT for the execvue
+//EXE -> executes the command and args
+
 void	close_pipes(t_shell *shell)
 {
 	int	i;
@@ -33,7 +39,6 @@ void	close_pipes(t_shell *shell)
 	}
 }
 
-//IS_REDIRECTED//
 void	is_redirected(t_pro *pro, int id)
 {
 	int	i;
@@ -57,7 +62,6 @@ void	is_redirected(t_pro *pro, int id)
 		re_in_out(pro, 1, i, id);
 }
 
-//RE_IN_OUT  
 void	re_in_out(t_pro *pro, int in_out, int index, int id)
 {
 	if (in_out == 0)
@@ -80,7 +84,6 @@ void	re_in_out(t_pro *pro, int in_out, int index, int id)
 	}
 }
 
-//RE_PIPE//
 void	re_pipe(t_shell *shell, int id)
 {
 	if (id != 0 || (id == 0 && shell->my_pro->child[id].nbr_infile))
@@ -93,7 +96,6 @@ void	re_pipe(t_shell *shell, int id)
 	close_pipes(shell);
 }
 
-//EXE//
 void	exe_command(t_shell *shell, int id)
 {
 	int		i;

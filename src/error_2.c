@@ -6,11 +6,18 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/22 18:11:40 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:31:20 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//(error.c) -- check_error()
+	//CHECK_TWO_PIPE -> ||
+//CHECK_EMPTY_PIPE -> |  |
+//CHECK_NULL_PIPE -> |
+//CHECK_LINE_EMPTY
+//PRINTF_ERROR -> Another error handler with print and set status
 
 int	check_two_pipe(char *line)
 {

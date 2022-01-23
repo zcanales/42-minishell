@@ -6,11 +6,102 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 16:26:20 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/22 18:19:01 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:53:13 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//GET_NEW_PATHS -> Cd builtin. Resets $PATH in env 
+	//GET_NEW_PATHS_ELSE -> Aux function 
+//GET_EXE_PATH -> ./ must go to execvue as command[0]
+//SPECIAL_PATHS -> If the path is back or home
+
+//////////////SPECIAL PATHS/////////////////
+//No se porque, pero he quitado el ultimo bloque de if, y funciona
+
+static char	*special_paths_back(char **env, char **command, char *find)
+{
+	int		a;
+	char	*temp;
+	char	*to_join;
+
+	temp = NULL;
+	a = -1;
+	while (env[++a])
+	{
+		if (!ft_strncmp(env[a], find, ft_strlen(find)))
+		{
+			if (command[0][0] == '~')
+				temp = ft_strdup(&command[0][1]);
+			else if (command[0][0] == '-')
+				temp = (char *)ft_calloc(1, 1);
+			to_join = ft_strdup(&env[a][ft_strlen(find)]);
+			ft_free(*command);
+			command[0] = ft_strjoin(to_join, temp);
+			ft_free(temp);
+			ft_free(to_join);
+			return (command[0]);
+		}
+	}
+	return (command[0]);
+}
+
+char	*special_paths(char **env, char **command)
+{
+	char	*temp;
+
+	if (ft_strcmp(command[0], "-"))
+		return (special_paths_back(env, command, "OLDPWD="));
+	else if (command[0][0] == '~')
+	{
+		command[0] = special_paths_back(env, command, "HOME=");
+		temp = ft_strdup(&command[0][1]);
+		//ft_free(*command);
+		//to_join = ft_strdup(getenv("HOME"));
+		//command[0] = ft_strjoin(to_join, temp);
+	}
+	return (command[0]);
+}
+
+/*char	*special_paths(char **env, char **command)
+{
+	int		a;
+	char	*temp;
+	char	*find;
+	char	*to_join;
+
+	if (ft_strcmp(command[0], "-"))
+		find = "OLDPWD=";
+	else if (command[0][0] == '~')
+		find = "HOME=";
+	a = -1;
+	while (env[++a] && (ft_strcmp(command[0], "-") || command[0][0] == '~'))
+	{
+		if (!ft_strncmp(env[a], find, ft_strlen(find)))
+		{
+			if (command[0][0] == '~')
+				temp = ft_strdup(&command[0][1]);
+			else
+				temp = (char *)ft_calloc(1, 1);
+			to_join = ft_strdup(&env[a][ft_strlen(find)]);
+			ft_free(*command);
+			command[0] = ft_strjoin(to_join, temp);
+			ft_free(temp);
+			ft_free(to_join);
+			return (command[0]);
+		}
+	}
+//NO ES NECESARIO CREO!! NI llega si es ~ 
+//	if (command[0][0] == '~') //no es necesario CREO!! NI llega si es ~ 
+//	{
+//		temp = ft_strdup(&command[0][1]);
+//		ft_free(*command);
+//		to_join = ft_strdup(getenv("HOME"));
+//		command[0] = ft_strjoin(to_join, temp);
+//	}
+	return (command[0]);
+}*/
 
 ///////////////// -  "./" -  //////////////////
 char	*get_exe_path(t_shell *shell, char *command_split)

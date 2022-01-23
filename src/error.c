@@ -6,11 +6,18 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 11:16:54 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/22 18:13:08 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:27:18 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//CHECK_ERROR -> Handle the error and prints and RETURN
+	//THREE_BRACKET_CHECK -> <<<
+	//BRACKETS_CHECK -> |<
+	//OPEN_QUOTE_CHECK -> open quotes
+	//(error_2.c)
+//STATUS_ERROR -> Prints the error in str an EXIT
 
 static int	three_brackets_check(char *line, char c, int *i)
 {

@@ -6,18 +6,30 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/22 18:20:19 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:03:44 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <signal.h>
 
-//	CHILD PROCESS //
+//INPUT -> Checks input errors and goes to:
+	//ALLOC PROCESSES -> Allocate pids(childs), fd(pipes) 
+		//(child_info.c)
+	//CREATE PROCESSES -> Forks each child, gets pids and sends t_ch(cleaned)
+		//CHILD PROCESS -> (execute.c)
+		//MOTHER -> Waits for childs. Each return gets status and unlocks next.
+//(terminal.c - free_and_init() -> frees data)
+
 void	child_process(t_ch *child, t_shell *shell)
 {
 	is_redirected(shell->my_pro, child->id_child);
 	re_pipe(shell, child->id_child);
+	//PROBLEMA:
+		//CON KILL imprime los errores mezclados
+		//SIN KILL el wc sin input se queda abierto.(los no builtin)
+	/*if (child->id_child != shell->my_pro->nbr_process - 1)
+        kill(shell->my_pro->pid[child->id_child], SIGCONT);*/
 	if (!child->command_split)
 		exit(0);
 	check_builtins_child(&shell, child->id_child);
@@ -28,7 +40,6 @@ void	child_process(t_ch *child, t_shell *shell)
 	exe_command(shell, child->id_child);
 }
 
-//MOTHER //
 void	mother_process(t_shell *shell)
 {
 	int	i;
@@ -49,7 +60,6 @@ void	mother_process(t_shell *shell)
 	}
 }
 
-//CREATE PROCESSES//
 void	create_processes(t_shell *shell)
 {
 	int	id;
@@ -74,7 +84,6 @@ void	create_processes(t_shell *shell)
 	mother_process(shell);
 }
 
-//ALLOC PROCESSES//
 int	alloc_processes(t_shell *shell)
 {
 	int	i;
@@ -104,7 +113,6 @@ int	alloc_processes(t_shell *shell)
 	return (0);
 }
 
-//INPUT //
 int	input(t_shell *shell)
 {
 	unlink("here_doc.txt");

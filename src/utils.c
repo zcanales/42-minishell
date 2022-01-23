@@ -6,13 +6,18 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/22 18:21:57 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:14:09 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//FT_SUB_JOIN
+//FT_SUB_JOIN -> Substr + Strjoin
+//FREE_DOUBLE -> Free of double array
+//FREELIST -> Free whole linked list
+//CONVERT ARRAY TO STRING -> Returns a double array of 1 to char *
+//FT_STRCMP_LEN -> Compares the len of a piece of 2 different strings
+
 char	*ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
 {
 	char	*real_temp;
@@ -30,7 +35,6 @@ char	*ft_substr_strjoin(char *to_sub, char *to_join, int start, int end)
 	return (real_temp);
 }
 
-//FREE_DOUBLE//
 void	free_double(char **s, int check)
 {
 	int	i;
@@ -47,7 +51,6 @@ void	free_double(char **s, int check)
 	}
 }
 
-//FREELIST///
 void	ft_freelist(t_list **head)
 {
 	t_list	*temp;
@@ -65,7 +68,6 @@ void	ft_freelist(t_list **head)
 	*head = NULL;
 }
 
-/*CONVERT ARRAY TO STRING*/
 char	*convert_array_to_string(char **array)
 {
 	char	*string;
@@ -74,8 +76,6 @@ char	*convert_array_to_string(char **array)
 	free_double(array, 2);
 	return (string);
 }
-
-/*LEN OF 2 STRINGS*/
 
 int	ft_strcmp_len(char *env, char *var)
 {

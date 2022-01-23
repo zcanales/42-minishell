@@ -6,27 +6,17 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:59:12 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/22 18:15:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:38:50 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	filter_unset(char *var)
-{
-	int	a;
-
-	a = -1;
-	while (var[++a])
-	{
-		if (!ft_isalnum(var[a]) && var[a] != '_')
-		{
-			printf("Pink peanuts: %s not a valid identifier\n", var);
-			return (1);
-		}
-	}
-	return (0);
-}
+//CONVERT_LIST_ARRAY
+//REPLACE_ENV -> Adds or deletes (replace 1/0) $VARS to the env
+	//REPLACE_REPEATED -> if its repeated replace
+		//REPLACE_FIRST -> replace head of linked list
+//CREATE_LIST -> Gets the env and vars in a linked list
 
 void	create_lists(t_shell *shell, int replace)
 {

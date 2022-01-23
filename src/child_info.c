@@ -6,11 +6,17 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/21 20:50:58 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/23 19:16:01 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//GET_CHILD_INFO -> Mom cleans and chops orders to childs (clean_command.c)
+	//CLASSIFY_ORDER -> Infiles, outfiles and command in each child structure. 
+		//CHOP_COMMAND -> Joins each token in his array, (dequoted)
+			//CHOP_FILES -> Dequote infiles and outfiles
+				//PRE_CHOP_FILES -> Aux function of CHOP_FILES
 
 static char	pre_chop_files(int *type, char c, int *i, char *order)
 {

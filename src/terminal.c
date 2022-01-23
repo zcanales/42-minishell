@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/22 18:21:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/23 20:08:48 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 #include "../include/minishell.h"
+
+//CREATE_TERMINAL -> while (1) loop. 
+	//SIG_HANDLER -> Sets signals ^D / ^C / ^\ (mom or ch with global g_mother)
+	//GET_LINE -> Prints the prompt, addhistory
+	//(processes.c)
+//FREE_AND_INIT -> Frees data for the new input line
+	//FT_FREE -> Make sure if exist data and free
 
 void	ft_free(void *to_free)
 {
