@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/24 11:20:30 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:16:30 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <sys/ioctl.h>
 #include <sys/ioctl.h>
 #include <signal.h>
 #include "../include/minishell.h"
@@ -91,13 +90,13 @@ void	sig_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	if (signum == SIGINT && g_mother == 0)
+/*	if (signum == SIGINT && g_mother == 4)
 	{
 		printf("\n");
 		rl_on_new_line();
-	}
-	if (signum == SIGQUIT && g_mother == 0)
-		printf("^Quit : 3\n");
+	}*/
+//	if (signum == SIGQUIT && g_mother == 4)
+//		write(1, "Quit : 3\n", 9);
 }
 
 int	create_terminal(t_shell *shell)
@@ -117,6 +116,7 @@ int	create_terminal(t_shell *shell)
 		}
 		else if (shell->line[0] != '\0')
 		{
+			g_mother = 4;
 			input(shell);
 			ft_free(shell->line);
 			shell->line = NULL;

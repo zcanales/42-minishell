@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/11 10:35:10 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 19:48:58 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:16:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@ static void	exit_builtin(char **command_split,
 	i = -1;
 	printf("exit\n");
 	shell->my_pro->child[id].mom_builtin = 1;
-	if (nbr_com > 2)
+	if (nbr_com > 1)
 	{
 		while (command_split[0][++i])
 		{
 			if (!ft_isdigit(command_split[0][i]))
 				status_error("Numeric argument required", 127);
 		}
-		printf_error("", 3, shell);
+	}
+	if (nbr_com > 2)
+	{
+		printf_error("exit", 3, shell);
 		shell->status_builtin = 1;
 	}
 	else if (nbr_com == 2)
@@ -132,7 +135,8 @@ void	check_builtins_mother(t_shell **shell, int id)
 		change_env(shell, new_vars, id, 2);
 		free_double(new_vars, 2);
 	}
-	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit"))
+	else if (ft_strcmp((*shell)->my_pro->child[id].command_split[0], "exit")
+		&& (*shell)->my_pro->nbr_process == 1)
 		exit_builtin(&(*shell)->my_pro->child[id].command_split[1],
 			(*shell)->my_pro->child[id].nbr_command, *shell, id);
 }

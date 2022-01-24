@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 16:38:25 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 20:14:52 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:16:36 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	get_environment(t_env *my_env, char **env);
 int		create_terminal(t_shell *shell);
 void	free_and_init(t_shell *shell);
 void	ft_free(void *to_free);
+void	sig_handler(int signum);
 
 /*PROCESSES*/
 int		input(t_shell *shell);

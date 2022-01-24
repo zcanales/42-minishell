@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/23 18:51:48 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:16:31 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,16 @@ void	exit_builtin_child(char **command_split, int nbr_command)
 	int	i;
 
 	i = -1;
-	if (nbr_command > 2)
+	if (nbr_command > 1)
 	{
 		while (command_split[0][++i])
 		{
 			if (!ft_isdigit(command_split[0][i]))
 				status_error("Numeric argument required", 255);
 		}
-		status_error("Too many arguments", 1);
 	}
+	if (nbr_command > 2)
+		status_error("Too many arguments", 1);
 	else
 	{
 		if (nbr_command == 2)

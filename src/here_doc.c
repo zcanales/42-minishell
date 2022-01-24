@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 19:40:43 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 14:16:33 by zcanales         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ void	here_doc(t_pro *pro, int index, int id)
 	char	*limit;
 	int		fd;
 
+	g_mother = 3;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	limit = ft_strdup(pro->child[id].infile_t[index].file_name);
 	fd = open("here_doc.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
@@ -60,4 +63,6 @@ void	here_doc(t_pro *pro, int index, int id)
 	free(limit);
 	close(fd);
 	pro->fd[pro->child[id].id_child][0] = open("here_doc.txt", O_RDONLY);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 }
