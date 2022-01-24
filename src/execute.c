@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 19:35:14 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 11:52:35 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ void	exe_command(t_shell *shell, int id)
 				shell->my_pro->child[id].command_split[0]);
 		if (!access(temp_access, X_OK))
 		{
+			if (shell->my_pro->child[id].id_child
+				!= shell->my_pro->nbr_process - 1)
+				kill(shell->my_pro->pid[shell->my_pro->child[id].id_child],
+					SIGCONT);
 			execve(ft_strjoin(shell->my_env->paths[i],
 					shell->my_pro->child[id].command_split[0]),
 				shell->my_pro->child[id].command_split,

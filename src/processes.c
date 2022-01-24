@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 20:03:44 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/01/24 11:52:33 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,8 @@ void	child_process(t_ch *child, t_shell *shell)
 {
 	is_redirected(shell->my_pro, child->id_child);
 	re_pipe(shell, child->id_child);
-	//PROBLEMA:
-		//CON KILL imprime los errores mezclados
-		//SIN KILL el wc sin input se queda abierto.(los no builtin)
 	/*if (child->id_child != shell->my_pro->nbr_process - 1)
-        kill(shell->my_pro->pid[child->id_child], SIGCONT);*/
+		kill(shell->my_pro->pid[child->id_child], SIGCONT);*/
 	if (!child->command_split)
 		exit(0);
 	check_builtins_child(&shell, child->id_child);
