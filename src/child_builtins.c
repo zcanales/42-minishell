@@ -6,11 +6,12 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/24 14:16:31 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/24 16:13:14 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <signal.h>
 
 //CHECK_BUILTINS_CHILD -> Filter bultins. If it si a mom builtin (exit)
 	//EXIT_BUILTIN__CHILD -> Exit the program and filter exit args

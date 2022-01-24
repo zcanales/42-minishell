@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:59:53 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/24 14:16:30 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/24 16:25:32 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ void	sig_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-/*	if (signum == SIGINT && g_mother == 4)
+	if (signum == SIGINT && g_mother == 4)
 	{
 		printf("\n");
 		rl_on_new_line();
-	}*/
-//	if (signum == SIGQUIT && g_mother == 4)
-//		write(1, "Quit : 3\n", 9);
+	}
+	if (signum == SIGQUIT && g_mother == 4)
+		write(1, "Quit : 3\n", 9);
 }
 
 int	create_terminal(t_shell *shell)

@@ -6,7 +6,7 @@
 #    By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/03 16:37:50 by eperaita          #+#    #+#              #
-#    Updated: 2022/01/21 20:04:38 by zcanales         ###   ########.fr        #
+#    Updated: 2022/01/24 16:33:20 by eperaita         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = minishell
@@ -47,7 +47,7 @@ CC = gcc
 			-lreadline\
 			-L ~/.brew/opt/readline/lib\#
 
-PWD = /sgoinfre/goinfre/Perso/$(USER)/homebrew/opt/readline
+PWD = ~/.brew/opt/readline
 RLFLAGS =   -I $(PWD)/include\
             -lreadline\
             -L $(PWD)/lib\
