@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 13:44:11 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/24 14:16:32 by zcanales         ###   ########.fr       */
+/*   Updated: 2022/01/24 18:32:09 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_two_pipe(char *line)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	while (line[++i])
 	{
 		check_quotes(line, &i);
