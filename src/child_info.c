@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 18:06:18 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 19:16:01 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/03/02 12:16:47 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 			//CHOP_FILES -> Dequote infiles and outfiles
 				//PRE_CHOP_FILES -> Aux function of CHOP_FILES
 
-static char	pre_chop_files(int *type, char c, int *i, char *order)
+/*static char	pre_chop_files(int *type, char c, int *i, char *order)
 {
 	char	no_c;
 
@@ -32,21 +32,29 @@ static char	pre_chop_files(int *type, char c, int *i, char *order)
 		*i += 1;
 	}
 	return (no_c);
-}
+}*/
 
 void	chop_files(t_ch *ch, char c, int *i, char *order)
 {
 	int		type;
 	int		start;
-	char	no_c;
+//	char	no_c;
 
 	type = 1;
-	no_c = pre_chop_files(&type, c, i, order);
+//	no_c = pre_chop_files(&type, c, i, order);
+	if (order[++*i] && order[*i] == c)
+    {
+        type = 2;
+        *i += 1;
+    }
 	while (order[*i] && order[*i] == 32)
 		*i += 1;
 	start = *i;
-	while (order[*i] && order[*i] != 32 && order[*i] != no_c)
+	while (order[*i] && order[*i] != 32 && order[*i] != '<' && order[*i] != '>')
+	{
+		check_quotes(order, i);
 		*i = *i +1;
+	}
 	if (c == '<')
 	{
 		ch->infile_t[ch->index_in].file_name

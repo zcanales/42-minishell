@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 13:30:38 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/24 16:25:46 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/02/21 19:48:07 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 void	child_process(t_ch *child, t_shell *shell)
 {
+	unlink("here_doc.txt");
 	g_mother = 0;
 	rl_catch_signals = 1;
 	is_redirected(shell->my_pro, child->id_child);

@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:39:56 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/23 20:14:09 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/02/28 16:51:58 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ char	*convert_array_to_string(char **array)
 {
 	char	*string;
 
-	string = ft_strdup(array[0]);
+	string = NULL;
+	if (array[0])
+		string = ft_strdup(array[0]);
 	free_double(array, 2);
 	return (string);
 }

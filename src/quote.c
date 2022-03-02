@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/27 17:00:08 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/23 20:01:59 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/03/02 12:07:40 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ void	decode_quotes(t_shell *shell, char **str, int *i, int *start)
 		}
 		*i += 1;
 	}
-	shell->check = 1;
+	if(shell)
+		shell->check = 1;
 	*start += 1;
 }
 

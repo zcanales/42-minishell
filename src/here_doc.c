@@ -6,7 +6,7 @@
 /*   By: eperaita <eperaita@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 16:08:01 by eperaita          #+#    #+#             */
-/*   Updated: 2022/01/24 16:27:55 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/03/01 21:10:53 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	here_doc_loop(char *limit, int fd)
 {
 	char	*line;
 
+	//printf("%s\n", limit);
 	while (1)
 	{
 		line = readline(">");

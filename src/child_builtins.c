@@ -6,7 +6,7 @@
 /*   By: zcanales <zcanales@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/14 19:26:41 by zcanales          #+#    #+#             */
-/*   Updated: 2022/01/24 16:13:14 by eperaita         ###   ########.fr       */
+/*   Updated: 2022/02/14 18:18:15 by eperaita         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	env_bu(char **env, int nbr_command, int check)
 		while (env[++i])
 		{
 			if (check == 1)
-				printf("declare -x");
+				printf("declare -x ");
 			printf("%s\n", env[i]);
 		}
 	}
