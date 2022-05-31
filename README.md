@@ -1,7 +1,7 @@
 # 42-minishell
-* [Introduction](#introduction)
-* [Usage](#usage)
-* [Features](#features)
+* [Introduction](#Introduction)
+* [Usage](#Usage)
+* [Features](#Features)
 
 # Introduction 💻
 
@@ -10,7 +10,7 @@ The objective of this project is to create a simple shell.
 # Usage ❓
 
 1. Clone the repo `git clone git@github.com:zcanales/42-minishell.git`
-2. Install Readline library `sh intall_readline.sh`
+2. Install Readline library `sh install_readline.sh`
 3. Compile Minishell `make`
 4. Run `./minishell`
 
