@@ -3,7 +3,7 @@
 * [Usage](#Usage)
 * [Features](#Features)
 
-# Introduction 💻
+# Introduction
 
 The objective of this project is to create a simple shell.
 
@@ -14,7 +14,7 @@ The objective of this project is to create a simple shell.
 3. Compile Minishell `make`
 4. Run `./minishell`
 
-# Feautures 📃
+# Features 📃
 ### Basics:
 - Working History.
 - Search and launch the right executable (based on the PATH variable or by using a relative or an absolute path)
