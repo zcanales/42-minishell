@@ -1,7 +1,7 @@
 # 42-minishell 🐚
-* [Introduction](#Introduction 💻)
-* [Usage](#Usage ❓)
-* [Features](#Features 📃)
+* [Introduction](#Introduction💻)
+* [Usage](#Usage❓)
+* [Features](#Features📃)
 
 # Introduction 💻
 
